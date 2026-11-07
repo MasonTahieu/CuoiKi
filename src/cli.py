@@ -60,9 +60,13 @@ def main():
                 result["intraday"]["update_intervals"] = {d["run"]: d["update_intervals"] for d in details}
             else:
                 result["intraday_note"] = "Chưa có nhật ký stream trong phiên; chạy session-v3 trong giờ giao dịch."
-            if DAILY_DB.is_file():
-                result["daily"] = evaluate_daily(read_daily(DAILY_DB))
             output = PROJECT_ROOT / "evidence" / "v3_sessions" / "evaluation.json"
+            if DAILY_DB.is_file():
+                from src.analytics.validation import forward_check, write_evidence
+                daily = read_daily(DAILY_DB)
+                result["daily"] = evaluate_daily(daily)
+                result["forward_check"] = forward_check(daily)
+                write_evidence(result["forward_check"], output.parent)
             output.parent.mkdir(parents=True, exist_ok=True)
             output.write_text(json.dumps(result,ensure_ascii=False,indent=2,default=str),encoding="utf-8")
             result["output"] = str(output)

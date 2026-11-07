@@ -6,6 +6,7 @@ Trang công khai: https://cuoiki.vercel.app (mặc định chế độ **Cuối 
 
 - [Kết nối FastConnect V3](docs/V3_KET_NOI.md)
 - [Phạm vi chỉ VN30 và lý do bỏ HNX30](evidence/v3_history/PHAM_VI_VN30.md)
+- [Kiểm chứng ngoài mẫu: điểm và lợi suất phiên sau](evidence/v3_sessions/KIEM_CHUNG_NGOAI_MAU.md)
 - [Triển khai miễn phí lên Vercel + GitHub Actions](docs/TRIEN_KHAI_VERCEL.md) · Repo: [MasonTahieu/CuoiKi](https://github.com/MasonTahieu/CuoiKi)
 - [Đăng ký SSI và phạm vi chuyển đổi](docs/CHUYEN_SANG_SSI.md)
 - [Ghi chú bàn giao và tiến độ](HANDOFF.md)

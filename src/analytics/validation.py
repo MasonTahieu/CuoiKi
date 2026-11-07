@@ -1,0 +1,120 @@
+"""Out-of-sample check of the end-of-day score: does today's rank line up with the next session's return?
+
+Design (fixed before looking at the result, so nothing is tuned on this data):
+- Score on day t uses only day-t summaries (src.ranking.daily, weights chosen in advance).
+- Forward return is SSI's ``priceChangePercent`` of day t+1, i.e. close(t+1) against the reference
+  price of t+1. The reference already adjusts for ex-rights days, so dividends do not fake a loss.
+- Per pair of consecutive sessions: Spearman rank IC between score and forward return, and the
+  mean forward return of the top 5 minus the bottom 5 ranked stocks.
+- Across pairs: mean, sample standard deviation, t-statistic of the mean, share of positive pairs.
+
+With about 14 pairs the test has little power; a mean IC near zero means "no evidence of next-day
+predictive power", which is consistent with the product being a screener, not a forecaster.
+"""
+import math
+
+import numpy as np
+import pandas as pd
+
+from src.ranking.daily import WEIGHTS, rank_daily
+
+FACTOR_COLUMNS = {"momentum": "momentum", "liquidity": "turnover", "foreign": "foreign_ratio"}
+TOP_N = 5
+
+
+def _stats(values):
+    values = [v for v in values if v is not None and math.isfinite(v)]
+    n = len(values)
+    if n == 0:
+        return {"pairs": 0, "mean": None, "sd": None, "t": None, "positive_share": None}
+    mean = float(np.mean(values))
+    sd = float(np.std(values, ddof=1)) if n > 1 else None
+    t = mean / (sd / math.sqrt(n)) if sd else None
+    return {"pairs": n, "mean": mean, "sd": sd, "t": t, "positive_share": float(np.mean([v > 0 for v in values]))}
+
+
+def _spearman(a, b):
+    if len(a) < 3 or a.nunique() < 2 or b.nunique() < 2:
+        return None
+    return float(a.rank().corr(b.rank()))
+
+
+def forward_check(frame, group="VN30", weights=tuple(WEIGHTS), top_n=TOP_N):
+    """frame: daily summary rows (read_daily). Returns per-pair results and summaries per weight set."""
+    data = frame[frame["index_group"] == group].copy()
+    data["priceChangePercent"] = pd.to_numeric(data.get("priceChangePercent"), errors="coerce")
+    days = sorted(data["tradingDate"].unique())
+    out = {"method": "next-session-rank-ic-v1", "group": group, "sessions": len(days),
+           "pairs": max(0, len(days) - 1), "top_n": top_n,
+           "forward_return": "priceChangePercent của phiên t+1 (so với giá tham chiếu)", "weights": {}}
+    for name in weights:
+        rows, factor_ic = [], {f: [] for f in FACTOR_COLUMNS}
+        for today, nxt in zip(days, days[1:]):
+            ranked = rank_daily(data[data["tradingDate"] == today].to_dict("records"), weights=name).set_index("symbol")
+            forward = data[data["tradingDate"] == nxt].set_index("symbol")["priceChangePercent"].rename("forward")
+            joined = ranked.join(forward, how="inner")
+            scored = joined.dropna(subset=["total_score", "forward"])
+            ic = _spearman(scored["total_score"], scored["forward"])
+            spread = None
+            if len(scored) >= 2 * top_n:
+                spread = float(scored.nlargest(top_n, "total_score")["forward"].mean()
+                               - scored.nsmallest(top_n, "total_score")["forward"].mean())
+            for factor, column in FACTOR_COLUMNS.items():
+                part = joined.dropna(subset=[column, "forward"]) if column in joined else joined.iloc[0:0]
+                factor_ic[factor].append(_spearman(part[column], part["forward"]) if len(part) else None)
+            rows.append({"date": today, "next_date": nxt, "ranked": int(len(scored)), "ic": ic,
+                         "top_minus_bottom_pp": spread,
+                         "market_mean_pp": float(forward.mean()) if forward.notna().any() else None})
+        out["weights"][name] = {"pairs": rows, "ic": _stats([r["ic"] for r in rows]),
+                                "top_minus_bottom_pp": _stats([r["top_minus_bottom_pp"] for r in rows]),
+                                "factor_ic": {f: _stats(v) for f, v in factor_ic.items()}}
+    return out
+
+
+def verdict(summary):
+    """One honest sentence for the report and the page."""
+    ic = summary["ic"]
+    if not ic["pairs"]:
+        return "Chưa đủ phiên để kiểm chứng."
+    if ic["t"] is not None and abs(ic["t"]) >= 2:
+        sign = "cùng chiều" if ic["mean"] > 0 else "ngược chiều"
+        return f"Điểm có liên hệ {sign} với lợi suất phiên sau (t = {_fmt(ic['t'], 2)}); cần thêm phiên để xác nhận."
+    return (f"Không có bằng chứng điểm dự báo lợi suất phiên sau (IC trung bình {_fmt(ic['mean'])}, "
+            f"t = {_fmt(ic['t'], 2)}, {ic['pairs']} cặp phiên). Điểm dùng để thu hẹp danh sách, không phải tín hiệu mua bán.")
+
+
+def _fmt(value, digits=3, sign=True):
+    if value is None:
+        return "—"
+    text = f"{value:+.{digits}f}" if sign else f"{value:.{digits}f}"
+    return text.replace(".", ",")
+
+
+def write_evidence(result, folder):
+    """KIEM_CHUNG_NGOAI_MAU.md and a per-pair CSV, regenerated by `python -m src.cli evaluate-v3`."""
+    folder.mkdir(parents=True, exist_ok=True)
+    balanced = result["weights"]["balanced"]
+    pd.DataFrame(balanced["pairs"]).to_csv(folder / "kiem_chung_ngoai_mau.csv", index=False, encoding="utf-8")
+    labels = {"balanced": "Cân bằng 33/33/33", "momentum": "Ưu tiên động lượng 50/25/25"}
+    factor_labels = {"momentum": "Động lượng", "liquidity": "Thanh khoản", "foreign": "Dòng tiền ngoại"}
+    lines = ["# Kiểm chứng ngoài mẫu: điểm cuối ngày và lợi suất phiên sau", "",
+             f"Dữ liệu SSI thật, rổ {result['group']}, **{result['sessions']} phiên**, {result['pairs']} cặp phiên liên tiếp. "
+             "Trọng số cố định từ trước, không dò trên dữ liệu này. Điểm phiên t chỉ dùng dữ liệu phiên t.",
+             f"Lợi suất phiên sau: {result['forward_return']}, nên ngày giao dịch không hưởng quyền không làm méo kết quả.", "",
+             "| Cấu hình | IC trung bình | Độ lệch chuẩn | t | Tỷ lệ cặp IC > 0 | Top 5 − Bottom 5 (điểm %) | t |",
+             "|---|---:|---:|---:|---:|---:|---:|"]
+    for name, part in result["weights"].items():
+        ic, spread = part["ic"], part["top_minus_bottom_pp"]
+        share = "—" if ic["positive_share"] is None else f"{ic['positive_share']:.0%}"
+        lines.append(f"| {labels.get(name, name)} | {_fmt(ic['mean'])} | {_fmt(ic['sd'], sign=False)} | {_fmt(ic['t'], 2)} | "
+                     f"{share} | {_fmt(spread['mean'], 2)} | {_fmt(spread['t'], 2)} |")
+    lines += ["", "## IC của từng yếu tố (cấu hình cân bằng)", "", "| Yếu tố | IC trung bình | t |", "|---|---:|---:|"]
+    for factor, stats in balanced["factor_ic"].items():
+        lines.append(f"| {factor_labels[factor]} | {_fmt(stats['mean'])} | {_fmt(stats['t'], 2)} |")
+    lines += ["", "## Kết luận", "", verdict(balanced), "",
+              "- IC là hệ số tương quan hạng Spearman giữa điểm phiên t và lợi suất phiên t+1 của các mã được xếp hạng.",
+              "- |t| < 2 nghĩa là chưa phân biệt được với 0. Với khoảng 14 cặp phiên, phép thử có độ nhạy thấp.",
+              "- Kết quả này không thay đổi cách chấm điểm. Sản phẩm không trình bày điểm như xác suất tăng giá.", "",
+              "Chi tiết từng cặp phiên: [kiem_chung_ngoai_mau.csv](kiem_chung_ngoai_mau.csv). "
+              "Tạo lại: `python -X utf8 -m src.cli evaluate-v3`.", ""]
+    (folder / "KIEM_CHUNG_NGOAI_MAU.md").write_text("\n".join(lines), encoding="utf-8")

@@ -325,7 +325,9 @@ def _daily_snapshot(point, weights, foreign, compare):
                 "raw": {"momentum": _num(rec.get("momentum")), "turnover": _num(rec.get("turnover")), "spread_bps": None,
                         "depth_vnd": None, "foreign_ratio": _num(rec.get("foreign_ratio")), "imbalance": None,
                         "closePrice": _num(rec.get("closePrice")), "openPrice": _num(rec.get("openPrice")),
-                        "totalTradingVolume": _num(rec.get("totalTradingVolume"))},
+                        "totalTradingVolume": _num(rec.get("totalTradingVolume")),
+                        "change_pct": _num(rec.get("priceChangePercent")),
+                        "foreign_net_value": _net(rec.get("foreignBuyValue"), rec.get("foreignSellValue"))},
                 "status": {"kind": "ranked" if ok else kind, "label": "Đã xếp hạng" if ok else
                            ("Nhóm chưa đủ mã" if kind == "cohort" else "Thiếu dữ liệu"), "details": [] if ok else [reason]},
                 "warnings": [], "session": "Cuối ngày", "ages": {}, "explanation": None,
@@ -346,6 +348,7 @@ def _daily_snapshot(point, weights, foreign, compare):
         "freshness_seconds": None, "gaps": [], "policy": {"max_age_seconds": 60},
         "weights": {"id": weights, "label": daily_rank.WEIGHT_LABELS[weights], "values": weight_map},
         "foreign": foreign, "groups": groups, "compare": None,
+        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), _index_row(day), "tham chiếu"),
     }
     if compare:
         target = _compare_point("daily", DAILY_RUN, None, as_of, compare, moments=moments)
@@ -356,6 +359,93 @@ def _daily_snapshot(point, weights, foreign, compare):
             result["compare"]["as_of"] = previous["as_of"]
             _attach_changes(result, previous)
     return result
+
+
+def _net(buy, sell):
+    buy, sell = _num(buy), _num(sell)
+    return None if buy is None or sell is None else buy - sell
+
+
+def _index_row(day):
+    """VN30 index summary of one trading day (kept as context, not ranked)."""
+    from src.data.daily_store import read_daily
+    frame = read_daily(DAILY_DB)
+    if frame.empty:
+        return None
+    part = frame[(frame["index_group"] == "INDEX") & (frame["symbol"] == "VN30") & (frame["tradingDate"] == day)]
+    if part.empty:
+        return None
+    rec = part.iloc[-1].to_dict()
+    return {"close": _num(rec.get("closePrice")), "change": _num(rec.get("priceChange")),
+            "change_pct": _num(rec.get("priceChangePercent")), "value": _num(rec.get("totalTradingValue"))}
+
+
+def _pulse(rows, index, basis):
+    """Basket context at the moment: breadth, matched value and foreign net, from the members' raw data.
+
+    Breadth uses the change against the reference price when the source has it (daily), otherwise
+    the change since the open (intraday), and says which.
+    """
+    changes = []
+    for r in rows:
+        raw = r.get("raw", {})
+        value = raw.get("change_pct") if raw.get("change_pct") is not None else raw.get("momentum")
+        if value is not None:
+            changes.append(value)
+    turnover = [r["raw"]["turnover"] for r in rows if r.get("raw", {}).get("turnover") is not None]
+    nets = [r["raw"]["foreign_net_value"] for r in rows if r.get("raw", {}).get("foreign_net_value") is not None]
+    eps = 1e-9
+    return {"members": len(rows), "priced": len(changes), "basis": basis,
+            "advancers": sum(c > eps for c in changes), "decliners": sum(c < -eps for c in changes),
+            "unchanged": sum(abs(c) <= eps for c in changes),
+            "total_value": sum(turnover) if turnover else None,
+            "foreign_net": sum(nets) if nets else None, "foreign_reported": len(nets),
+            "index": index}
+
+
+def _require_daily(source, what):
+    if source != "daily":
+        raise ApiError(f"{what} chỉ có ở nguồn Cuối ngày · SSI thật (cần dữ liệu nhiều phiên).")
+
+
+def heatmap(source, weights="balanced", foreign="value"):
+    """Rank of every VN30 member in every recorded session, for the rank-history heatmap."""
+    _require_daily(source, "Lịch sử hạng")
+    if weights not in daily_rank.WEIGHTS or foreign not in ("value", "volume"):
+        raise ApiError("Cấu hình trọng số hoặc khối ngoại không hợp lệ.")
+    frame = _daily_frame()
+    days = sorted(frame["tradingDate"].unique()) if not frame.empty else []
+    ranks, reasons = {}, {}
+    for i, day in enumerate(days):
+        part = frame[(frame["index_group"] == "VN30") & (frame["tradingDate"] == day)]
+        ranked = daily_rank.rank_daily(part.to_dict("records"), weights, foreign)
+        for rec in ranked.to_dict("records"):
+            ranks.setdefault(rec["symbol"], [None] * len(days))[i] = int(rec["rank"]) if _num(rec.get("rank")) is not None else None
+            if _num(rec.get("rank")) is None:
+                reasons.setdefault(rec["symbol"], {})[i] = rec.get("quality_reason") or "Chưa xếp hạng"
+    rows = []
+    for symbol, series in ranks.items():
+        seen = [r for r in series if r is not None]
+        rows.append({"symbol": symbol, "ranks": series, "latest": series[-1] if series else None,
+                     "mean": sum(seen) / len(seen) if seen else None, "ranked_sessions": len(seen),
+                     "reasons": {str(k): v for k, v in reasons.get(symbol, {}).items()}})
+    rows.sort(key=lambda r: (r["latest"] is None, r["latest"] or 0, r["symbol"]))
+    return {"weights": weights, "foreign": foreign, "method": daily_rank.METHOD,
+            "days": [{"id": _day_id(d), "label": f"{d[8:10]}/{d[5:7]}"} for d in days], "rows": rows}
+
+
+def validation(source, weights="balanced"):
+    """Out-of-sample check of the end-of-day score against the next session's return."""
+    from src.analytics.validation import forward_check, verdict
+    _require_daily(source, "Kiểm chứng")
+    if weights not in daily_rank.WEIGHTS:
+        raise ApiError("Cấu hình trọng số không hợp lệ.")
+    result = forward_check(_daily_frame(), weights=(weights,))
+    part = result["weights"][weights]
+    return {"method": result["method"], "sessions": result["sessions"], "pairs": result["pairs"],
+            "top_n": result["top_n"], "forward_return": result["forward_return"], "weights": weights,
+            "weights_label": daily_rank.WEIGHT_LABELS[weights], "summary": {"ic": part["ic"], "spread": part["top_minus_bottom_pp"]},
+            "factor_ic": part["factor_ic"], "series": part["pairs"], "verdict": verdict(part)}
 
 
 def snapshot(source, run=None, point=None, weights="balanced", foreign="value", compare=None):
@@ -425,8 +515,9 @@ def snapshot(source, run=None, point=None, weights="balanced", foreign="value", 
                 "symbol": rec["symbol"], "rank": int(rec["rank"]) if ranked_ok else None,
                 "total": _num(rec.get("total_score")), "scores": scores,
                 "contributions": {f: (scores[f] * weight_map[f] if scores[f] is not None else None) for f in FACTOR_NAMES},
-                "raw": {k: _num(rec.get(k)) for k in ("momentum", "turnover", "spread_bps", "depth_vnd", "foreign_ratio",
-                                                       "imbalance", "closePrice", "openPrice", "totalTradingVolume")},
+                "raw": {**{k: _num(rec.get(k)) for k in ("momentum", "turnover", "spread_bps", "depth_vnd", "foreign_ratio",
+                                                          "imbalance", "closePrice", "openPrice", "totalTradingVolume")},
+                        "change_pct": None, "foreign_net_value": _net(rec.get("foreignBuyValue"), rec.get("foreignSellValue"))},
                 "status": {"kind": "ranked" if ranked_ok else kind, "label": "Đã xếp hạng" if ranked_ok else label,
                            "details": [] if ranked_ok else details},
                 "warnings": [WARNING_TEXT.get(w, w) for w in q.get("warnings", [])],
@@ -468,6 +559,7 @@ def snapshot(source, run=None, point=None, weights="balanced", foreign="value", 
         "policy": report.get("policy") if report else {"max_age_seconds": 60},
         "weights": {"id": weights, "label": WEIGHT_LABELS[weights], "values": weight_map},
         "foreign": foreign, "groups": groups, "compare": compare_info,
+        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), None, "giá mở cửa"),
     }
     if compare_info and compare_info["point"]:
         previous = snapshot(source, run, compare_info["point"], weights, foreign)

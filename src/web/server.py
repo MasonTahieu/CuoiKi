@@ -65,6 +65,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(HTTPStatus.OK, api.snapshot(query.get("source", ""), query.get("run"), query.get("point"),
                                                               query.get("weights", "balanced"), query.get("foreign", "value"),
                                                               query.get("compare") or None))
+            if parts.path == "/api/heatmap":
+                return self._json(HTTPStatus.OK, api.heatmap(query.get("source", ""), query.get("weights", "balanced"),
+                                                             query.get("foreign", "value")))
+            if parts.path == "/api/validation":
+                return self._json(HTTPStatus.OK, api.validation(query.get("source", ""), query.get("weights", "balanced")))
             if parts.path == "/api/history":
                 return self._json(HTTPStatus.OK, api.history(query.get("source", ""), query.get("run"), query.get("point"),
                                                              query.get("symbol", "")))

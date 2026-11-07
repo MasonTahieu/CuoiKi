@@ -3,6 +3,8 @@
   const FACTORS = ["momentum", "liquidity", "foreign", "imbalance"];
   const FLABEL = { momentum: "Động lượng", liquidity: "Thanh khoản", foreign: "Dòng tiền ngoại", imbalance: "Cung–cầu" };
   const FCOLOR = { momentum: "#4C8DFF", liquidity: "#31C2D6", foreign: "#A48BFF", imbalance: "#E58BC8" };
+  const FRGB = { momentum: "76, 141, 255", liquidity: "49, 194, 214", foreign: "164, 139, 255", imbalance: "229, 139, 200" };
+  const VIEWS = ["rank", "history", "validate", "quality", "method"];
   const MODE = { demo: "Demo", replay: "Phát lại", live: "Trực tiếp" };
   const BAD = new Set(["disconnected", "halt", "invalid"]);
   const $ = (id) => document.getElementById(id);
@@ -19,12 +21,13 @@
     ctx: null, source: null, run: null, point: null, weights: "balanced", foreign: "value", group: "VN30",
     sort: { key: "rank", dir: 1 }, search: "", min: 0, selected: null, view: "rank", compare: "prev",
     runs: [], timeline: [], data: null, timer: null, refresh: 0, requestId: 0,
+    chart: "score", heat: null, heatKey: "", valid: null, validKey: "",
   };
 
   // ---------- URL state ----------
   function readHash() {
     const p = new URLSearchParams(location.hash.slice(1));
-    for (const [k, key] of [["src", "source"], ["run", "run"], ["pt", "point"], ["g", "group"], ["w", "weights"], ["f", "foreign"], ["sel", "selected"], ["view", "view"], ["cmp", "compare"]]) {
+    for (const [k, key] of [["src", "source"], ["run", "run"], ["pt", "point"], ["g", "group"], ["w", "weights"], ["f", "foreign"], ["sel", "selected"], ["view", "view"], ["cmp", "compare"], ["ch", "chart"]]) {
       if (p.has(k)) state[key] = p.get(k);
     }
   }
@@ -32,7 +35,7 @@
     const p = new URLSearchParams();
     const put = (k, v) => v && p.set(k, v);
     put("src", state.source); put("run", state.run); put("pt", state.point); put("g", state.group);
-    put("w", state.weights); put("f", state.foreign); put("sel", state.selected); put("view", state.view); p.set("cmp", state.compare || "");
+    put("w", state.weights); put("f", state.foreign); put("sel", state.selected); put("view", state.view); p.set("cmp", state.compare || ""); put("ch", state.chart);
     history.replaceState(null, "", "#" + p.toString());
   }
 
@@ -56,6 +59,8 @@
   async function init() {
     readHash();
     state.group = "VN30";  // scope is VN30 only; old links may still carry g=HNX30
+    if (!VIEWS.includes(state.view)) state.view = "rank";
+    if (!["score", "scatter"].includes(state.chart)) state.chart = "score";
     try {
       state.ctx = await get("/api/context");
     } catch (err) { return fatal(err); }
@@ -112,6 +117,11 @@
     };
     document.querySelectorAll(".group-tabs button").forEach((b) => (b.onclick = () => { state.group = b.dataset.group; state.selected = null; render(); }));
     document.querySelectorAll(".view-tabs button").forEach((b) => (b.onclick = () => { state.view = b.dataset.view; render(); }));
+    $("chart-mode").onclick = (e) => {
+      const b = e.target.closest("button");
+      if (!b || b.dataset.id === state.chart) return;
+      state.chart = b.dataset.id; writeHash(); renderChart();
+    };
   }
 
   function setRefresh(seconds) {
@@ -202,10 +212,12 @@
     }
     document.querySelectorAll(".group-tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.group === state.group)));
     document.querySelectorAll(".view-tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.view === state.view)));
-    for (const v of ["rank", "quality", "method"]) $("view-" + v).hidden = state.view !== v;
+    for (const v of VIEWS) $("view-" + v).hidden = state.view !== v;
     $("footer-source").textContent = `Nguồn ${d.source === "synthetic" ? "giả lập" : d.source.toUpperCase()}${d.profile ? " · " + d.profile : ""} · giờ UTC+7`;
-    $("controls-summary").textContent = `${clock(d.as_of)} · ${d.weights.id === "balanced" ? "25/25/25/25" : "40/20/20/20"} · ${d.foreign === "value" ? "ngoại theo giá trị" : "ngoại theo khối lượng"}${compareAt() ? " · so với " + compareAt() : ""}`;
-    renderMetrics(); renderNotice(); renderRank(); renderQuality(); renderMethod();
+    const wl = isDaily() ? (d.weights.id === "balanced" ? "33/33/33" : "50/25/25") : (d.weights.id === "balanced" ? "25/25/25/25" : "40/20/20/20");
+    $("controls-summary").textContent = `${isDaily() ? day(d.as_of) : clock(d.as_of)} · ${wl} · ${d.foreign === "value" ? "ngoại theo giá trị" : "ngoại theo khối lượng"}${compareAt() ? " · so với " + compareAt() : ""}`;
+    renderPulse(); renderMetrics(); renderNotice(); renderRank(); renderQuality(); renderMethod();
+    renderHistory(); renderValidate();
   }
 
   function renderMetrics() {
@@ -282,6 +294,13 @@
     return `<span class="${cls}" aria-hidden="true">${parts}</span>`;
   }
   function applyWidths(root) { root.querySelectorAll("[data-w]").forEach((n) => (n.style.width = Math.max(0, Math.min(100, Number(n.dataset.w))) + "%")); }
+  // Percentile tint behind each factor score: same hue as the factor, stronger when the score is higher.
+  function applyTints(root) {
+    root.querySelectorAll("[data-tint]").forEach((n) => {
+      const v = Math.max(0, Math.min(100, Number(n.dataset.tint)));
+      n.style.backgroundColor = `rgba(${FRGB[n.dataset.f]}, ${(0.2 * Math.pow(v / 100, 2.2)).toFixed(3)})`;
+    });
+  }
 
   function statusTag(row) {
     if (row.rank != null) {
@@ -319,12 +338,12 @@
         <td class="rank num"><span class="rank-cell"><b>${r.rank ?? "—"}</b>${deltaTag(r)}</span></td>
         <td class="sym">${esc(r.symbol)}</td>
         <td class="total"><span class="total-cell"><b class="num">${fmt(r.total)}</b>${r.rank != null ? stackBar(r) : ""}</span></td>
-        ${shownFactors().map((f) => `<td class="factor"><span class="factor-cell">${r.scores[f] != null ? `<span class="bar"><i class="c-${f}" data-w="${r.scores[f]}"></i></span><span class="num">${fmt(r.scores[f], 0)}</span>` : `<span></span><span class="muted">—</span>`}</span></td>`).join("")}
+        ${shownFactors().map((f) => `<td class="factor"${r.scores[f] != null ? ` data-tint="${r.scores[f]}" data-f="${f}"` : ""}><span class="factor-cell">${r.scores[f] != null ? `<span class="bar"><i class="c-${f}" data-w="${r.scores[f]}"></i></span><span class="num">${fmt(r.scores[f], 0)}</span>` : `<span></span><span class="muted">—</span>`}</span></td>`).join("")}
         <td class="state">${statusTag(r)}</td>
       </tr>`).join("");
     const table = $("rank-table");
     table.innerHTML = `<caption class="sr-only">Xếp hạng ${esc(state.group)}</caption><thead><tr>${th}</tr></thead><tbody>${body}</tbody>`;
-    applyWidths(table);
+    applyWidths(table); applyTints(table);
     table.querySelectorAll("th button[data-sort]").forEach((b) => (b.onclick = () => {
       const key = b.dataset.sort;
       state.sort = { key, dir: state.sort.key === key ? -state.sort.dir : 1 };
@@ -353,7 +372,7 @@
   function select(symbol) {
     state.selected = symbol;
     document.querySelectorAll("#rank-table tbody tr").forEach((tr) => tr.setAttribute("aria-selected", String(tr.dataset.symbol === symbol)));
-    writeHash(); renderDetail(); renderChart();
+    writeHash(); renderDetail(); renderChart(); drawHeatmap();
   }
 
   function rawLine(f, raw) {
@@ -442,6 +461,8 @@
   }
 
   function renderChart() {
+    document.querySelectorAll("#chart-mode button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.id === state.chart)));
+    if (state.chart === "scatter") return scatterChart();
     const g = groupData(), el = $("score-chart");
     const rows = (g ? g.rows : []).filter((r) => r.rank != null).slice(0, 15);
     $("chart-title").textContent = `Điểm tổng trong nhóm ${state.group} · chia theo đóng góp${compareAt() ? " · vạch trắng: điểm lúc " + compareAt() : ""}`;
@@ -499,6 +520,193 @@
         <dt>So sánh với</dt><dd>${d.compare ? (d.compare.as_of ? esc(d.compare.as_of) + " (" + esc(d.compare.label) + ")" : "không có mốc " + esc(d.compare.label)) : "không so sánh"}</dd></dl></div>`;
   }
 
+  // ---------- market pulse ----------
+  function renderPulse() {
+    const p = state.data.pulse, el = $("pulse");
+    el.hidden = !p || !p.members;
+    if (el.hidden) return;
+    const idx = p.index;
+    $("p-index-item").hidden = !idx;
+    if (idx) {
+      const dir = idx.change_pct > 0 ? "up" : idx.change_pct < 0 ? "down" : "ref";
+      $("p-index").textContent = fmt(idx.close, 2);
+      const ch = $("p-index-change");
+      ch.className = "num move " + dir;
+      ch.innerHTML = `${dir === "ref" ? "" : icon(dir)}${signed(idx.change, 2)} (${signed(idx.change_pct, 2)}%)`;
+    }
+    $("p-breadth-label").textContent = `Tăng / đứng / giảm · so với ${p.basis}`;
+    const n = p.priced || 1;
+    const [u, f, dn] = $("p-breadth").children;
+    u.dataset.w = (100 * p.advancers) / n; f.dataset.w = (100 * p.unchanged) / n; dn.dataset.w = (100 * p.decliners) / n;
+    applyWidths($("p-breadth"));
+    $("p-breadth-text").innerHTML = `<span class="up">${p.advancers}</span><span class="sep">/</span><span class="ref">${p.unchanged}</span><span class="sep">/</span><span class="down">${p.decliners}</span>`;
+    $("p-breadth-text").title = `${p.advancers} mã tăng, ${p.unchanged} đứng, ${p.decliners} giảm (${p.priced}/${p.members} mã có giá)`;
+    $("p-value").textContent = money(p.total_value);
+    $("p-foreign").textContent = p.foreign_net == null ? "—" : `${signed(p.foreign_net / 1e9, 1)} tỷ`;
+    $("p-foreign-note").textContent = p.foreign_net == null ? "nguồn không gửi"
+      : (p.foreign_net >= 0 ? "mua ròng" : "bán ròng") + (p.foreign_reported < p.members ? ` · ${p.foreign_reported}/${p.members} mã` : "");
+  }
+
+  // ---------- views that need many sessions ----------
+  function needsDaily(el, what) {
+    const has = state.ctx.sources.some((s) => s.id === "daily");
+    el.innerHTML = `<div class="empty"><strong>${what} cần dữ liệu nhiều phiên</strong>Nguồn đang chọn chỉ có một phiên, nên chưa so được giữa các phiên.`
+      + (has ? `<span class="empty-action"><button class="btn" type="button" data-go-daily>Mở Cuối ngày · SSI thật</button></span>` : "") + `</div>`;
+    const b = el.querySelector("[data-go-daily]");
+    if (b) b.onclick = () => { $("source").value = "daily"; $("source").dispatchEvent(new Event("change")); };
+  }
+
+  async function renderHistory() {
+    if (state.view !== "history") return;
+    const el = $("heatmap");
+    const note = document.querySelector("#view-history .view-note");
+    if (!isDaily()) { note.hidden = true; return needsDaily(el, "Lịch sử hạng"); }
+    note.hidden = false;
+    const key = `${state.weights}|${state.foreign}`;
+    if (state.heatKey !== key) {
+      if (!state.heat) el.innerHTML = `<p class="muted loading-line">Đang tính hạng từng phiên…</p>`;
+      try {
+        const h = await get("/api/heatmap", { source: state.source, weights: state.weights, foreign: state.foreign });
+        state.heat = h; state.heatKey = key;
+      } catch (err) { el.innerHTML = `<div class="empty"><strong>Không tải được lịch sử hạng</strong>${esc(err.message)}</div>`; return; }
+    }
+    drawHeatmap();
+  }
+
+  function drawHeatmap() {
+    const el = $("heatmap"), h = state.heat;
+    if (!h || state.view !== "history" || !isDaily() || !h.rows.length) return;
+    const days = h.days, n = h.rows.length, L = 58, row = 22;
+    const cell = Math.max(28, Math.floor((Math.max(320, el.clientWidth - 32) - L) / days.length));
+    const narrow = cell < 40, T = narrow ? 36 : 24;  // narrow cells: month on its own line, day number below
+    const W = L + cell * days.length, H = T + row * n + 2;
+    const cur = days.findIndex((d) => d.id === (state.data && state.data.as_of));
+    const top = Math.max(2, ...h.rows.flatMap((r) => r.ranks.filter((k) => k != null)));
+    let svg = days.map((d, j) => {
+      const cx = L + j * cell + cell / 2, mark = j === cur ? ' class="cur"' : "";
+      if (!narrow) return `<text x="${cx}" y="14" text-anchor="middle"${mark}>${d.label}</text>`;
+      const month = j === 0 || d.label.slice(3) !== days[j - 1].label.slice(3) ? `<text class="month" x="${L + j * cell + 2}" y="11">Th${Number(d.label.slice(3))}</text>` : "";
+      return `${month}<text x="${cx}" y="27" text-anchor="middle"${mark}>${d.label.slice(0, 2)}</text>`;
+    }).join("");
+    if (cur >= 0) svg += `<rect class="cur-col" x="${L + cur * cell + 0.5}" y="${T - 3.5}" width="${cell - 1}" height="${row * n + 5}" rx="4"/>`;
+    svg += h.rows.map((r, i) => {
+      const y = T + i * row, sel = r.symbol === state.selected;
+      const cells = r.ranks.map((k, j) => {
+        const x = L + j * cell, tip = `${r.symbol} · phiên ${days[j].label}: `;
+        if (k == null) return `<g><title>${esc(tip + (r.reasons[j] || "chưa xếp hạng"))}</title><rect class="cell-empty" x="${x + 1}" y="${y + 1}" width="${cell - 2}" height="${row - 2}" rx="3"/><text class="dash" x="${x + cell / 2}" y="${y + 15}" text-anchor="middle">–</text></g>`;
+        const a = 0.06 + 0.86 * Math.pow(1 - (k - 1) / (top - 1), 1.6);
+        return `<g><title>${esc(tip)}hạng ${k}</title><rect x="${x + 1}" y="${y + 1}" width="${cell - 2}" height="${row - 2}" rx="3" fill="rgba(59, 130, 246, ${a.toFixed(3)})"/><text x="${x + cell / 2}" y="${y + 15}" text-anchor="middle"${a > 0.52 ? ' class="deep"' : ""}>${k}</text></g>`;
+      }).join("");
+      return `<g class="heat-row${sel ? " sel" : ""}" data-symbol="${esc(r.symbol)}"><rect class="track" x="0" y="${y}" width="${W}" height="${row}"/>`
+        + `<text class="sym" x="0" y="${y + 15}">${esc(r.symbol)}</text>${cells}`
+        + (sel ? `<rect class="sel-ring" x="${L + 0.5}" y="${y + 0.5}" width="${cell * days.length - 1}" height="${row - 1}" rx="4"/>` : "") + `</g>`;
+    }).join("");
+    el.innerHTML = `<svg class="chart heat" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Hạng của ${n} mã VN30 qua ${days.length} phiên">${svg}</svg>`;
+    el.querySelectorAll(".heat-row").forEach((g) => (g.onclick = () => select(g.dataset.symbol)));
+    const steady = h.rows.filter((r) => r.ranks.every((k) => k != null && k <= 10)).map((r) => r.symbol);
+    const label = state.data.weights.id === "balanced" ? "33/33/33" : "50/25/25";
+    $("history-note").textContent = `Hạng trong rổ VN30 qua ${days.length} phiên, trọng số ${label}, sắp theo hạng phiên mới nhất · khung sáng: phiên đang xem · bấm một hàng để xem chi tiết`
+      + (steady.length ? ` · Ở top 10 mọi phiên: ${steady.join(", ")}` : ` · Không mã nào ở top 10 cả ${days.length} phiên`);
+    $("heat-key").innerHTML = `<span>Hạng 1</span><i class="ramp"></i><span>Hạng ${top}</span><i class="none"></i><span>Chưa xếp hạng</span>`;
+  }
+
+  async function renderValidate() {
+    if (state.view !== "validate") return;
+    const el = $("validate");
+    if (!isDaily()) return needsDaily(el, "Kiểm chứng");
+    if (state.validKey !== state.weights) {
+      if (!state.valid) el.innerHTML = `<p class="muted loading-line">Đang đối chiếu điểm với lợi suất phiên sau…</p>`;
+      try {
+        state.valid = await get("/api/validation", { source: state.source, weights: state.weights });
+        state.validKey = state.weights;
+      } catch (err) { el.innerHTML = `<div class="empty"><strong>Không tải được kiểm chứng</strong>${esc(err.message)}</div>`; return; }
+    }
+    drawValidate();
+  }
+
+  function drawValidate() {
+    const v = state.valid, el = $("validate");
+    if (!v || state.view !== "validate" || !isDaily()) return;
+    const ic = v.summary.ic, sp = v.summary.spread;
+    const stat = (label, value, note) => `<div><dt>${label}</dt><dd><strong class="num">${value}</strong><span>${note}</span></dd></div>`;
+    const positive = ic.positive_share == null ? "—" : `${Math.round(ic.positive_share * ic.pairs)}/${ic.pairs}`;
+    const tNote = ic.t == null ? "chưa đủ cặp" : Math.abs(ic.t) >= 2 ? "|t| ≥ 2: khác 0 có ý nghĩa" : "|t| < 2: chưa khác 0";
+    el.innerHTML = `
+      <p class="verdict">${esc(v.verdict)}</p>
+      <dl class="vstats">
+        ${stat("IC trung bình", signed(ic.mean, 3), `độ lệch chuẩn ${fmt(ic.sd, 3)}`)}
+        ${stat("Thống kê t", signed(ic.t, 2), tNote)}
+        ${stat("Cặp phiên có IC > 0", positive, "một nửa là mức ngẫu nhiên")}
+        ${stat(`Top ${v.top_n} − bottom ${v.top_n}`, `${signed(sp.mean, 2)} điểm %`, "lợi suất phiên sau, trung bình")}
+      </dl>
+      <h3 class="chart-title">IC từng cặp phiên liên tiếp · trọng số ${esc(v.weights_label.replace(/^\D+/, ""))}</h3>
+      <div id="ic-chart"></div>
+      <div class="vgrid">
+        <div><h3 class="chart-title">IC của từng yếu tố</h3>
+          <table class="ftable"><thead><tr><th scope="col">Yếu tố</th><th scope="col" class="n">IC trung bình</th><th scope="col" class="n">t</th></tr></thead>
+          <tbody>${["momentum", "liquidity", "foreign"].map((f) => `<tr><td><i class="sw c-${f}"></i>${FLABEL[f]}</td><td class="num n">${signed(v.factor_ic[f].mean, 3)}</td><td class="num n">${signed(v.factor_ic[f].t, 2)}</td></tr>`).join("")}</tbody></table></div>
+        <div><h3 class="chart-title">Cách đo</h3>
+          <p class="legend-note">IC là tương quan hạng Spearman giữa điểm phiên t và lợi suất phiên t+1 của các mã được xếp hạng. Lợi suất lấy theo ${esc(v.forward_return)}, nên ngày không hưởng quyền không làm méo kết quả. Trọng số cố định từ trước, không dò trên dữ liệu này. Với ${v.pairs} cặp phiên, phép thử có độ nhạy thấp; kết quả không thay đổi cách chấm điểm.</p></div>
+      </div>`;
+    const box = $("ic-chart");
+    box.innerHTML = icChart(v.series, ic.mean, Math.max(280, box.clientWidth));
+  }
+
+  function icChart(series, mean, W) {
+    const pts = series.filter((p) => p.ic != null);
+    if (!pts.length) return `<p class="muted">Chưa có cặp phiên nào tính được IC.</p>`;
+    const H = 168, P = { l: 40, r: 10, t: 12, b: 24 };
+    const lim = Math.max(0.5, ...pts.map((p) => Math.abs(p.ic) * 1.1));
+    const y = (v) => P.t + (1 - (v + lim) / (2 * lim)) * (H - P.t - P.b);
+    const step = (W - P.l - P.r) / series.length, bw = Math.max(6, Math.min(26, step * 0.62));
+    const every = step < 34 ? 2 : 1;
+    let out = [lim, lim / 2, 0, -lim / 2, -lim].map((v) => `<line class="grid${v === 0 ? " zero" : ""}" x1="${P.l}" x2="${W - P.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/><text x="${P.l - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${signed(v, 2)}</text>`).join("");
+    out += series.map((p, i) => {
+      const cx = P.l + step * i + step / 2, label = (i % every === 0) ? `<text x="${cx.toFixed(1)}" y="${H - 6}" text-anchor="middle">${p.date.slice(8, 10)}/${p.date.slice(5, 7)}</text>` : "";
+      if (p.ic == null) return label;
+      const top = y(Math.max(0, p.ic)), h = Math.max(1, Math.abs(y(p.ic) - y(0)));
+      return `<g><title>Phiên ${p.date.slice(8, 10)}/${p.date.slice(5, 7)} → ${p.next_date.slice(8, 10)}/${p.next_date.slice(5, 7)}: IC ${signed(p.ic, 3)} · ${p.ranked} mã</title><rect class="${p.ic >= 0 ? "pos" : "neg"}" x="${(cx - bw / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2"/></g>${label}`;
+    }).join("");
+    if (mean != null) out += `<line class="mean" x1="${P.l}" x2="${W - P.r}" y1="${y(mean).toFixed(1)}" y2="${y(mean).toFixed(1)}"/><text class="mean-label" x="${P.l + 4}" y="${(y(mean) + (mean >= 0 ? 13 : -5)).toFixed(1)}">trung bình ${signed(mean, 3)}</text>`;
+    return `<svg class="chart ic" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="IC của ${pts.length} cặp phiên, trung bình ${signed(mean, 3)}">${out}</svg>`;
+  }
+
+  // ---------- momentum x foreign flow ----------
+  function scatterChart() {
+    const g = groupData(), el = $("score-chart");
+    const pts = (g ? g.rows : []).filter((r) => r.raw.momentum != null && r.raw.foreign_ratio != null && r.raw.turnover > 0);
+    const basis = state.data.foreign === "volume" ? "khối lượng" : "giá trị khớp";
+    $("chart-title").textContent = `Động lượng × dòng tiền ngoại · cỡ chấm theo giá trị khớp · ngoại ròng tính trên ${basis}`;
+    if (pts.length < 3) { el.innerHTML = `<p class="muted">Cần ít nhất 3 mã có giá, giá trị khớp và số liệu khối ngoại để vẽ.</p>`; return; }
+    const W = Math.max(260, el.clientWidth), H = Math.round(Math.min(330, Math.max(230, W * 0.8)));
+    const P = { l: 10, r: 10, t: 10, b: 22 };
+    const mx = Math.max(0.2, ...pts.map((p) => Math.abs(p.raw.momentum))) * 1.15;
+    const my = Math.max(0.005, ...pts.map((p) => Math.abs(p.raw.foreign_ratio))) * 1.15;
+    const x = (v) => P.l + ((v + mx) / (2 * mx)) * (W - P.l - P.r);
+    const y = (v) => P.t + (1 - (v + my) / (2 * my)) * (H - P.t - P.b);
+    const tmax = Math.max(...pts.map((p) => p.raw.turnover));
+    const rad = (t) => 3 + 10 * Math.sqrt(t / tmax);
+    const big = new Set(pts.slice().sort((a, b) => b.raw.turnover - a.raw.turnover).slice(0, 4).map((p) => p.symbol));
+    const q = (tx, ty, anchor, text) => `<text class="quad" x="${tx}" y="${ty}" text-anchor="${anchor}">${text}</text>`;
+    let out = `<line class="grid axis" x1="${P.l}" x2="${W - P.r}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}"/><line class="grid axis" x1="${x(0).toFixed(1)}" x2="${x(0).toFixed(1)}" y1="${P.t}" y2="${H - P.b}"/>`
+      + q(W - P.r - 2, P.t + 12, "end", "Giá tăng · ngoại mua") + q(P.l + 2, P.t + 12, "start", "Giá giảm · ngoại mua")
+      + q(W - P.r - 2, H - P.b - 6, "end", "Giá tăng · ngoại bán") + q(P.l + 2, H - P.b - 6, "start", "Giá giảm · ngoại bán")
+      + `<text x="${P.l}" y="${H - 6}">${signed(-mx / 1.15, 1)}%</text><text x="${W - P.r}" y="${H - 6}" text-anchor="end">${signed(mx / 1.15, 1)}%</text><text x="${x(0).toFixed(1)}" y="${H - 6}" text-anchor="middle">động lượng</text>`;
+    out += pts.slice().sort((a, b) => b.raw.turnover - a.raw.turnover).map((p) => {
+      const sel = p.symbol === state.selected, cx = x(p.raw.momentum), cy = y(p.raw.foreign_ratio), r = rad(p.raw.turnover);
+      const tip = `${p.symbol}: động lượng ${signed(p.raw.momentum, 2)}%, ngoại ròng ${signed(100 * p.raw.foreign_ratio, 2)}% ${basis}, giá trị khớp ${money(p.raw.turnover)}${p.rank == null ? " · chưa xếp hạng" : " · hạng " + p.rank}`;
+      return `<g class="pt${sel ? " sel" : ""}${p.rank == null ? " open" : ""}" data-symbol="${esc(p.symbol)}"><title>${esc(tip)}</title><circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"/></g>`;
+    }).join("");
+    out += pts.filter((p) => p.symbol === state.selected || big.has(p.symbol)).map((p) => {
+      const sel = p.symbol === state.selected, cx = x(p.raw.momentum), cy = y(p.raw.foreign_ratio), r = rad(p.raw.turnover);
+      const right = cx + r + 3 + 34 < W;
+      return `<text class="pt-label${sel ? " sel" : ""}" x="${(right ? cx + r + 3 : cx - r - 3).toFixed(1)}" y="${(cy + 4).toFixed(1)}" text-anchor="${right ? "start" : "end"}">${esc(p.symbol)}</text>`;
+    }).join("");
+    el.innerHTML = `<svg class="chart scatter" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Động lượng và dòng tiền ngoại của ${pts.length} mã">${out}</svg>`
+      + `<p class="chart-note">Trục ngang: % giá so với mở cửa. Trục dọc: (ngoại mua − bán) / ${basis}. Không phải tín hiệu mua bán.</p>`;
+    el.querySelectorAll(".pt").forEach((n) => (n.onclick = () => select(n.dataset.symbol)));
+  }
+
   function showError(err) {
     if (!state.data) return fatal(err);
     renderNotice(`Không tải được dữ liệu: ${err.message}`);
@@ -518,6 +726,11 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => { if (state.data) { renderChart(); drawPrice(); } }, 120);
   }).observe(document.querySelector(".side"));
+  let mainTimer = null;
+  new ResizeObserver(() => {
+    clearTimeout(mainTimer);
+    mainTimer = setTimeout(() => { if (state.data) { drawHeatmap(); drawValidate(); } }, 120);
+  }).observe(document.querySelector(".workspace > .panel"));
 
   init();
 })();

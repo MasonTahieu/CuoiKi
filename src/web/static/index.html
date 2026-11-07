@@ -42,6 +42,18 @@
 </header>
 
 <main class="page" id="page">
+  <section class="pulse" id="pulse" aria-label="Nhịp rổ VN30 tại mốc phân tích" hidden>
+    <div class="pulse-item" id="p-index-item"><span class="pulse-label">Chỉ số VN30</span>
+      <span class="pulse-value"><strong class="num" id="p-index">–</strong><span class="num" id="p-index-change"></span></span></div>
+    <div class="pulse-item pulse-breadth"><span class="pulse-label" id="p-breadth-label">Tăng / đứng / giảm</span>
+      <span class="pulse-value"><span class="breadth" id="p-breadth" aria-hidden="true"><i class="b-up" data-w="0"></i><i class="b-flat" data-w="0"></i><i class="b-down" data-w="0"></i></span>
+      <span class="num breadth-count" id="p-breadth-text"></span></span></div>
+    <div class="pulse-item"><span class="pulse-label">Giá trị khớp của rổ</span>
+      <span class="pulse-value"><strong class="num" id="p-value">–</strong></span></div>
+    <div class="pulse-item"><span class="pulse-label">Khối ngoại ròng</span>
+      <span class="pulse-value"><strong class="num" id="p-foreign">–</strong><span id="p-foreign-note"></span></span></div>
+  </section>
+
   <dl class="metrics" aria-label="Tổng quan nhóm">
     <div class="metric"><dt>Mã đã xếp hạng</dt><dd><strong class="num" id="m-ranked">–</strong><span id="m-ranked-note"></span></dd></div>
     <div class="metric"><dt>Dẫn đầu nhóm</dt><dd><strong id="m-leader">–</strong><span class="num" id="m-leader-note"></span></dd></div>
@@ -75,6 +87,8 @@
       <div class="panel-head">
         <nav class="view-tabs" role="tablist" aria-label="Khu vực">
           <button role="tab" data-view="rank" aria-selected="true">Xếp hạng</button>
+          <button role="tab" data-view="history" aria-selected="false">Lịch sử<span class="hide-sm"> hạng</span></button>
+          <button role="tab" data-view="validate" aria-selected="false">Kiểm chứng</button>
           <button role="tab" data-view="quality" aria-selected="false">Chất lượng<span class="hide-sm"> dữ liệu</span></button>
           <button role="tab" data-view="method" aria-selected="false">Phương pháp</button>
         </nav>
@@ -99,6 +113,8 @@
         </div>
         <div class="table-wrap"><table id="rank-table"></table></div>
       </div>
+      <div id="view-history" hidden><div class="view-note"><p class="legend-note" id="history-note"></p><span class="heat-key" id="heat-key" aria-hidden="true"></span></div><div class="heatmap" id="heatmap"></div></div>
+      <div id="view-validate" hidden><div class="validate" id="validate"></div></div>
       <div id="view-quality" hidden><p class="legend-note" id="quality-note"></p><div class="table-wrap"><table class="quality" id="quality-table"></table></div></div>
       <div id="view-method" hidden><div class="method" id="method"></div></div>
     </section>
@@ -110,6 +126,10 @@
         <div class="price" id="price"></div>
       </section>
       <section class="panel chart-panel">
+        <div class="segmented compact" id="chart-mode" role="group" aria-label="Loại biểu đồ">
+          <button type="button" data-id="score" aria-pressed="true">Điểm tổng</button>
+          <button type="button" data-id="scatter" aria-pressed="false">Giá × khối ngoại</button>
+        </div>
         <h3 class="chart-title" id="chart-title">Điểm tổng trong nhóm</h3>
         <div id="score-chart"></div>
       </section>

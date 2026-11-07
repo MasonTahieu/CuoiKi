@@ -238,6 +238,8 @@ Four hues that mean one factor each, everywhere the factor appears: segments of 
 
 **The Change Is Not a Market Move Rule.** Rank and score changes against an earlier moment are not price moves: a rise uses Pale Change Blue (change-up) with an up chevron, a fall uses Tertiary Ink with a down chevron, "mới" marks a stock newly ranked. Never green or red.
 
+**The Accent Is Also the Rank Scale Rule.** The rank-history heatmap fills cells with Selection Blue at an alpha that rises non-linearly with rank (rank 1 strongest), so leaders separate from the middle of the pack. It is the only place the accent encodes a value, and it stays a single hue; unranked cells are Track Slate with a dash.
+
 **The Factor Constancy Rule.** A factor's hue is identical in the table, detail panel, chart, legend and brand mark. Factor colour is applied by class (c-momentum, c-liquidity, c-foreign, c-imbalance) or the matching hex in SVG, never improvised.
 
 ## Typography
@@ -261,7 +263,7 @@ Four hues that mean one factor each, everywhere the factor appears: segments of 
 
 ## Layout
 
-A sticky 60px top bar (brand left, VN30 badge centred, mode chips, connection and clock right) above a page with 16px vertical gap and 24px side padding. Below it: a four-cell metrics strip in one panel, a wrapping toolbar of labelled controls (aligned to their bottoms, gaps 12px by 18px), then the workspace.
+A sticky 60px top bar (brand left, VN30 badge centred, mode chips, connection and clock right) above a page with 16px vertical gap and 24px side padding. Below it: an unpanelled market-pulse band on the ground, a four-cell metrics strip in one panel, a wrapping toolbar of labelled controls (aligned to their bottoms, gaps 12px by 18px), then the workspace.
 
 The workspace is two columns, ranking panel left (1.7fr, about 62%) and a side column (min 340px) with the "why" panel above the total-score chart. The side column is sticky below the top bar.
 
@@ -319,10 +321,25 @@ Quiet and solid; the accent is reserved.
 
 ### Navigation
 - **Group badge:** a single raised VN30 chip at the top bar's centre with a muted ranked/members count (the HNX30 tab was removed when scope narrowed to VN30).
-- **View tabs:** Xếp hạng / Chất lượng dữ liệu / Phương pháp as full-height text tabs in the panel head; active tab in Primary Ink with a 2px blue underline.
+- **View tabs:** Xếp hạng / Lịch sử hạng / Kiểm chứng / Chất lượng dữ liệu / Phương pháp as full-height text tabs in the panel head; active tab in Primary Ink with a 2px blue underline. At ≤560px the tab row scrolls horizontally and the longer labels shorten ("Lịch sử", "Chất lượng"). The cohort note in the panel head hides below 1560px.
 
 ### Ranking Row (signature)
 Each row: rank (secondary ink), symbol (700), total score (15px) beside a **contribution-stacked total bar** (8px tall on a raised track, segments in factor hues sized by weighted contribution), then four **factor percentile bars** (6px, 0–100 width in the factor hue, value right-aligned). Row hover is a 2.5% white wash; selected row takes accent-soft. Bar widths animate 240ms on `cubic-bezier(.16, 1, .3, 1)`, off under reduced motion.
+
+### Market Pulse
+An unpanelled band above the metrics strip, four items separated by 1px seams: VN30 index (17px/650 value, change and % in market green/red/amber with a 12px chevron), breadth (a 120px 6px bar split green/amber/red by advancers, unchanged and decliners, plus the three counts), basket matched value, and basket foreign net (signed, in tỷ, with "mua ròng"/"bán ròng" in Secondary Ink; never green or red, because flow is not a price move). Breadth states its basis: against the reference price for daily data, against the open for intraday data. The index item is hidden when the source has no index row. At ≤560px the band becomes a 2×2 grid and labels wrap.
+
+### Rank History Heatmap (Lịch sử hạng)
+Symbols down, sessions across, one 22px row per symbol sorted by the latest rank; each cell shows the rank number in 11px (white on cells above ~50% alpha). The viewed session's column carries a 1px light outline and a bold header; the selected symbol's row carries a 1.5px Pale Selection Ink ring and its label turns the same ink. Clicking a row selects the stock everywhere. Cells are at least 28px wide; when narrower than 40px the header splits into a month line ("Th11") and a day line. A note names the weights and the stocks that stayed in the top 10 every session; a key shows the blue ramp and the unranked swatch. Daily source only; other sources show an empty state with a button to open the daily source.
+
+### Validation (Kiểm chứng)
+The honest-verdict view: one 15px sentence stating whether the score has shown next-session predictive power, a four-cell stat strip (IC mean, t-statistic, pairs with IC > 0, top-5 minus bottom-5 spread) in 22px/650 values, a bar chart of IC per consecutive-session pair (positive bars Pale Change Blue, negative bars Tertiary Ink, a dashed mean line labelled at the left), a factor-IC table with factor swatches, and a short method note. Statistics are not price moves, so no green or red appears.
+
+### Factor Cell Tint
+Behind each factor score in the ranking table, the cell takes its factor hue at an alpha of `0.2 × (score/100)^2.2`: weak scores stay nearly untinted, strong ones read as a heat column, without displacing the percentile bar.
+
+### Momentum × Foreign Flow Scatter
+The side chart panel has a compact segmented switch (24px) between the total-score bars and a scatter: x is momentum (% vs the open), y is foreign net over matched value (or volume), bubble radius grows with the square root of matched value. Axes cross at zero; the four quadrants are labelled in Tertiary Ink ("Giá tăng · ngoại mua", …). Bubbles are neutral (Secondary Ink at 24% fill, 1px stroke); unranked stocks are dashed outlines; the selected stock fills with the accent. The selected and the four largest stocks are labelled in a second pass with a surface-coloured halo so bubbles never hide names. A note states the axes and that it is not a trading signal.
 
 ### Rank Change
 Beside each rank: a 12px chevron plus the number of places moved since the comparison moment (default the previous recorded moment; 30 s, 1, 5, 15 min selectable; "Không so sánh" turns it off). The comparison moment is always strictly earlier and named in the legend note; when none exists the note says so instead of guessing. The detail panel adds one line "So với HH:MM:SS: hạng a → b (…), điểm x → y (±d)", the leader metric notes "từ hạng n", and the total-score chart marks each stock's previous total with a 2px white tick.
@@ -347,6 +364,7 @@ Inline SVG drawn at the container's pixel width so 11px labels stay 11px. Gridli
 - **Do** set every number in tabular figures and draw icons as 16px line icons (1.6 stroke) from the inline sprite.
 - **Do** apply factor colours and bar widths through classes and the CSSOM; the CSP forbids inline style attributes.
 - **Do** draw charts at container pixel width so chart labels stay 11px.
+- **Do** keep the views that need many sessions (heatmap, validation) honest about their scope: show an empty state with a way to the daily source rather than a chart of one session.
 
 ### Don't:
 - **Don't** colour scores green or red; score strength is bar length in factor hues.

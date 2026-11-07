@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bộ lọc VN30 &amp; HNX30</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></symbol>
+  <symbol id="i-download" viewBox="0 0 16 16"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 16 16"><path d="M10 3.5 5.5 8 10 12.5"/></symbol>
+  <symbol id="i-next" viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v3h-3"/></symbol>
+  <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.2v3.6M8 5.1v.1"/></symbol>
+  <symbol id="i-up" viewBox="0 0 16 16"><path d="M4 10 8 6l4 4"/></symbol>
+  <symbol id="i-down" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 16 16"><path d="M2.5 4h11M4.5 8h7M6.5 12h3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16"><path d="M8 2.5 14 13H2L8 2.5Z"/><path d="M8 6.5v3M8 11.3v.1"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#1D2535"/><rect x="6" y="15" width="3.2" height="7" rx="1" fill="#4C8DFF"/><rect x="11" y="11" width="3.2" height="11" rx="1" fill="#31C2D6"/><rect x="16" y="7" width="3.2" height="15" rx="1" fill="#A48BFF"/><rect x="21" y="12" width="3.2" height="10" rx="1" fill="#E58BC8"/></svg>
+    <div>
+      <h1>Bộ lọc cổ phiếu đa yếu tố</h1>
+      <p>VN30 &amp; HNX30 · thu hẹp danh sách cho nhà đầu tư và môi giới</p>
+    </div>
+  </div>
+  <div class="group-tabs" role="tablist" aria-label="Nhóm so sánh">
+    <button role="tab" data-group="VN30" aria-selected="true">VN30 <small class="num" data-count="VN30"></small></button>
+    <button role="tab" data-group="HNX30" aria-selected="false">HNX30 <small class="num" data-count="HNX30"></small></button>
+  </div>
+  <div class="status-cluster">
+    <span class="chip" id="mode-chip">Demo</span>
+    <span class="chip synthetic" id="synthetic-chip" hidden>Dữ liệu giả lập</span>
+    <span class="chip unverified" id="unverified-chip" hidden title="Điểm của dữ liệu thật bị khóa đến khi xác minh đơn vị và ngữ nghĩa nguồn">Chưa xác minh nguồn</span>
+    <span class="conn-group"><span class="conn" id="conn"><span class="dot"></span><span id="conn-label">Đang tải</span></span>
+    <span class="clock num" id="clock">--:--:--</span></span>
+  </div>
+</header>
+
+<main class="page" id="page">
+  <dl class="metrics" aria-label="Tổng quan nhóm">
+    <div class="metric"><dt>Mã đã xếp hạng</dt><dd><strong class="num" id="m-ranked">–</strong><span id="m-ranked-note"></span></dd></div>
+    <div class="metric"><dt>Dẫn đầu nhóm</dt><dd><strong id="m-leader">–</strong><span class="num" id="m-leader-note"></span></dd></div>
+    <div class="metric"><dt>Mốc phân tích (UTC+7)</dt><dd><strong class="num" id="m-asof">–</strong><span class="num" id="m-asof-note"></span></dd></div>
+    <div class="metric"><dt>Độ mới dữ liệu</dt><dd><strong class="num" id="m-fresh">–</strong><span id="m-fresh-note"></span></dd></div>
+  </dl>
+
+  <details class="controls" id="controls" open>
+  <summary><svg class="icon"><use href="#i-filter"/></svg><span>Bộ lọc và thời điểm</span><span class="muted" id="controls-summary"></span><svg class="icon chev"><use href="#i-down"/></svg></summary>
+  <section class="toolbar" aria-label="Bộ lọc và thời điểm">
+    <label class="field" id="f-source"><span>Nguồn</span><select id="source"></select></label>
+    <label class="field" id="f-run"><span>Lần thu thập</span><select id="run"></select></label>
+    <div class="field" id="f-point"><span>Mốc phát lại</span>
+      <div class="stepper">
+        <button class="btn icon-only" id="prev" type="button" aria-label="Mốc trước"><svg class="icon"><use href="#i-prev"/></svg></button>
+        <select id="point" aria-label="Mốc phát lại"></select>
+        <button class="btn icon-only" id="next" type="button" aria-label="Mốc sau"><svg class="icon"><use href="#i-next"/></svg></button>
+      </div>
+    </div>
+    <div class="field" id="f-refresh" hidden><span>Tự làm mới</span>
+      <div class="stepper"><select id="refresh"></select>
+        <button class="btn icon-only" id="reload" type="button" aria-label="Đọc lại kho"><svg class="icon"><use href="#i-refresh"/></svg></button></div>
+    </div>
+    <div class="field"><span>Trọng số</span><div class="segmented" id="weights" role="group" aria-label="Trọng số"></div></div>
+    <div class="field"><span>Khối ngoại</span><div class="segmented" id="foreign" role="group" aria-label="Cách tính khối ngoại"></div></div>
+  </section>
+  </details>
+
+  <div class="workspace">
+    <section class="panel" aria-label="Kết quả">
+      <div class="panel-head">
+        <nav class="view-tabs" role="tablist" aria-label="Khu vực">
+          <button role="tab" data-view="rank" aria-selected="true">Xếp hạng</button>
+          <button role="tab" data-view="quality" aria-selected="false">Chất lượng<span class="hide-sm"> dữ liệu</span></button>
+          <button role="tab" data-view="method" aria-selected="false">Phương pháp</button>
+        </nav>
+        <span class="muted" id="cohort-note"></span>
+        <button class="btn" id="export" type="button" aria-label="Tải CSV"><svg class="icon"><use href="#i-download"/></svg><span class="hide-sm">Tải CSV</span></button>
+      </div>
+      <div class="notice" id="notice" hidden></div>
+      <div id="view-rank">
+        <div class="filterbar">
+          <label class="inline grow"><span class="search"><svg class="icon"><use href="#i-search"/></svg><input type="search" id="search" placeholder="Tìm mã" aria-label="Tìm mã" autocomplete="off"></span></label>
+          <label class="inline"><span>Điểm tổng ≥</span><input type="number" id="min" min="0" max="100" step="5" value="0"></label>
+          <label class="inline"><span>So sánh với</span><select id="compare"></select></label>
+        </div>
+        <div class="legend-row">
+          <div class="legend-keys" aria-hidden="true">
+            <span><i class="c-momentum"></i>Động lượng</span>
+            <span><i class="c-liquidity"></i>Thanh khoản</span>
+            <span><i class="c-foreign"></i>Dòng tiền ngoại</span>
+            <span><i class="c-imbalance"></i>Cung–cầu</span>
+          </div>
+          <p class="legend-note" id="legend-note">Thanh điểm tổng chia theo phần đóng góp có trọng số · thanh yếu tố là điểm phân vị 0–100 trong nhóm</p>
+        </div>
+        <div class="table-wrap"><table id="rank-table"></table></div>
+      </div>
+      <div id="view-quality" hidden><p class="legend-note" id="quality-note"></p><div class="table-wrap"><table class="quality" id="quality-table"></table></div></div>
+      <div id="view-method" hidden><div class="method" id="method"></div></div>
+    </section>
+
+    <aside class="side" aria-label="Chi tiết">
+      <section class="panel" aria-live="polite">
+        <div class="panel-head"><h2>Vì sao mã này ở vị trí đó</h2></div>
+        <div class="detail" id="detail"></div>
+        <div class="price" id="price"></div>
+      </section>
+      <section class="panel chart-panel">
+        <h3 class="chart-title" id="chart-title">Điểm tổng trong nhóm</h3>
+        <div id="score-chart"></div>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="footer">
+    <span>Công cụ phân tích học thuật. Điểm là vị trí tương đối trong nhóm tại một mốc, không phải xác suất tăng giá hay khuyến nghị mua/bán.</span>
+    <span id="footer-source">Giờ hiển thị theo UTC+7</span>
+  </footer>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>

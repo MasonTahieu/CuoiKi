@@ -1,0 +1,77 @@
+{
+  "intraday": null,
+  "daily": {
+    "sessions": 10,
+    "trading_dates": [
+      "2026-10-26",
+      "2026-10-27",
+      "2026-10-28",
+      "2026-10-29",
+      "2026-10-30",
+      "2026-11-02",
+      "2026-11-03",
+      "2026-11-04",
+      "2026-11-05",
+      "2026-11-06"
+    ],
+    "groups": {
+      "HNX30": {
+        "symbols": 30,
+        "days": 10,
+        "day_to_day_persistence": {
+          "momentum": {
+            "pairs": 9,
+            "mean_spearman": 0.048446169887236906
+          },
+          "turnover": {
+            "pairs": 9,
+            "mean_spearman": 0.9324028461959496
+          },
+          "foreign_ratio": {
+            "pairs": 9,
+            "mean_spearman": 0.33022935669994496
+          }
+        },
+        "factor_rank_correlation": {
+          "momentum~turnover": -0.0763871096613337,
+          "momentum~foreign_ratio": 0.1255908847686246,
+          "turnover~foreign_ratio": 0.16896082581457753
+        },
+        "missing_share": {
+          "momentum": 0.0,
+          "turnover": 0.0,
+          "foreign_ratio": 0.43478260869565216
+        }
+      },
+      "VN30": {
+        "symbols": 30,
+        "days": 10,
+        "day_to_day_persistence": {
+          "momentum": {
+            "pairs": 9,
+            "mean_spearman": 0.05458993537798831
+          },
+          "turnover": {
+            "pairs": 9,
+            "mean_spearman": 0.8846619700902237
+          },
+          "foreign_ratio": {
+            "pairs": 9,
+            "mean_spearman": 0.4324964245987604
+          }
+        },
+        "factor_rank_correlation": {
+          "momentum~turnover": 0.05426378945310556,
+          "momentum~foreign_ratio": 0.34316818147589473,
+          "turnover~foreign_ratio": 0.1824298398053549
+        },
+        "missing_share": {
+          "momentum": 0.0,
+          "turnover": 0.0,
+          "foreign_ratio": 0.016666666666666666
+        }
+      }
+    }
+  },
+  "intraday_note": "Chưa có nhật ký stream trong phiên; chạy session-v3 trong giờ giao dịch."
+}

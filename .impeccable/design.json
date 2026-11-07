@@ -1,0 +1,519 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-06T00:00:00+07:00",
+  "title": "Design System: Bộ lọc cổ phiếu đa yếu tố",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Session Night",
+        "canonical": "#0B0E14",
+        "tonalRamp": [
+          "oklch(12% 0.012 265)",
+          "oklch(16% 0.015 265)",
+          "oklch(20% 0.018 265)",
+          "oklch(25% 0.02 265)",
+          "oklch(32% 0.02 265)",
+          "oklch(45% 0.018 265)",
+          "oklch(65% 0.012 265)",
+          "oklch(92% 0.006 265)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Panel Slate",
+        "canonical": "#131823",
+        "tonalRamp": [
+          "#0B0E14",
+          "#131823",
+          "#182030",
+          "#1D2535",
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#A3ACBA"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Lifted Slate",
+        "canonical": "#182030",
+        "tonalRamp": [
+          "#0B0E14",
+          "#131823",
+          "#182030",
+          "#1D2535",
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#A3ACBA"
+        ]
+      },
+      "raised": {
+        "role": "neutral",
+        "displayName": "Track Slate",
+        "canonical": "#1D2535",
+        "tonalRamp": [
+          "#0B0E14",
+          "#131823",
+          "#182030",
+          "#1D2535",
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#A3ACBA"
+        ]
+      },
+      "seam": {
+        "role": "neutral",
+        "displayName": "Seam",
+        "canonical": "#232A36",
+        "tonalRamp": [
+          "#0B0E14",
+          "#131823",
+          "#182030",
+          "#1D2535",
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#A3ACBA"
+        ]
+      },
+      "seam-2": {
+        "role": "neutral",
+        "displayName": "Strong Seam",
+        "canonical": "#2E3746",
+        "tonalRamp": [
+          "#0B0E14",
+          "#131823",
+          "#182030",
+          "#1D2535",
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#A3ACBA"
+        ]
+      },
+      "seam-hover": {
+        "role": "neutral",
+        "displayName": "Hover Seam",
+        "canonical": "#3A4556",
+        "tonalRamp": [
+          "#0B0E14",
+          "#131823",
+          "#182030",
+          "#1D2535",
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#A3ACBA"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Primary Ink",
+        "canonical": "#E7EAF0",
+        "tonalRamp": [
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#8892A2",
+          "#A3ACBA",
+          "#C5CBD5",
+          "#E7EAF0",
+          "#F6F7FA"
+        ]
+      },
+      "text-2": {
+        "role": "neutral",
+        "displayName": "Secondary Ink",
+        "canonical": "#A3ACBA",
+        "tonalRamp": [
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#8892A2",
+          "#A3ACBA",
+          "#C5CBD5",
+          "#E7EAF0",
+          "#F6F7FA"
+        ]
+      },
+      "text-3": {
+        "role": "neutral",
+        "displayName": "Tertiary Ink",
+        "canonical": "#8892A2",
+        "tonalRamp": [
+          "#232A36",
+          "#2E3746",
+          "#3A4556",
+          "#8892A2",
+          "#A3ACBA",
+          "#C5CBD5",
+          "#E7EAF0",
+          "#F6F7FA"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Selection Blue",
+        "canonical": "#3B82F6",
+        "tonalRamp": [
+          "oklch(22% 0.06 262)",
+          "oklch(32% 0.1 262)",
+          "oklch(42% 0.14 262)",
+          "oklch(52% 0.17 262)",
+          "oklch(62.3% 0.188 260)",
+          "oklch(72% 0.13 260)",
+          "oklch(84% 0.07 260)",
+          "oklch(94% 0.025 260)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Selection Wash",
+        "canonical": "rgba(59, 130, 246, 0.16)"
+      },
+      "accent-ink": {
+        "role": "primary",
+        "displayName": "Pale Selection Ink",
+        "canonical": "#CFE0FF"
+      },
+      "up": {
+        "role": "tertiary",
+        "displayName": "Session Green",
+        "canonical": "#16C784",
+        "tonalRamp": [
+          "oklch(22% 0.05 160)",
+          "oklch(32% 0.08 160)",
+          "oklch(44% 0.11 160)",
+          "oklch(56% 0.14 160)",
+          "oklch(72% 0.17 160)",
+          "oklch(80% 0.13 160)",
+          "oklch(88% 0.08 160)",
+          "oklch(95% 0.03 160)"
+        ]
+      },
+      "down": {
+        "role": "tertiary",
+        "displayName": "Session Red",
+        "canonical": "#FF5C66",
+        "tonalRamp": [
+          "oklch(22% 0.06 20)",
+          "oklch(32% 0.1 20)",
+          "oklch(44% 0.15 20)",
+          "oklch(56% 0.19 20)",
+          "oklch(68% 0.2 20)",
+          "oklch(78% 0.13 20)",
+          "oklch(86% 0.07 20)",
+          "oklch(95% 0.025 20)"
+        ]
+      },
+      "reference": {
+        "role": "tertiary",
+        "displayName": "Reference Amber",
+        "canonical": "#F0B90B",
+        "tonalRamp": [
+          "oklch(24% 0.05 85)",
+          "oklch(34% 0.08 85)",
+          "oklch(46% 0.11 85)",
+          "oklch(60% 0.14 85)",
+          "oklch(80% 0.16 85)",
+          "oklch(86% 0.12 88)",
+          "oklch(91% 0.07 90)",
+          "oklch(96% 0.03 90)"
+        ]
+      },
+      "warn-ink": {
+        "role": "tertiary",
+        "displayName": "Warm Amber Ink",
+        "canonical": "#F6D365"
+      },
+      "bad-ink": {
+        "role": "tertiary",
+        "displayName": "Soft Red Ink",
+        "canonical": "#FFB4B9"
+      },
+      "factor-momentum": {
+        "role": "secondary",
+        "displayName": "Momentum Blue",
+        "canonical": "#4C8DFF",
+        "tonalRamp": [
+          "oklch(22% 0.06 262)",
+          "oklch(32% 0.1 262)",
+          "oklch(44% 0.15 262)",
+          "oklch(56% 0.18 262)",
+          "oklch(65% 0.18 262)",
+          "oklch(76% 0.12 262)",
+          "oklch(86% 0.06 262)",
+          "oklch(95% 0.02 262)"
+        ]
+      },
+      "factor-liquidity": {
+        "role": "secondary",
+        "displayName": "Liquidity Cyan",
+        "canonical": "#31C2D6",
+        "tonalRamp": [
+          "oklch(22% 0.04 210)",
+          "oklch(32% 0.06 210)",
+          "oklch(44% 0.08 210)",
+          "oklch(58% 0.1 210)",
+          "oklch(75% 0.12 210)",
+          "oklch(82% 0.09 210)",
+          "oklch(89% 0.05 210)",
+          "oklch(96% 0.02 210)"
+        ]
+      },
+      "factor-foreign": {
+        "role": "secondary",
+        "displayName": "Foreign Violet",
+        "canonical": "#A48BFF",
+        "tonalRamp": [
+          "oklch(22% 0.06 293)",
+          "oklch(32% 0.1 293)",
+          "oklch(44% 0.14 293)",
+          "oklch(56% 0.16 293)",
+          "oklch(70% 0.15 293)",
+          "oklch(78% 0.1 293)",
+          "oklch(87% 0.05 293)",
+          "oklch(95% 0.02 293)"
+        ]
+      },
+      "factor-imbalance": {
+        "role": "secondary",
+        "displayName": "Imbalance Orchid",
+        "canonical": "#E58BC8",
+        "tonalRamp": [
+          "oklch(22% 0.05 340)",
+          "oklch(32% 0.08 340)",
+          "oklch(44% 0.11 340)",
+          "oklch(56% 0.13 340)",
+          "oklch(74% 0.13 340)",
+          "oklch(81% 0.09 340)",
+          "oklch(88% 0.05 340)",
+          "oklch(95% 0.02 340)"
+        ]
+      },
+      "change-up": {
+        "name": "Pale Change Blue",
+        "role": "rank-rise deltas and the newly-ranked tag"
+      },
+      "accent-pressed": {
+        "name": "Pressed Blue",
+        "role": "primary button hover/pressed"
+      },
+      "on-accent": {
+        "name": "On Accent White",
+        "role": "text on the primary button"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Selected stock symbol (26px) and score (30px) in the detail panel only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Metric values in the status strip; 17px at <=560px."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product name (16px) and panel headings (14px)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default text with tabular figures; method prose at 1.6 line-height, max 75ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, table headers, chips, legend, metric captions, chart titles."
+      },
+      "chart-label": {
+        "displayName": "Chart Label",
+        "purpose": "SVG axis and bar labels, fixed 11px because charts are drawn at container pixel width."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tab-lift",
+        "value": "0 1px 2px rgba(0,0,0,.35)",
+        "purpose": "Selected VN30/HNX30 tab inside its track."
+      },
+      {
+        "name": "tab-underline",
+        "value": "inset 0 -2px 0 #3B82F6",
+        "purpose": "Active view tab indicator."
+      },
+      {
+        "name": "live-halo",
+        "value": "0 0 0 3px rgba(22, 199, 132, .18)",
+        "purpose": "Connected status dot only."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: 2px solid #3B82F6; outline-offset: 2px",
+        "purpose": "Global :focus-visible treatment (offset -2px inside table headers)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "bar-grow",
+        "value": "width .24s cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Stacked total bar and factor bar width changes; disabled under prefers-reduced-motion."
+      },
+      {
+        "name": "loading-dim",
+        "value": "opacity .2s",
+        "purpose": "Table and side column dim to .55 while data reloads."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "560px",
+        "purpose": "Controls collapse into the 'Bộ lọc và thời điểm' disclosure; icon-only CSV; full-width group tabs."
+      },
+      {
+        "name": "single-column",
+        "value": "900px",
+        "purpose": "Workspace becomes one column; metrics 2x2; table scrolls horizontally."
+      },
+      {
+        "name": "half-screen",
+        "value": "1180px",
+        "purpose": "Side panel fixed at 340px; factor columns hidden (901-1180px) and the stacked bar widens to 200px."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Default quiet action with optional 16px line icon (e.g. Tải CSV).",
+      "html": "<button class=\"ds-btn\" type=\"button\"><svg class=\"ds-icon\" viewBox=\"0 0 16 16\"><path d=\"M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10\"/></svg>Tải CSV</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: 6px; border: 1px solid #2E3746; background: #131823; color: #E7EAF0; cursor: pointer; font: 600 13px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; } .ds-btn:hover { background: #182030; border-color: #3A4556; } .ds-btn:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; } .ds-icon { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Accent-filled action; used for the error state's retry.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\"><svg class=\"ds-icon\" viewBox=\"0 0 16 16\"><path d=\"M13 8a5 5 0 1 1-1.5-3.6M13 2.5v3h-3\"/></svg>Thử lại</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: 6px; border: 1px solid #3B82F6; background: #3B82F6; color: #fff; cursor: pointer; font: 600 13px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; } .ds-btn-primary:hover { filter: brightness(1.08); } .ds-btn-primary:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; } .ds-icon { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "34px field on panel slate with inset magnifier.",
+      "html": "<span class=\"ds-search\"><svg class=\"ds-icon\" viewBox=\"0 0 16 16\"><circle cx=\"7\" cy=\"7\" r=\"4.5\"/><path d=\"M10.5 10.5 14 14\"/></svg><input class=\"ds-input\" type=\"search\" placeholder=\"Tìm mã\"></span>",
+      "css": ".ds-search { position: relative; display: inline-block; } .ds-search .ds-icon { position: absolute; left: 10px; top: 9px; width: 16px; height: 16px; fill: none; stroke: #8892A2; stroke-width: 1.6; stroke-linecap: round; } .ds-input { height: 34px; width: 170px; padding: 0 10px 0 32px; background: #131823; color: #E7EAF0; border: 1px solid #2E3746; border-radius: 6px; font: 14px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; } .ds-input:hover { border-color: #3A4556; } .ds-input:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segmented-option-selected",
+      "description": "Weights and foreign-basis switch; pressed option takes the selection wash.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button aria-pressed=\"true\">25/25/25/25</button><button aria-pressed=\"false\">40/20/20/20</button></div>",
+      "css": ".ds-seg { display: inline-flex; background: #131823; border: 1px solid #2E3746; border-radius: 6px; padding: 2px; } .ds-seg button { border: 0; background: transparent; height: 28px; padding: 0 12px; border-radius: 4px; cursor: pointer; color: #A3ACBA; font: 13px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; font-variant-numeric: tabular-nums; } .ds-seg button:hover { color: #E7EAF0; } .ds-seg button[aria-pressed=\"true\"] { background: rgba(59, 130, 246, 0.16); color: #CFE0FF; font-weight: 600; } .ds-seg button:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Group Tabs",
+      "kind": "nav",
+      "refersTo": "group-tab-selected",
+      "description": "VN30 / HNX30 switch in the top bar with muted counts.",
+      "html": "<div class=\"ds-gtabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\">VN30 <small>11/11</small></button><button role=\"tab\" aria-selected=\"false\">HNX30 <small>11/11</small></button></div>",
+      "css": ".ds-gtabs { display: inline-flex; padding: 3px; gap: 2px; background: #131823; border: 1px solid #232A36; border-radius: 9px; } .ds-gtabs button { border: 0; background: transparent; padding: 6px 18px; border-radius: 7px; cursor: pointer; font: 600 14px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; color: #A3ACBA; display: inline-flex; gap: 8px; align-items: baseline; } .ds-gtabs small { font-weight: 500; font-size: 12px; color: #8892A2; font-variant-numeric: tabular-nums; } .ds-gtabs button:hover { color: #E7EAF0; } .ds-gtabs button[aria-selected=\"true\"] { background: #1D2535; color: #E7EAF0; box-shadow: 0 1px 2px rgba(0,0,0,.35); } .ds-gtabs button:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Provenance Chips",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Mode chip and the amber synthetic-data chip in the top bar.",
+      "html": "<span class=\"ds-chip\">Demo</span> <span class=\"ds-chip ds-chip-synthetic\">Dữ liệu giả lập</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font: 600 12px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; border: 1px solid #2E3746; color: #A3ACBA; white-space: nowrap; } .ds-chip-synthetic { color: #F6D365; border-color: rgba(240, 185, 11, .45); background: rgba(240, 185, 11, .08); }"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Flat container with a 48px head and 1px seams.",
+      "html": "<section class=\"ds-panel\"><div class=\"ds-panel-head\"><h2>Vì sao mã này ở vị trí đó</h2></div><div class=\"ds-panel-body\">Mạnh nhất ở động lượng (100), yếu nhất ở thanh khoản (33).</div></section>",
+      "css": ".ds-panel { background: #131823; border: 1px solid #232A36; border-radius: 10px; color: #E7EAF0; font: 14px/1.45 \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; max-width: 420px; } .ds-panel-head { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid #232A36; } .ds-panel-head h2 { margin: 0; font-size: 14px; font-weight: 650; } .ds-panel-body { padding: 14px 16px; }"
+    },
+    {
+      "name": "Ranking Row",
+      "kind": "custom",
+      "refersTo": "table-row",
+      "description": "Signature row: contribution-stacked total bar plus four factor percentile bars; status cell silent when valid.",
+      "html": "<table class=\"ds-rank\"><tbody><tr class=\"ds-sel\"><td class=\"ds-r\">1</td><td class=\"ds-sym\">V3HOSE02</td><td><span class=\"ds-total\"><b>83,3</b><span class=\"ds-stack\"><i class=\"m\" style=\"width:25%\"></i><i class=\"l\" style=\"width:8%\"></i><i class=\"f\" style=\"width:25%\"></i><i class=\"x\" style=\"width:25%\"></i></span></span></td><td><span class=\"ds-f\"><span class=\"ds-bar\"><i class=\"m\" style=\"width:100%\"></i></span><span>100</span></span></td><td><span class=\"ds-f\"><span class=\"ds-bar\"><i class=\"l\" style=\"width:33%\"></i></span><span>33</span></span></td><td><span class=\"ds-f\"><span class=\"ds-bar\"><i class=\"f\" style=\"width:100%\"></i></span><span>100</span></span></td><td><span class=\"ds-f\"><span class=\"ds-bar\"><i class=\"x\" style=\"width:100%\"></i></span><span>100</span></span></td><td></td></tr><tr><td class=\"ds-r\">12</td><td class=\"ds-sym\">V3HOSE10</td><td></td><td></td><td></td><td></td><td></td><td><span class=\"ds-tag\"><span class=\"ds-dot\"></span>Dữ liệu cũ</span></td></tr></tbody></table>",
+      "css": ".ds-rank { border-collapse: collapse; background: #131823; color: #E7EAF0; font: 14px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; font-variant-numeric: tabular-nums; } .ds-rank tr { border-bottom: 1px solid #232A36; cursor: pointer; } .ds-rank tr:hover { background: rgba(255,255,255,.025); } .ds-rank tr.ds-sel { background: rgba(59, 130, 246, 0.16); } .ds-rank td { height: 46px; padding: 0 12px; white-space: nowrap; } .ds-r { color: #A3ACBA; font-weight: 600; } .ds-sel .ds-r { color: #CFE0FF; } .ds-sym { font-weight: 700; letter-spacing: .02em; } .ds-total { display: flex; align-items: center; gap: 10px; } .ds-total b { width: 40px; text-align: right; font-size: 15px; } .ds-stack { display: flex; height: 8px; width: 140px; background: #1D2535; border-radius: 4px; overflow: hidden; } .ds-stack i, .ds-bar i { display: block; height: 100%; transition: width .24s cubic-bezier(.16, 1, .3, 1); } .ds-f { display: grid; grid-template-columns: 70px 34px; align-items: center; gap: 8px; } .ds-f span:last-child { text-align: right; font-size: 13px; } .ds-bar { height: 6px; background: #1D2535; border-radius: 3px; overflow: hidden; } .ds-bar i { border-radius: 3px; } .m { background: #4C8DFF; } .l { background: #31C2D6; } .f { background: #A48BFF; } .x { background: #E58BC8; } .ds-tag { display: inline-flex; align-items: center; gap: 7px; color: #F6D365; font-size: 13px; } .ds-dot { width: 8px; height: 8px; border-radius: 50%; background: #F0B90B; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Session Desk",
+    "overview": "The category standard played straight: a dark Vietnamese stock dashboard at the finish of SSI iBoard and FireAnt/Simplize, built to sit open beside the price board for a whole trading session. The user chose this world over any novelty direction; its job is to look exactly as trustworthy as the tools brokers already use, then do one thing those tools do not: show why each stock ranks where it does, inside the row.\n\nDensity is a working-desk density: 46px table rows, 34px controls, 12–14px text, tabular figures everywhere. Depth comes from tonal steps of a near-black blue ground and 1px seams, not from shadows. Colour is spent with discipline in three separate jobs that never borrow from each other: one blue accent for selection and focus, four factor hues that encode the score split, and market green/red/amber only where price moves or data is stale.\n\nEverything is offline: system UI sans, drawn 16px line icons from an inline SVG sprite, inline SVG charts, no web fonts, no CDN, and a CSP that forbids inline style attributes.",
+    "keyCharacteristics": [
+      "Near-black blue ground with tonal surfaces and 1px seams; flat, no decorative shadow.",
+      "Three colour vocabularies with fixed jobs: accent (selection), factor palette (score composition), market colours (price and staleness).",
+      "Every ranking row carries a contribution-stacked total bar plus four factor percentile bars.",
+      "Exceptions speak, valid states stay silent; run-wide notes appear once.",
+      "Segoe UI system stack with tabular figures; Vietnamese copy throughout."
+    ],
+    "rules": [
+      {
+        "name": "The Three Vocabularies Rule",
+        "body": "Blue accent means \"selected or focused\", factor hues mean \"this factor's share\", green/red/amber mean \"price moved or data is stale\". A colour never crosses into another vocabulary's job.",
+        "section": "colors"
+      },
+      {
+        "name": "The Market Colour Is Earned Rule",
+        "body": "Green and red appear only where a price moves or a connection/status is stated. Scores are never coloured green or red; a high score is shown by bar length and the factor palette.",
+        "section": "colors"
+      },
+      {
+        "name": "The Factor Constancy Rule",
+        "body": "A factor's hue is identical in the table, detail panel, chart, legend and brand mark. Factor colour is applied by class (c-momentum, c-liquidity, c-foreign, c-imbalance) or the matching hex in SVG, never improvised.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every number is set in tabular figures and right-aligned in numeric columns, so scores, ranks and times never jitter as data updates.",
+        "section": "typography"
+      },
+      {
+        "name": "The Split Survives Rule",
+        "body": "When width forces columns out, the factor columns go first and the contribution-stacked bar grows to carry the factor split. \"Why this rank\" is never dropped from the row.",
+        "section": "layout"
+      },
+      {
+        "name": "The Seam Not Shadow Rule",
+        "body": "Panels separate from the ground by a tone step and a 1px seam. No drop shadows on panels, cards or menus.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Change Is Not a Market Move Rule",
+        "text": "The Change Is Not a Market Move Rule. Rank and score changes against an earlier moment are not price moves: a rise uses Pale Change Blue (change-up) with an up chevron, a fall uses Tertiary Ink with a down chevron, \"mới\" marks a stock newly ranked. Never green or red."
+      }
+    ],
+    "dos": [
+      "Do keep the three colour vocabularies separate: accent #3B82F6 for selection/focus/primary, the factor palette for score composition, #16C784/#FF5C66/#F0B90B only for price movement, connection and staleness.",
+      "Do show every ranked row with its contribution-stacked total bar and, where width allows, four factor percentile bars.",
+      "Do keep valid rows silent in the status column; give an exception a dot plus a short Vietnamese label.",
+      "Do state run-wide reasons and warnings once, in the notice banner or legend note.",
+      "Do label synthetic data with the amber chip whenever it is shown.",
+      "Do set every number in tabular figures and draw icons as 16px line icons (1.6 stroke) from the inline sprite.",
+      "Do apply factor colours and bar widths through classes and the CSSOM; the CSP forbids inline style attributes.",
+      "Do draw charts at container pixel width so chart labels stay 11px."
+    ],
+    "donts": [
+      "Don't colour scores green or red; score strength is bar length in factor hues.",
+      "Don't stack warning boxes over the ranking or repeat a run-wide note on every row.",
+      "Don't add drop shadows to panels; separate with tone and a 1px seam.",
+      "Don't load web fonts, icon fonts or CDN assets; the build runs offline.",
+      "Don't fall back to the Streamlit arrangement of a form-control sidebar, stacked info boxes and one generic bar chart.",
+      "Don't drop the factor split at narrow widths; hide factor columns and widen the stacked bar instead."
+    ]
+  }
+}

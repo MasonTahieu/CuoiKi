@@ -1,0 +1,460 @@
+[
+  {
+    "schema_version": "ssi-fcdata-v2-patch-1",
+    "source": "synthetic",
+    "profile": "fcdata_v2",
+    "message_type": "F",
+    "channel": "stockInfo",
+    "received_at": "2026-11-04T10:00:01+07:00",
+    "source_at": "2026-11-04T10:00:00+07:00",
+    "update_mode": "patch",
+    "payload": {
+      "symbol": "DEMO01",
+      "marketCode": "HOSE",
+      "tradingSession": "LO",
+      "tradingStatus": "NORMAL",
+      "tradingDate": "04/11/2026"
+    },
+    "present_fields": [
+      "marketCode",
+      "symbol",
+      "tradingDate",
+      "tradingSession",
+      "tradingStatus"
+    ],
+    "field_updated_at": {
+      "marketCode": "2026-11-04T10:00:00+07:00",
+      "tradingSession": "2026-11-04T10:00:00+07:00",
+      "tradingStatus": "2026-11-04T10:00:00+07:00"
+    },
+    "field_sources": {
+      "marketCode": [
+        "exchange"
+      ],
+      "tradingSession": [
+        "tradingsession"
+      ],
+      "tradingStatus": [
+        "tradingstatus"
+      ]
+    },
+    "issues": [],
+    "metadata": {
+      "book_levels": null,
+      "price_unit": "VND_documented_pending_live_validation",
+      "volume_unit": "pending_live_validation",
+      "foreign_value_estimated": null,
+      "counter_fields": []
+    }
+  },
+  {
+    "schema_version": "ssi-fcdata-v2-patch-1",
+    "source": "synthetic",
+    "profile": "fcdata_v2",
+    "message_type": "X-QUOTE",
+    "channel": "stockInfo",
+    "received_at": "2026-11-04T10:00:01+07:00",
+    "source_at": "2026-11-04T10:00:00+07:00",
+    "update_mode": "patch",
+    "payload": {
+      "symbol": "DEMO01",
+      "marketCode": "HOSE",
+      "bidPrice1": 20000.0,
+      "bidPrice2": 19950.0,
+      "bidPrice3": 19900.0,
+      "bidVol1": 1000.0,
+      "bidVol2": 2000.0,
+      "bidVol3": 3000.0,
+      "askPrice1": 20050.0,
+      "askPrice2": 20100.0,
+      "askPrice3": 20150.0,
+      "askVol1": 1200.0,
+      "askVol2": 2200.0,
+      "askVol3": 3200.0,
+      "tradingDate": "04/11/2026"
+    },
+    "present_fields": [
+      "askPrice1",
+      "askPrice2",
+      "askPrice3",
+      "askVol1",
+      "askVol2",
+      "askVol3",
+      "bidPrice1",
+      "bidPrice2",
+      "bidPrice3",
+      "bidVol1",
+      "bidVol2",
+      "bidVol3",
+      "marketCode",
+      "symbol",
+      "tradingDate"
+    ],
+    "field_updated_at": {
+      "marketCode": "2026-11-04T10:00:00+07:00",
+      "bidPrice1": "2026-11-04T10:00:00+07:00",
+      "bidPrice2": "2026-11-04T10:00:00+07:00",
+      "bidPrice3": "2026-11-04T10:00:00+07:00",
+      "bidVol1": "2026-11-04T10:00:00+07:00",
+      "bidVol2": "2026-11-04T10:00:00+07:00",
+      "bidVol3": "2026-11-04T10:00:00+07:00",
+      "askPrice1": "2026-11-04T10:00:00+07:00",
+      "askPrice2": "2026-11-04T10:00:00+07:00",
+      "askPrice3": "2026-11-04T10:00:00+07:00",
+      "askVol1": "2026-11-04T10:00:00+07:00",
+      "askVol2": "2026-11-04T10:00:00+07:00",
+      "askVol3": "2026-11-04T10:00:00+07:00"
+    },
+    "field_sources": {
+      "marketCode": [
+        "exchange"
+      ],
+      "bidPrice1": [
+        "bidprice1"
+      ],
+      "bidPrice2": [
+        "bidprice2"
+      ],
+      "bidPrice3": [
+        "bidprice3"
+      ],
+      "bidVol1": [
+        "bidvol1"
+      ],
+      "bidVol2": [
+        "bidvol2"
+      ],
+      "bidVol3": [
+        "bidvol3"
+      ],
+      "askPrice1": [
+        "askprice1"
+      ],
+      "askPrice2": [
+        "askprice2"
+      ],
+      "askPrice3": [
+        "askprice3"
+      ],
+      "askVol1": [
+        "askvol1"
+      ],
+      "askVol2": [
+        "askvol2"
+      ],
+      "askVol3": [
+        "askvol3"
+      ]
+    },
+    "issues": [],
+    "metadata": {
+      "book_levels": 3,
+      "price_unit": "VND_documented_pending_live_validation",
+      "volume_unit": "pending_live_validation",
+      "foreign_value_estimated": null,
+      "counter_fields": []
+    }
+  },
+  {
+    "schema_version": "ssi-fcdata-v2-patch-1",
+    "source": "synthetic",
+    "profile": "fcdata_v2",
+    "message_type": "X-TRADE",
+    "channel": "stockInfo",
+    "received_at": "2026-11-04T10:00:01+07:00",
+    "source_at": "2026-11-04T10:00:00+07:00",
+    "update_mode": "patch",
+    "payload": {
+      "symbol": "DEMO01",
+      "marketCode": "HOSE",
+      "refPrice": 19900.0,
+      "closePrice": 20050.0,
+      "lastTradeVolume": 100.0,
+      "totalTradingVolume": 100000.0,
+      "totalTradingValue": 2000000000.0,
+      "tradingDate": "04/11/2026"
+    },
+    "present_fields": [
+      "closePrice",
+      "lastTradeVolume",
+      "marketCode",
+      "refPrice",
+      "symbol",
+      "totalTradingValue",
+      "totalTradingVolume",
+      "tradingDate"
+    ],
+    "field_updated_at": {
+      "marketCode": "2026-11-04T10:00:00+07:00",
+      "refPrice": "2026-11-04T10:00:00+07:00",
+      "closePrice": "2026-11-04T10:00:00+07:00",
+      "lastTradeVolume": "2026-11-04T10:00:00+07:00",
+      "totalTradingVolume": "2026-11-04T10:00:00+07:00",
+      "totalTradingValue": "2026-11-04T10:00:00+07:00"
+    },
+    "field_sources": {
+      "marketCode": [
+        "exchange"
+      ],
+      "refPrice": [
+        "refprice"
+      ],
+      "closePrice": [
+        "lastprice"
+      ],
+      "lastTradeVolume": [
+        "lastvol"
+      ],
+      "totalTradingVolume": [
+        "totalvol"
+      ],
+      "totalTradingValue": [
+        "totalval"
+      ]
+    },
+    "issues": [],
+    "metadata": {
+      "book_levels": null,
+      "price_unit": "VND_documented_pending_live_validation",
+      "volume_unit": "pending_live_validation",
+      "foreign_value_estimated": null,
+      "counter_fields": [
+        "totalTradingVolume",
+        "totalTradingValue"
+      ]
+    }
+  },
+  {
+    "schema_version": "ssi-fcdata-v2-patch-1",
+    "source": "synthetic",
+    "profile": "fcdata_v2",
+    "message_type": "R",
+    "channel": "stockInfo",
+    "received_at": "2026-11-04T10:00:01+07:00",
+    "source_at": "2026-11-04T10:00:00+07:00",
+    "update_mode": "patch",
+    "payload": {
+      "symbol": "DEMO01",
+      "marketCode": "HOSE",
+      "foreignBuyVolume": 2000.0,
+      "foreignSellVolume": 1000.0,
+      "foreignBuyValue": 40100000.0,
+      "foreignSellValue": 20050000.0,
+      "tradingDate": "04/11/2026"
+    },
+    "present_fields": [
+      "foreignBuyValue",
+      "foreignBuyVolume",
+      "foreignSellValue",
+      "foreignSellVolume",
+      "marketCode",
+      "symbol",
+      "tradingDate"
+    ],
+    "field_updated_at": {
+      "marketCode": "2026-11-04T10:00:00+07:00",
+      "foreignBuyVolume": "2026-11-04T10:00:00+07:00",
+      "foreignSellVolume": "2026-11-04T10:00:00+07:00",
+      "foreignBuyValue": "2026-11-04T10:00:00+07:00",
+      "foreignSellValue": "2026-11-04T10:00:00+07:00"
+    },
+    "field_sources": {
+      "marketCode": [
+        "exchange"
+      ],
+      "foreignBuyVolume": [
+        "buyvol"
+      ],
+      "foreignSellVolume": [
+        "sellvol"
+      ],
+      "foreignBuyValue": [
+        "buyval"
+      ],
+      "foreignSellValue": [
+        "sellval"
+      ]
+    },
+    "issues": [
+      {
+        "code": "FOREIGN_VALUE_ESTIMATED",
+        "field": "foreignBuyValue/foreignSellValue"
+      }
+    ],
+    "metadata": {
+      "book_levels": null,
+      "price_unit": "VND_documented_pending_live_validation",
+      "volume_unit": "pending_live_validation",
+      "foreign_value_estimated": true,
+      "counter_fields": [
+        "foreignBuyVolume",
+        "foreignSellVolume"
+      ]
+    }
+  },
+  {
+    "schema_version": "ssi-fcdata-v2-patch-1",
+    "source": "synthetic",
+    "profile": "fcdata_v2",
+    "message_type": "B",
+    "channel": "stockInfo",
+    "received_at": "2026-11-04T10:00:01+07:00",
+    "source_at": "2026-11-04T10:00:00+07:00",
+    "update_mode": "patch",
+    "payload": {
+      "symbol": "DEMO01",
+      "marketCode": "HOSE",
+      "openPrice": 19900.0,
+      "highPrice": 20100.0,
+      "lowPrice": 19800.0,
+      "closePrice": 20050.0,
+      "lastTradeVolume": 100.0,
+      "tradingDate": "04/11/2026"
+    },
+    "present_fields": [
+      "closePrice",
+      "highPrice",
+      "lastTradeVolume",
+      "lowPrice",
+      "marketCode",
+      "openPrice",
+      "symbol",
+      "tradingDate"
+    ],
+    "field_updated_at": {
+      "marketCode": "2026-11-04T10:00:00+07:00",
+      "openPrice": "2026-11-04T10:00:00+07:00",
+      "highPrice": "2026-11-04T10:00:00+07:00",
+      "lowPrice": "2026-11-04T10:00:00+07:00",
+      "closePrice": "2026-11-04T10:00:00+07:00",
+      "lastTradeVolume": "2026-11-04T10:00:00+07:00"
+    },
+    "field_sources": {
+      "marketCode": [
+        "exchange"
+      ],
+      "openPrice": [
+        "open"
+      ],
+      "highPrice": [
+        "high"
+      ],
+      "lowPrice": [
+        "low"
+      ],
+      "closePrice": [
+        "close"
+      ],
+      "lastTradeVolume": [
+        "volume"
+      ]
+    },
+    "issues": [
+      {
+        "code": "B_VALUE_NOT_CUMULATIVE",
+        "field": "Value"
+      }
+    ],
+    "metadata": {
+      "book_levels": null,
+      "price_unit": "VND_documented_pending_live_validation",
+      "volume_unit": "pending_live_validation",
+      "foreign_value_estimated": null,
+      "counter_fields": []
+    }
+  },
+  {
+    "schema_version": "ssi-fcdata-v2-patch-1",
+    "source": "synthetic",
+    "profile": "fcdata_v2",
+    "message_type": "X",
+    "channel": "stockInfo",
+    "received_at": "2026-11-04T10:00:01+07:00",
+    "source_at": "2026-11-04T10:00:00+07:00",
+    "update_mode": "patch",
+    "payload": {
+      "symbol": "HNDEMO01",
+      "marketCode": "HNX",
+      "tradingSession": "ATC",
+      "tradingStatus": "NORMAL",
+      "openPrice": 14800.0,
+      "closePrice": 15000.0,
+      "totalTradingVolume": 100000.0,
+      "totalTradingValue": 1500000000.0,
+      "ohlcClosePrice": 14900.0,
+      "bidPrice1": "ATC",
+      "askPrice1": "ATC",
+      "tradingDate": "04/11/2026"
+    },
+    "present_fields": [
+      "askPrice1",
+      "bidPrice1",
+      "closePrice",
+      "marketCode",
+      "ohlcClosePrice",
+      "openPrice",
+      "symbol",
+      "totalTradingValue",
+      "totalTradingVolume",
+      "tradingDate",
+      "tradingSession",
+      "tradingStatus"
+    ],
+    "field_updated_at": {
+      "marketCode": "2026-11-04T10:00:00+07:00",
+      "tradingSession": "2026-11-04T10:00:00+07:00",
+      "tradingStatus": "2026-11-04T10:00:00+07:00",
+      "openPrice": "2026-11-04T10:00:00+07:00",
+      "closePrice": "2026-11-04T10:00:00+07:00",
+      "totalTradingVolume": "2026-11-04T10:00:00+07:00",
+      "totalTradingValue": "2026-11-04T10:00:00+07:00",
+      "ohlcClosePrice": "2026-11-04T10:00:00+07:00",
+      "bidPrice1": "2026-11-04T10:00:00+07:00",
+      "askPrice1": "2026-11-04T10:00:00+07:00"
+    },
+    "field_sources": {
+      "marketCode": [
+        "marketid",
+        "exchange"
+      ],
+      "tradingSession": [
+        "tradingsession"
+      ],
+      "tradingStatus": [
+        "tradingstatus"
+      ],
+      "openPrice": [
+        "open"
+      ],
+      "closePrice": [
+        "lastprice"
+      ],
+      "totalTradingVolume": [
+        "totalvol"
+      ],
+      "totalTradingValue": [
+        "totalval"
+      ],
+      "ohlcClosePrice": [
+        "close"
+      ],
+      "bidPrice1": [
+        "bidprice1"
+      ],
+      "askPrice1": [
+        "askprice1"
+      ]
+    },
+    "issues": [],
+    "metadata": {
+      "book_levels": 3,
+      "price_unit": "VND_documented_pending_live_validation",
+      "volume_unit": "pending_live_validation",
+      "foreign_value_estimated": null,
+      "counter_fields": [
+        "totalTradingVolume",
+        "totalTradingValue"
+      ]
+    }
+  }
+]

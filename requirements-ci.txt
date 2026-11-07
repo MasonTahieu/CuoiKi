@@ -1,0 +1,3 @@
+# GitHub Actions job that fetches SSI daily summaries (REST, no OTP).
+-r requirements.txt
+ssi-sdk==3.3.2

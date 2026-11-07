@@ -1,0 +1,49 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0E14;--card:#151A23;--line:#232A36;--tx:#E7EAF0;--mu:#AEB6C2;--up:#16C784;--dn:#FF5C66;--acc:#3B82F6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--bg);color:var(--tx);font:14px/1.45 "Be Vietnam Pro",sans-serif;font-variant-numeric:tabular-nums}
+nav{height:60px;display:flex;align-items:center;gap:26px;padding:0 28px;border-bottom:1px solid var(--line)}
+nav b{font-size:17px}
+nav .t{color:var(--mu)}nav .t.on{color:var(--tx);border-bottom:2px solid var(--acc);padding-bottom:18px;margin-bottom:-20px}
+nav .r{margin-left:auto;color:var(--mu)}
+.wrap{padding:22px 28px;display:grid;grid-template-columns:1fr 420px;gap:22px}
+.kpis{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.k span{color:var(--mu);font-size:13px}.k b{display:block;font-size:28px;margin-top:6px}.k i{font-style:normal;font-size:13px;color:var(--up)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.panel h3{font-size:15px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse}
+th{color:var(--mu);font-size:12px;font-weight:600;text-align:right;padding:8px 6px;border-bottom:1px solid var(--line)}
+th:first-child,th:nth-child(2){text-align:left}
+td{padding:0 6px;height:40px;border-bottom:1px solid var(--line);text-align:right}
+td:first-child,td:nth-child(2){text-align:left}
+.up{color:var(--up)}.dn{color:var(--dn)}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:rgba(22,199,132,.14);color:var(--up)}
+.pill.w{background:rgba(234,57,67,.14);color:var(--dn)}
+.chart{display:flex;align-items:flex-end;gap:12px;height:300px;padding-top:10px;border-bottom:1px solid var(--line)}
+.chart div{flex:1;background:linear-gradient(var(--acc),#1E3A8A);border-radius:6px 6px 0 0;position:relative}
+.chart div span{position:absolute;bottom:-22px;left:0;right:0;text-align:center;font-size:12px;color:var(--mu)}
+.note{color:var(--mu);font-size:12px;margin-top:34px}
+</style></head><body>
+<nav><b>📈 Stock Screener</b><span class="t on">VN30</span><span class="t">HNX30</span><span class="t">Phương pháp</span><span class="r">10:00:30 · ● Live · Dữ liệu giả lập</span></nav>
+<div class="wrap">
+ <div class="kpis"><div class="k"><span>Mã xếp hạng</span><b>11 / 12</b><i>+0 so với mốc trước</i></div><div class="k"><span>Điểm cao nhất</span><b>84,2</b><i>DEMO04</i></div><div class="k"><span>Điểm trung bình</span><b>51,5</b><i>▲ 1,2</i></div><div class="k"><span>Cập nhật</span><b>2 giây</b><i>Đã kết nối</i></div></div>
+ <div class="panel"><h3>Bảng xếp hạng</h3><table>
+  <tr><th>#</th><th>Mã</th><th>Điểm</th><th>Động lượng</th><th>Thanh khoản</th><th>Ngoại</th><th>Cung–cầu</th><th>Tín hiệu</th></tr>
+  <tr><td>1</td><td><b>DEMO04</b></td><td>84,2</td><td class="up">100</td><td>46,7</td><td class="up">100</td><td class="up">90,0</td><td><span class="pill">Mạnh</span></td></tr>
+  <tr><td>2</td><td><b>DEMO07</b></td><td>82,5</td><td class="up">90,0</td><td>70,0</td><td class="up">90,0</td><td class="up">80,0</td><td><span class="pill">Mạnh</span></td></tr>
+  <tr><td>3</td><td><b>DEMO10</b></td><td>78,3</td><td class="up">80,0</td><td class="up">83,3</td><td class="up">80,0</td><td>70,0</td><td><span class="pill">Mạnh</span></td></tr>
+  <tr><td>4</td><td><b>DEMO02</b></td><td>56,7</td><td>70,0</td><td class="dn">26,7</td><td>70,0</td><td>60,0</td><td><span class="pill">Trung tính</span></td></tr>
+  <tr><td>5</td><td><b>DEMO05</b></td><td>53,3</td><td>60,0</td><td>43,3</td><td>60,0</td><td>50,0</td><td><span class="pill">Trung tính</span></td></tr>
+  <tr><td>6</td><td><b>DEMO08</b></td><td>50,0</td><td>50,0</td><td>60,0</td><td>50,0</td><td>40,0</td><td><span class="pill">Trung tính</span></td></tr>
+  <tr><td>7</td><td><b>DEMO11</b></td><td>46,7</td><td>40,0</td><td>76,7</td><td>40,0</td><td class="dn">30,0</td><td><span class="pill w">Yếu</span></td></tr>
+  <tr><td>8</td><td><b>DEMO01</b></td><td>33,3</td><td class="dn">0,0</td><td>33,3</td><td class="dn">0,0</td><td class="up">100</td><td><span class="pill w">Yếu</span></td></tr>
+  <tr><td>9</td><td><b>DEMO03</b></td><td>25,0</td><td class="dn">30,0</td><td class="dn">20,0</td><td class="dn">30,0</td><td class="dn">20,0</td><td><span class="pill w">Yếu</span></td></tr>
+  <tr><td>10</td><td><b>DEMO06</b></td><td>21,7</td><td class="dn">20,0</td><td>36,7</td><td class="dn">20,0</td><td class="dn">10,0</td><td><span class="pill w">Yếu</span></td></tr>
+ </table></div>
+ <div class="panel"><h3>Điểm tổng theo mã</h3><div class="chart"><div style="height:84%"><span>DEMO04</span></div><div style="height:82%"><span>DEMO07</span></div><div style="height:78%"><span>DEMO10</span></div><div style="height:57%"><span>DEMO02</span></div><div style="height:53%"><span>DEMO05</span></div><div style="height:50%"><span>DEMO08</span></div></div>
+ <p class="note">Công cụ học thuật · không phải khuyến nghị mua/bán. Nguồn SSI FastConnect V3.</p></div>
+</div>
+</body></html>

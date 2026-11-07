@@ -1,0 +1,65 @@
+# Fetch SSI FastConnect V3 daily summaries for VN30/HNX30 after each session and commit them.
+# REST market data needs no OTP. Vercel redeploys on the push, so the "Cuối ngày" view updates
+# without any local machine running. Secrets: SSI_API_KEY, SSI_API_SECRET (repository secrets).
+name: SSI daily summaries
+
+on:
+  schedule:
+    - cron: "20 8 * * 1-5"   # 15:20 Asia/Ho_Chi_Minh (UTC+7), Monday–Friday
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ssi-daily
+  cancel-in-progress: false
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATA_PROVIDER: ssi
+      APP_MODE: demo
+      SSI_API_PROFILE: fastconnect_v3
+      SSI_API_KEY: ${{ secrets.SSI_API_KEY }}
+      SSI_API_SECRET: ${{ secrets.SSI_API_SECRET }}
+      SSI_OTP_MODE: none
+      SSI_DAILY_DATABASE: webdata/ssi_daily.sqlite
+      TZ: Asia/Ho_Chi_Minh
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install
+        run: python -m pip install -r requirements-ci.txt
+
+      - name: Check configuration (no network)
+        run: python -X utf8 -m src.cli readiness
+
+      - name: Fetch the last 15 sessions (idempotent upsert, older rows are kept)
+        run: python -X utf8 -m src.cli history-v3 --sessions 15
+
+      - name: Multi-session evaluation
+        run: python -X utf8 -m src.cli evaluate-v3
+
+      # Commit as the repository owner (GitHub noreply address): Vercel Hobby only deploys
+      # commits whose author is the account owner, so a generic bot author would be skipped.
+      - name: Commit if changed
+        run: |
+          git config user.name "${{ github.repository_owner }}"
+          git config user.email "${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com"
+          git add webdata/ssi_daily.sqlite evidence/v3_sessions/evaluation.json
+          if git diff --cached --quiet; then
+            echo "No new data."
+          else
+            git commit -m "data: SSI daily summaries $(date +%F)"
+            git pull --rebase
+            git push
+          fi

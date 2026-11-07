@@ -1,0 +1,76 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g0:#16181D;--g1:#1C1F25;--g2:#22262E;--seam:#2E333C;--tx:#E6E8EC;--mu:#9AA1AD;--blue:#7AA2F7;--amber:#E0AF68}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--g0);color:var(--tx);font:13px/1.45 "Be Vietnam Pro",sans-serif}
+.mono{font-family:"JetBrains Mono",monospace}
+header{height:52px;display:flex;align-items:center;gap:22px;padding:0 20px;border-bottom:1px solid var(--seam);background:var(--g1)}
+header b{font-size:15px}
+.tab{padding:5px 12px;border:1px solid var(--seam);border-radius:4px;color:var(--mu)}
+.tab.on{border-color:var(--blue);color:var(--tx)}
+.stat{margin-left:auto;display:flex;gap:18px;color:var(--mu)}
+.stat b{color:var(--tx)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--blue);margin-right:6px}
+.grid{display:grid;grid-template-columns:520px 1fr 340px;height:848px}
+.panel{border-right:1px solid var(--seam);display:flex;flex-direction:column}
+.ph{height:36px;display:flex;align-items:center;padding:0 16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--seam);background:var(--g1)}
+.ph span{margin-left:auto;letter-spacing:0;text-transform:none}
+.row{display:grid;grid-template-columns:34px 86px 64px 1fr 120px;align-items:center;height:44px;padding:0 16px;border-bottom:1px solid var(--seam)}
+.row.sel{background:var(--g2);box-shadow:inset 2px 0 0 var(--blue)}
+.row.off{color:var(--mu)}
+.r{font:700 15px "JetBrains Mono";color:var(--mu)}
+.s{font:700 14px "JetBrains Mono"}
+.v{font:600 14px "JetBrains Mono";text-align:right;padding-right:14px}
+.mini{display:flex;gap:3px;height:16px;align-items:flex-end}
+.mini i{width:22px;background:var(--blue);opacity:.85}
+.warn{color:var(--amber);font-size:12px}
+.body{padding:22px 26px}
+.h{font:700 28px "JetBrains Mono"}
+.h small{font:500 14px "Be Vietnam Pro";color:var(--mu);margin-left:10px}
+.fbar{display:grid;grid-template-columns:140px 1fr 60px;align-items:center;gap:12px;margin:14px 0}
+.track{height:10px;background:var(--g2);border:1px solid var(--seam)}
+.track i{display:block;height:100%;background:var(--blue)}
+.kv{display:grid;grid-template-columns:1fr auto;padding:9px 0;border-bottom:1px solid var(--seam)}
+.kv b{font-family:"JetBrains Mono"}
+.health{padding:18px}
+.hrow{display:grid;grid-template-columns:1fr auto;padding:10px 0;border-bottom:1px solid var(--seam)}
+.ok{color:var(--blue)}.am{color:var(--amber)}
+.foot{position:absolute;bottom:0;left:0;right:0;height:26px;border-top:1px solid var(--seam);background:var(--g1);color:var(--mu);font-size:12px;display:flex;align-items:center;padding:0 20px;gap:20px}
+</style></head><body>
+<header><b>Bộ lọc đa yếu tố</b><span class="tab on">VN30</span><span class="tab">HNX30</span><span class="tab">Trọng số 25/25/25/25</span><span class="tab">Ngoại: giá trị</span>
+<div class="stat"><span><span class="dot"></span>Đã kết nối</span><span>Mốc <b class="mono">10:00:30</b></span><span>Đủ điều kiện <b class="mono">11/12</b></span><span style="color:var(--amber)">DỮ LIỆU GIẢ LẬP</span></div></header>
+<div class="grid">
+ <div class="panel"><div class="ph">Xếp hạng nhóm<span>M · L · F · O</span></div>
+  <div class="row sel"><span class="r">1</span><span class="s">DEMO04</span><span class="v">84.2</span><span class="mini"><i style="height:100%"></i><i style="height:47%"></i><i style="height:100%"></i><i style="height:90%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">2</span><span class="s">DEMO07</span><span class="v">82.5</span><span class="mini"><i style="height:90%"></i><i style="height:70%"></i><i style="height:90%"></i><i style="height:80%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">3</span><span class="s">DEMO10</span><span class="v">78.3</span><span class="mini"><i style="height:80%"></i><i style="height:83%"></i><i style="height:80%"></i><i style="height:70%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">4</span><span class="s">DEMO02</span><span class="v">56.7</span><span class="mini"><i style="height:70%"></i><i style="height:27%"></i><i style="height:70%"></i><i style="height:60%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">5</span><span class="s">DEMO05</span><span class="v">53.3</span><span class="mini"><i style="height:60%"></i><i style="height:43%"></i><i style="height:60%"></i><i style="height:50%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">6</span><span class="s">DEMO08</span><span class="v">50.0</span><span class="mini"><i style="height:50%"></i><i style="height:60%"></i><i style="height:50%"></i><i style="height:40%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">7</span><span class="s">DEMO11</span><span class="v">46.7</span><span class="mini"><i style="height:40%"></i><i style="height:77%"></i><i style="height:40%"></i><i style="height:30%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">8</span><span class="s">DEMO01</span><span class="v">33.3</span><span class="mini"><i style="height:2%"></i><i style="height:33%"></i><i style="height:2%"></i><i style="height:100%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">9</span><span class="s">DEMO03</span><span class="v">25.0</span><span class="mini"><i style="height:30%"></i><i style="height:20%"></i><i style="height:30%"></i><i style="height:20%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">10</span><span class="s">DEMO06</span><span class="v">21.7</span><span class="mini"><i style="height:20%"></i><i style="height:37%"></i><i style="height:20%"></i><i style="height:10%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row"><span class="r">11</span><span class="s">DEMO09</span><span class="v">15.0</span><span class="mini"><i style="height:10%"></i><i style="height:30%"></i><i style="height:10%"></i><i style="height:10%"></i></span><span class="ok">xếp hạng</span></div>
+  <div class="row off"><span class="r">—</span><span class="s">DEMO12</span><span class="v">—</span><span></span><span class="warn">sổ lệnh cũ 74s</span></div>
+ </div>
+ <div class="panel"><div class="ph">Phân rã · DEMO04<span>hạng 1/11</span></div>
+  <div class="body"><div class="h">84.2<small>điểm tổng / 100</small></div>
+   <div class="fbar"><span>Động lượng</span><span class="track"><i style="width:100%"></i></span><b class="mono">100</b></div>
+   <div class="fbar"><span>Thanh khoản</span><span class="track"><i style="width:46.7%"></i></span><b class="mono">46.7</b></div>
+   <div class="fbar"><span>Dòng tiền ngoại</span><span class="track"><i style="width:100%"></i></span><b class="mono">100</b></div>
+   <div class="fbar"><span>Cung–cầu</span><span class="track"><i style="width:90%"></i></span><b class="mono">90.0</b></div>
+   <div style="margin-top:22px">
+    <div class="kv"><span>Giá khớp / mở cửa</span><b>+2.00%</b></div><div class="kv"><span>Giá trị khớp</span><b>184.6 tỷ</b></div>
+    <div class="kv"><span>Chênh lệch mua–bán</span><b>24 bps</b></div><div class="kv"><span>Ngoại ròng / giá trị khớp</span><b>+0.062</b></div>
+    <div class="kv"><span>Mất cân bằng cung–cầu</span><b>+0.31</b></div></div></div>
+ </div>
+ <div class="panel" style="border-right:0"><div class="ph">Sức khỏe dữ liệu</div>
+  <div class="health"><div class="hrow"><span>Kết nối</span><b class="ok">ổn định · lần 1</b></div><div class="hrow"><span>Phiên HOSE</span><b class="mono">LO</b></div>
+   <div class="hrow"><span>Giá và khớp</span><b class="mono ok">2s</b></div><div class="hrow"><span>Sổ lệnh</span><b class="mono ok">3s</b></div>
+   <div class="hrow"><span>Khối ngoại</span><b class="mono ok">5s</b></div><div class="hrow"><span>Mã bị loại</span><b class="mono am">1</b></div>
+   <div class="hrow"><span>Xác minh nguồn</span><b class="am">chưa</b></div></div></div>
+</div>
+<div class="foot"><span>Công cụ học thuật · không phải khuyến nghị mua/bán</span><span>Nguồn SSI FastConnect V3 · UTC+7</span><span>Cấu hình 7f20…41 · Tập mã c3e1…9a</span></div>
+</body></html>

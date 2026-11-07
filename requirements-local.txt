@@ -1,0 +1,12 @@
+# Full local stack (Streamlit fallback, tests, SSI SDK). Windows x64 lock: requirements-win-py313.lock.txt
+streamlit==1.66.1
+pandas==3.1.0
+numpy==2.5.4
+plotly==7.1.0
+requests==2.34.2
+websocket-client==1.9.2
+python-dotenv==1.2.4
+pytest==9.1.1
+tzdata==2026.5
+# Official FastConnect V3 client (REST auth + market-data WebSocket). Read-only use in this project.
+ssi-sdk==3.3.2

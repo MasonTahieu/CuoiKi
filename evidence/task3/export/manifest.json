@@ -1,0 +1,16 @@
+{
+  "source": "synthetic",
+  "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+  "as_of": "2026-11-04T10:00:13+07:00",
+  "policy": {
+    "max_age_seconds": 60,
+    "max_recorded_lag_seconds": 10,
+    "max_clock_skew_seconds": 5
+  },
+  "files": {
+    "snapshot.csv": "6592eec83c71834173561e0d9051dff9a72bf16dff2980f00c905ddc704c7378",
+    "field_quality.csv": "8cc5817baba62a5855f6783eb81e574acc4fa0ad5cdb4b770ec2da4ee47f694c",
+    "gaps.csv": "45b72c564986ac77229a97de272e2b1fe1d056536ba2932d581194fb5d40295b",
+    "quality.json": "9379d34284382d0db78afd7fa478b810f07ba07638f8df5887dbcb3a85ceac8f"
+  }
+}

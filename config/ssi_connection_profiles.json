@@ -1,0 +1,83 @@
+{
+  "network_called": false,
+  "live_verified": false,
+  "selected_profile": "unselected",
+  "profiles": {
+    "fcdata_v2": {
+      "rest_base": "https://fc-data.ssi.com.vn/api/v2/Market/",
+      "auth_url": "https://fc-data.ssi.com.vn/api/v2/Market/AccessToken",
+      "market_routes": {
+        "Securities": "https://fc-data.ssi.com.vn/api/v2/Market/Securities",
+        "SecuritiesDetails": "https://fc-data.ssi.com.vn/api/v2/Market/SecuritiesDetails",
+        "IndexList": "https://fc-data.ssi.com.vn/api/v2/Market/IndexList",
+        "IndexComponents": "https://fc-data.ssi.com.vn/api/v2/Market/IndexComponents",
+        "DailyOhlc": "https://fc-data.ssi.com.vn/api/v2/Market/DailyOhlc",
+        "IntradayOhlc": "https://fc-data.ssi.com.vn/api/v2/Market/IntradayOhlc",
+        "DailyIndex": "https://fc-data.ssi.com.vn/api/v2/Market/DailyIndex",
+        "DailyStockPrice": "https://fc-data.ssi.com.vn/api/v2/Market/DailyStockPrice"
+      },
+      "stream_url": "https://fc-datahub.ssi.com.vn/v2.0/signalr",
+      "stream_transport": "signalr",
+      "sdk_stream_base": "https://fc-datahub.ssi.com.vn/",
+      "hub": "FcMarketDataV2Hub",
+      "receive_method": "Broadcast",
+      "subscribe_method": "SwitchChannels",
+      "channel_templates": [
+        "F:{symbols}",
+        "X:{symbols}",
+        "X-Quote:{symbols}",
+        "X-Trade:{symbols}",
+        "R:{symbols}",
+        "B:{symbols}"
+      ],
+      "symbol_separator": "-",
+      "rest_implemented": true,
+      "stream_implemented": false,
+      "references": [
+        "https://github.com/SSI-Securities-Corporation/python-fcdata/blob/master/ssi_fc_data/model/api.py",
+        "https://guide.ssi.com.vn/ssi-products/fastconnect-data/streaming-data"
+      ]
+    },
+    "fastconnect_v3": {
+      "rest_base": "https://api.ssi.com.vn/api/v3/",
+      "auth_url": "https://api.ssi.com.vn/api/v3/auth/token",
+      "refresh_url": "https://api.ssi.com.vn/api/v3/auth/refresh",
+      "otp_url": "https://api.ssi.com.vn/api/v3/auth/requestOtp",
+      "market_routes": {
+        "securitiesByBoard": "https://api.ssi.com.vn/api/v3/data/securitiesByBoard",
+        "securitiesSummary": "https://api.ssi.com.vn/api/v3/data/securitiesSummary",
+        "masterData": "https://api.ssi.com.vn/api/v3/data/masterdata",
+        "indexList": "https://api.ssi.com.vn/api/v3/data/indexList",
+        "indexSummary": "https://api.ssi.com.vn/api/v3/data/indexSummary",
+        "ohlc": "https://api.ssi.com.vn/api/v3/data/ohlc"
+      },
+      "stream_url": "wss://stream.ssi.com.vn/ws/v3",
+      "stream_transport": "websocket",
+      "sdk": "ssi-sdk==3.3.2",
+      "subscribe_frame": {
+        "method": "subscribe",
+        "channel": "DATA",
+        "topics": [
+          "trade.VN30@*",
+          "quote.VN30@*",
+          "room.VN30@*"
+        ]
+      },
+      "topics": [
+        "trade.{VN30|HNX30}@*",
+        "quote.{VN30|HNX30}@*",
+        "room.{VN30|HNX30}@*",
+        "market.flag"
+      ],
+      "auth_note": "REST dữ liệu dùng token không OTP; tài liệu SDK yêu cầu đăng nhập có OTP trước khi mở stream. Cần xác nhận với tài khoản thật.",
+      "session_note": "Server giữ một phiên cho mỗi apiKey: REST và stream phải dùng chung một đăng nhập trong một tiến trình.",
+      "rest_implemented": true,
+      "stream_implemented": true,
+      "references": [
+        "https://developers.ssi.com.vn/docs/getting-started/overview",
+        "https://developers.ssi.com.vn/docs/getting-started/registration",
+        "https://pypi.org/project/ssi-sdk/3.3.2/"
+      ]
+    }
+  }
+}

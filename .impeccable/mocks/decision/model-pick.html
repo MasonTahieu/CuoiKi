@@ -1,0 +1,79 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FBFBFD;--ink:#2B2350;--violet:#5B3FA8;--line:#D9D2F0;--wash:#F1EEFA;--red:#B42318}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--paper);color:var(--ink);font:14px/1.45 "Be Vietnam Pro",sans-serif;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:flex-end;justify-content:space-between;padding:22px 40px 14px;border-bottom:2px solid var(--violet)}
+h1{font:800 26px/1.1 "Be Vietnam Pro"}
+h1 small{display:block;font:500 13px "Be Vietnam Pro";color:#5C5480;margin-top:4px}
+.meta{display:flex;gap:28px;font-size:14px}
+.meta div span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6A6290}
+.meta b{font-size:18px}
+.tabs{display:flex;gap:6px}
+.tabs span{padding:7px 16px;border:1.5px solid var(--violet);border-radius:6px;font-weight:700}
+.tabs .on{background:var(--violet);color:#fff}
+.bar{display:flex;gap:16px;align-items:center;padding:12px 40px;background:var(--wash);font-size:13px}
+.sel{border:1.5px solid #B9AEE0;background:#fff;border-radius:6px;padding:6px 10px}
+.syn{margin-left:auto;font-weight:700;color:var(--violet)}
+main{display:grid;grid-template-columns:1fr 360px;gap:0;height:calc(900px - 150px)}
+.sheet{padding:18px 40px}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;font-weight:700;text-align:center;padding:8px 6px;border:1px solid var(--line);background:var(--wash)}
+th small{display:block;font-weight:500;color:var(--violet)}
+td{border:1px solid var(--line);height:42px;text-align:center;font-size:15px}
+td.sym{text-align:left;padding-left:12px;font-weight:700;font-size:16px}
+td.avg{font-weight:800;font-size:17px;background:#F7F5FD}
+td.rk{font-weight:800;font-size:20px;color:var(--violet)}
+td.rem{text-align:left;padding:0 10px;font-size:13px;color:#4A4270}
+td.lo{color:var(--red);font-weight:700}
+tr.off td{color:#6A6290}
+tr.off td.rem{color:var(--red);font-weight:600}
+aside{border-left:2px solid var(--violet);padding:22px 28px;background:#fff}
+aside h2{font:800 20px "Be Vietnam Pro";margin-bottom:4px}
+.card{border:1.5px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
+.card h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#6A6290;margin-bottom:8px}
+.grade{display:grid;grid-template-columns:1fr auto auto;gap:6px 14px;font-size:14px}
+.grade b{font-weight:800}
+.grade i{font-style:normal;color:var(--violet);font-weight:600}
+.remark{font-size:15px;line-height:1.55}
+.foot{position:absolute;bottom:12px;left:40px;right:40px;font-size:12px;color:#6A6290}
+</style></head><body>
+<header>
+ <h1>Sổ điểm đa yếu tố<small>VN30 &amp; HNX30 · xếp hạng trong lớp cho nhà đầu tư và môi giới</small></h1>
+ <div class="meta"><div><span>Lớp</span><b>VN30</b></div><div><span>Buổi</span><b>Phiên LO</b></div><div><span>Giờ chấm</span><b>10:00:30</b></div><div><span>Sĩ số xếp loại</span><b>11 / 12</b></div></div>
+ <div class="tabs"><span class="on">VN30</span><span>HNX30</span></div>
+</header>
+<div class="bar"><span>Hệ số</span><span class="sel">Đều 1 · 1 · 1 · 1</span><span>Khối ngoại</span><span class="sel">Theo giá trị</span><span>Điểm TB tối thiểu</span><span class="sel">0</span><span>● Đã kết nối · 2 giây trước</span><span class="syn">DỮ LIỆU GIẢ LẬP</span></div>
+<main>
+ <section class="sheet">
+  <table>
+   <tr><th style="width:60px">Hạng</th><th style="width:110px;text-align:left;padding-left:12px">Mã</th><th>Động lượng<small>hệ số 1</small></th><th>Thanh khoản<small>hệ số 1</small></th><th>Dòng tiền ngoại<small>hệ số 1</small></th><th>Cung–cầu<small>hệ số 1</small></th><th style="width:90px">Điểm TB</th><th style="width:320px;text-align:left;padding-left:10px">Nhận xét</th></tr>
+   <tr><td class="rk">1</td><td class="sym">DEMO04</td><td>100</td><td>46,7</td><td>100</td><td>90,0</td><td class="avg">84,2</td><td class="rem">Dẫn đầu nhờ động lượng và ngoại mua ròng</td></tr>
+   <tr><td class="rk">2</td><td class="sym">DEMO07</td><td>90,0</td><td>70,0</td><td>90,0</td><td>80,0</td><td class="avg">82,5</td><td class="rem">Đều ở cả bốn yếu tố</td></tr>
+   <tr><td class="rk">3</td><td class="sym">DEMO10</td><td>80,0</td><td>83,3</td><td>80,0</td><td>70,0</td><td class="avg">78,3</td><td class="rem">Thanh khoản tốt nhất nhóm dẫn đầu</td></tr>
+   <tr><td class="rk">4</td><td class="sym">DEMO02</td><td>70,0</td><td class="lo">26,7</td><td>70,0</td><td>60,0</td><td class="avg">56,7</td><td class="rem">Kéo xuống bởi thanh khoản</td></tr>
+   <tr><td class="rk">5</td><td class="sym">DEMO05</td><td>60,0</td><td>43,3</td><td>60,0</td><td>50,0</td><td class="avg">53,3</td><td class="rem">Trung bình</td></tr>
+   <tr><td class="rk">6</td><td class="sym">DEMO08</td><td>50,0</td><td>60,0</td><td>50,0</td><td>40,0</td><td class="avg">50,0</td><td class="rem">Trung bình</td></tr>
+   <tr><td class="rk">7</td><td class="sym">DEMO11</td><td>40,0</td><td>76,7</td><td>40,0</td><td>30,0</td><td class="avg">46,7</td><td class="rem">Thanh khoản tốt, cung–cầu yếu</td></tr>
+   <tr><td class="rk">8</td><td class="sym">DEMO01</td><td class="lo">0,0</td><td>33,3</td><td class="lo">0,0</td><td>100</td><td class="avg">33,3</td><td class="rem">Lệch: cung–cầu mạnh, động lượng yếu</td></tr>
+   <tr><td class="rk">9</td><td class="sym">DEMO03</td><td>30,0</td><td class="lo">20,0</td><td>30,0</td><td class="lo">20,0</td><td class="avg">25,0</td><td class="rem">Yếu ở cả bốn yếu tố</td></tr>
+   <tr><td class="rk">10</td><td class="sym">DEMO06</td><td class="lo">20,0</td><td>36,7</td><td class="lo">20,0</td><td class="lo">10,0</td><td class="avg">21,7</td><td class="rem">Yếu</td></tr>
+   <tr><td class="rk">11</td><td class="sym">DEMO09</td><td class="lo">10,0</td><td>30,0</td><td class="lo">10,0</td><td class="lo">10,0</td><td class="avg">15,0</td><td class="rem">Cuối nhóm</td></tr>
+   <tr class="off"><td class="rk">—</td><td class="sym">DEMO12</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="avg">—</td><td class="rem">Chưa xếp loại: sổ lệnh cũ 74 giây</td></tr>
+  </table>
+ </section>
+ <aside>
+  <h2>DEMO04 · hạng 1/11</h2>
+  <p style="color:#5C5480">Điểm trung bình 84,2 trên thang 100</p>
+  <div class="card"><h3>Bảng điểm chi tiết</h3><div class="grade">
+   <span>Động lượng</span><i>+2,00 %</i><b>100</b>
+   <span>Thanh khoản</span><i>184,6 tỷ</i><b>46,7</b>
+   <span>Dòng tiền ngoại</span><i>+0,062</i><b>100</b>
+   <span>Cung–cầu</span><i>+0,31</i><b>90,0</b></div></div>
+  <div class="card"><h3>Nhận xét</h3><p class="remark">Đứng đầu lớp nhờ giá tăng mạnh từ mở cửa và khối ngoại mua ròng cao nhất nhóm. Cần chú ý thanh khoản chỉ ở mức trung bình.</p></div>
+  <div class="card"><h3>Sổ đầu bài</h3><p class="remark" style="font-size:13px">Dữ liệu mới nhất 2 giây · Lần kết nối 1 · Cấu hình 7f20…41</p></div>
+ </aside>
+</main>
+<div class="foot">Công cụ phân tích học thuật. Điểm là vị trí tương đối trong nhóm, không phải xác suất tăng giá hay khuyến nghị mua/bán. Giờ UTC+7.</div>
+</body></html>

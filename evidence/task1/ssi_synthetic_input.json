@@ -1,0 +1,82 @@
+{
+  "source": "synthetic",
+  "messages": [
+    {
+      "DataType": "F",
+      "Content": {
+        "Symbol": "DEMO01",
+        "Exchange": "HOSE",
+        "TradingDate": "04/11/2026",
+        "Time": "10:00:00",
+        "RType": "F",
+        "TradingSession": "LO",
+        "TradingStatus": "N"
+      }
+    },
+    {
+      "DataType": "X-QUOTE",
+      "Content": "{\"Symbol\": \"DEMO01\", \"Exchange\": \"HOSE\", \"TradingDate\": \"04/11/2026\", \"Time\": \"10:00:00\", \"BidPrice1\": \"20000\", \"BidVol1\": 1000, \"BidPrice2\": 19950, \"BidVol2\": 2000, \"BidPrice3\": 19900, \"BidVol3\": 3000, \"AskPrice1\": 20050, \"AskVol1\": 1200, \"AskPrice2\": 20100, \"AskVol2\": 2200, \"AskPrice3\": 20150, \"AskVol3\": 3200, \"AskPrice4\": 20200, \"AskVol4\": 4000}"
+    },
+    {
+      "DataType": "X-TRADE",
+      "Content": {
+        "Symbol": "DEMO01",
+        "Exchange": "HOSE",
+        "TradingDate": "04/11/2026",
+        "Time": "10:00:00",
+        "LastPrice": 20050,
+        "LastVol": 100,
+        "TotalVol": 100000,
+        "TotalVal": 2000000000,
+        "RefPrice": 19900
+      }
+    },
+    {
+      "DataType": "R",
+      "Content": {
+        "Symbol": "DEMO01",
+        "Exchange": "HOSE",
+        "TradingDate": "04/11/2026",
+        "Time": "10:00:00",
+        "BuyVol": "2000",
+        "SellVol": 1000,
+        "BuyVal": 40100000,
+        "SellVal": 20050000
+      }
+    },
+    {
+      "DataType": "B",
+      "Content": {
+        "RType": "B",
+        "Symbol": "DEMO01",
+        "Exchange": "HOSE",
+        "Time": "2026-11-04T10:00:00+07:00",
+        "Open": 19900,
+        "High": 20100,
+        "Low": 19800,
+        "Close": 20050,
+        "Volume": 100,
+        "Value": 0
+      }
+    },
+    {
+      "DataType": "X",
+      "Content": {
+        "Symbol": "HNDEMO01",
+        "Exchange": "HNX",
+        "TradingDate": "04/11/2026",
+        "Time": "10:00:00",
+        "MarketId": "HNX",
+        "LastPrice": 15000,
+        "Close": 14900,
+        "Open": 14800,
+        "TotalVal": 1500000000,
+        "TotalVol": 100000,
+        "TradingSession": "ATC",
+        "TradingStatus": "N",
+        "BidPrice1": "ATC",
+        "AskPrice1": "ATC"
+      }
+    }
+  ]
+}

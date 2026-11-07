@@ -1,0 +1,106 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#E9EAE6;--ink:#17191C;--ink2:#4A4F57;--spot:#1D4E9E;--rule:#17191C;--warn:#C2410C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--paper);color:var(--ink);font:14px/1.4 "Be Vietnam Pro",sans-serif}
+.cond{font-family:"Barlow Condensed",sans-serif}
+header{display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:32px;padding:18px 32px 12px;border-bottom:3px solid var(--ink)}
+.mast{font:800 34px/0.9 "Barlow Condensed";letter-spacing:-.01em;text-transform:uppercase}
+.mast small{display:block;font:600 12px "Be Vietnam Pro";letter-spacing:.02em;text-transform:none;color:var(--ink2);margin-top:6px}
+.edition{display:flex;gap:22px;align-items:baseline;font:600 15px "Be Vietnam Pro"}
+.edition b{font:700 30px/1 "Barlow Condensed";color:var(--spot)}
+.tabs{display:flex;gap:0;border:2px solid var(--ink)}
+.tabs span{padding:6px 18px;font:700 16px "Barlow Condensed";letter-spacing:.03em}
+.tabs .on{background:var(--ink);color:var(--paper)}
+.live{font:600 13px "Be Vietnam Pro";display:flex;align-items:center;gap:8px}
+.live i{width:9px;height:9px;background:var(--spot);display:inline-block}
+.sub{display:flex;gap:28px;padding:8px 32px;border-bottom:1px solid var(--rule);font-size:13px;color:var(--ink2)}
+.sub b{color:var(--ink);font-weight:600}
+main{display:grid;grid-template-columns:220px 1fr 340px;height:calc(900px - 130px)}
+aside.filters{padding:20px 24px;border-right:1px solid var(--rule)}
+h3{font:700 13px "Be Vietnam Pro";text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+.ctl{margin-bottom:22px}
+.seg{display:flex;flex-direction:column;border:1.5px solid var(--ink)}
+.seg span{padding:7px 10px;font-size:13px;border-bottom:1px solid var(--ink)}
+.seg span:last-child{border:0}
+.seg .on{background:var(--spot);color:#fff;font-weight:600}
+.input{border:1.5px solid var(--ink);padding:7px 10px;font-size:13px;background:#F4F5F2}
+.note{font-size:12px;color:var(--ink2);margin-top:8px}
+section.board{padding:16px 28px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{font:700 12px "Be Vietnam Pro";text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:6px 8px;border-bottom:2px solid var(--ink)}
+th.n{text-align:right}
+td{padding:0 8px;height:46px;border-bottom:1px solid #C9CCC6;font-size:14px}
+.rk{font:800 30px/1 "Barlow Condensed";width:52px}
+.sym{font:700 22px/1 "Barlow Condensed";letter-spacing:.02em;width:96px}
+.tot{width:250px}
+.tot .num{font:700 22px/1 "Barlow Condensed";display:inline-block;width:52px}
+.budget{display:inline-flex;width:170px;height:12px;border:1px solid var(--ink);vertical-align:middle;background:#F4F5F2}
+.budget s{display:block;height:100%;text-decoration:none}
+.f{width:96px;text-align:right;font:700 19px/46px "Barlow Condensed";padding-right:12px}
+.t0{background:rgba(29,78,158,.06)}.t1{background:rgba(29,78,158,.22)}.t2{background:rgba(29,78,158,.42)}.t3{background:rgba(29,78,158,.8);color:#fff}.t4{background:#1D4E9E;color:#fff}
+.mark{width:120px;font-size:12px;font-weight:600}
+tr.sel td{background:rgba(23,25,28,.06)}
+tr.sel .sym{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
+tr.off td{color:#5B6068}
+tr.off .mark{color:var(--warn)}
+aside.why{border-left:1px solid var(--rule);padding:20px 24px}
+.big{font:800 64px/0.9 "Barlow Condensed"}
+.big small{font:600 22px "Barlow Condensed";color:var(--ink2)}
+.lede{font-size:15px;line-height:1.5;margin:12px 0 18px}
+.lede b{color:var(--spot)}
+.rows div{display:grid;grid-template-columns:1fr auto;padding:8px 0;border-bottom:1px solid #C9CCC6;font-size:13px}
+.rows b{font:700 18px "Barlow Condensed"}
+footer{position:absolute;bottom:0;left:0;right:0;height:0}
+.foot{position:absolute;bottom:14px;left:32px;right:32px;font-size:12px;color:var(--ink2);display:flex;justify-content:space-between}
+.chip{border:1.5px solid var(--ink);padding:2px 8px;font:700 12px "Be Vietnam Pro";background:#F4F5F2}
+</style></head><body>
+<header>
+ <div class="mast">Bộ lọc đa yếu tố<small>VN30 &amp; HNX30 · cho nhà đầu tư và môi giới</small></div>
+ <div class="edition"><span>Ấn bản <b class="cond">10:00:30</b></span><span>Thứ Tư 04/11/2026</span><span>Phiên LO</span><span class="chip">DỮ LIỆU GIẢ LẬP</span></div>
+ <div style="display:flex;gap:24px;align-items:center"><div class="tabs"><span class="on">VN30</span><span>HNX30</span></div><div class="live"><i></i>Đã kết nối · cập nhật 2 giây trước</div></div>
+</header>
+<div class="sub"><span><b>11/12</b> mã đủ điều kiện xếp hạng</span><span>Trọng số <b>25/25/25/25</b></span><span>Khối ngoại theo <b>giá trị</b></span><span>Tập mã <b>c3e1…9a</b> · Cấu hình <b>7f20…41</b></span><span style="margin-left:auto">Mức tram = điểm phân vị 0–100 trong nhóm</span></div>
+<main>
+ <aside class="filters">
+  <div class="ctl"><h3>Trọng số</h3><div class="seg"><span class="on">Cân bằng 25/25/25/25</span><span>Ưu tiên động lượng 40/20/20/20</span></div></div>
+  <div class="ctl"><h3>Khối ngoại</h3><div class="seg"><span class="on">Theo giá trị</span><span>Theo khối lượng</span></div></div>
+  <div class="ctl"><h3>Điểm tối thiểu</h3><div class="input">0</div></div>
+  <div class="ctl"><h3>Tìm mã</h3><div class="input">Nhập mã…</div><p class="note">Lọc sau khi chấm điểm, không đổi nhóm so sánh.</p></div>
+  <div class="ctl"><h3>Xuất</h3><div class="input" style="text-align:center;font-weight:600">Tải CSV có cấu hình</div></div>
+ </aside>
+ <section class="board">
+  <table>
+   <tr><th>Hạng</th><th>Mã</th><th>Điểm tổng · đóng góp</th><th class="n">Động lượng</th><th class="n">Thanh khoản</th><th class="n">Ngoại ròng</th><th class="n">Cung–cầu</th><th>Trạng thái</th></tr>
+   <tr class="sel"><td class="rk">1</td><td class="sym">DEMO04</td><td class="tot"><span class="num">84,2</span><span class="budget"><s style="width:25%;background:#1D4E9E"></s><s style="width:11.7%;background:#5F86C4"></s><s style="width:25%;background:#1D4E9E"></s><s style="width:22.5%;background:#5F86C4"></s></span></td><td class="f t4">100</td><td class="f t2">46,7</td><td class="f t4">100</td><td class="f t3">90,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">2</td><td class="sym">DEMO07</td><td class="tot"><span class="num">82,5</span><span class="budget"><s style="width:22.5%;background:#1D4E9E"></s><s style="width:17.5%;background:#5F86C4"></s><s style="width:22.5%;background:#1D4E9E"></s><s style="width:20%;background:#5F86C4"></s></span></td><td class="f t3">90,0</td><td class="f t3">70,0</td><td class="f t3">90,0</td><td class="f t3">80,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">3</td><td class="sym">DEMO10</td><td class="tot"><span class="num">78,3</span><span class="budget"><s style="width:20%;background:#1D4E9E"></s><s style="width:20.8%;background:#5F86C4"></s><s style="width:20%;background:#1D4E9E"></s><s style="width:17.5%;background:#5F86C4"></s></span></td><td class="f t3">80,0</td><td class="f t3">83,3</td><td class="f t3">80,0</td><td class="f t3">70,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">4</td><td class="sym">DEMO02</td><td class="tot"><span class="num">56,7</span><span class="budget"><s style="width:17.5%;background:#1D4E9E"></s><s style="width:6.7%;background:#5F86C4"></s><s style="width:17.5%;background:#1D4E9E"></s><s style="width:15%;background:#5F86C4"></s></span></td><td class="f t3">70,0</td><td class="f t1">26,7</td><td class="f t3">70,0</td><td class="f t2">60,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">5</td><td class="sym">DEMO05</td><td class="tot"><span class="num">53,3</span><span class="budget"><s style="width:15%;background:#1D4E9E"></s><s style="width:10.8%;background:#5F86C4"></s><s style="width:15%;background:#1D4E9E"></s><s style="width:12.5%;background:#5F86C4"></s></span></td><td class="f t2">60,0</td><td class="f t2">43,3</td><td class="f t2">60,0</td><td class="f t2">50,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">6</td><td class="sym">DEMO08</td><td class="tot"><span class="num">50,0</span><span class="budget"><s style="width:12.5%;background:#1D4E9E"></s><s style="width:15%;background:#5F86C4"></s><s style="width:12.5%;background:#1D4E9E"></s><s style="width:10%;background:#5F86C4"></s></span></td><td class="f t2">50,0</td><td class="f t2">60,0</td><td class="f t2">50,0</td><td class="f t2">40,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">7</td><td class="sym">DEMO11</td><td class="tot"><span class="num">46,7</span><span class="budget"><s style="width:10%;background:#1D4E9E"></s><s style="width:19.2%;background:#5F86C4"></s><s style="width:10%;background:#1D4E9E"></s><s style="width:7.5%;background:#5F86C4"></s></span></td><td class="f t2">40,0</td><td class="f t3">76,7</td><td class="f t2">40,0</td><td class="f t1">30,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">8</td><td class="sym">DEMO01</td><td class="tot"><span class="num">33,3</span><span class="budget"><s style="width:0"></s><s style="width:8.3%;background:#5F86C4"></s><s style="width:0"></s><s style="width:25%;background:#5F86C4"></s></span></td><td class="f t0">0,0</td><td class="f t1">33,3</td><td class="f t0">0,0</td><td class="f t4">100</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">9</td><td class="sym">DEMO03</td><td class="tot"><span class="num">25,0</span><span class="budget"><s style="width:7.5%;background:#1D4E9E"></s><s style="width:5%;background:#5F86C4"></s><s style="width:7.5%;background:#1D4E9E"></s><s style="width:5%;background:#5F86C4"></s></span></td><td class="f t1">30,0</td><td class="f t1">20,0</td><td class="f t1">30,0</td><td class="f t1">20,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">10</td><td class="sym">DEMO06</td><td class="tot"><span class="num">21,7</span><span class="budget"><s style="width:5%;background:#1D4E9E"></s><s style="width:9.2%;background:#5F86C4"></s><s style="width:5%;background:#1D4E9E"></s><s style="width:2.5%;background:#5F86C4"></s></span></td><td class="f t1">20,0</td><td class="f t1">36,7</td><td class="f t1">20,0</td><td class="f t0">10,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr><td class="rk">11</td><td class="sym">DEMO09</td><td class="tot"><span class="num">15,0</span><span class="budget"><s style="width:2.5%;background:#1D4E9E"></s><s style="width:7.5%;background:#5F86C4"></s><s style="width:2.5%;background:#1D4E9E"></s><s style="width:2.5%;background:#5F86C4"></s></span></td><td class="f t0">10,0</td><td class="f t1">30,0</td><td class="f t0">10,0</td><td class="f t0">10,0</td><td class="mark">Đã xếp hạng</td></tr>
+   <tr class="off"><td class="rk">—</td><td class="sym">DEMO12</td><td class="tot"><span class="num">—</span><span class="budget"></span></td><td class="f">—</td><td class="f">—</td><td class="f">—</td><td class="f">—</td><td class="mark">Sổ lệnh cũ 74 s</td></tr>
+  </table>
+ </section>
+ <aside class="why">
+  <h3>Vì sao DEMO04 đứng đầu</h3>
+  <div class="big">#1<small> / 11 · 84,2 điểm</small></div>
+  <p class="lede">Mạnh nhất ở <b>động lượng</b> và <b>dòng tiền ngoại</b> (cùng 100 điểm phân vị). Yếu nhất ở <b>thanh khoản</b>, 46,7 điểm.</p>
+  <div class="rows">
+   <div><span>Giá khớp / mở cửa</span><b>+2,00 %</b></div>
+   <div><span>Giá trị khớp</span><b>184,6 tỷ</b></div>
+   <div><span>Chênh lệch mua–bán</span><b>24 bps</b></div>
+   <div><span>Độ sâu 3 mức mỗi bên</span><b>9,8 tỷ</b></div>
+   <div><span>Ngoại ròng / giá trị khớp</span><b>+0,062</b></div>
+   <div><span>Mất cân bằng cung–cầu</span><b>+0,31</b></div>
+   <div><span>Dữ liệu mới nhất</span><b>2 s</b></div>
+  </div>
+ </aside>
+</main>
+<div class="foot"><span>Công cụ phân tích học thuật. Điểm là vị trí tương đối trong nhóm, không phải xác suất tăng giá hay khuyến nghị mua/bán.</span><span>Nguồn: SSI FastConnect V3 · giờ UTC+7</span></div>
+</body></html>

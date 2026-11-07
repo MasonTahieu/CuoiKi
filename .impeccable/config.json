@@ -1,0 +1,215 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-06T15:18:36.109Z",
+        "reason": "agent: throwaway decision-round sketch for an unchosen comparison card, not shipped UI"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-06T15:18:36.555Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-06T15:18:36.976Z",
+        "reason": "agent: throwaway decision-round sketch for an unchosen comparison card, not shipped UI"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-06T15:18:37.485Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "src/web/static/index.html"
+        ],
+        "createdAt": "2026-11-06T15:34:29.061Z",
+        "reason": "agent: standard tab strip whose active underline sits on the panel-head border by design (SSI iBoard/FireAnt tab convention)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-06T15:54:55.301Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-06T15:54:55.690Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-06T15:54:56.059Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-06T15:54:56.419Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-06T15:54:56.780Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-06T15:54:57.174Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-06T15:54:57.531Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-06T15:54:57.905Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-06T15:54:58.274Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-06T15:54:58.662Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-06T15:54:59.068Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-06T15:54:59.438Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-06T15:54:59.821Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-06T15:55:00.223Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-06T15:55:00.986Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-06T15:55:01.357Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-06T15:55:01.755Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-06T15:55:02.153Z",
+        "reason": "agent: spent decision-round sketch of a comparison direction; intentionally outside DESIGN.md, not shipped UI"
+      }
+    ]
+  }
+}

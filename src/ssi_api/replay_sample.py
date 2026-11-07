@@ -71,7 +71,7 @@ def main():
     # A cursor distinguishes F/HALT from the stopped marker with the same timestamp.
     with SSIJournal(database) as journal:
         last_decoded=max(e["event_id"] for e in journal.events(run) if e["channel"]=="ssiDecoded")
-    checkpoints.append({"name":"HNX tạm ngừng giao dịch, trước khi collector dừng",
+    checkpoints.append({"name":"DEMO02 tạm ngừng giao dịch, trước khi collector dừng",
         "report":replay(database,run,through_event_id=last_decoded)})
     checkpoints.append({"name":"Collector đã dừng","report":replay(database,run)})
     export_report(checkpoints[4]["report"],output/"export")
@@ -85,25 +85,25 @@ def main():
 
     lines=["# Task 3 — Kết quả lưu trữ, phát lại và chất lượng dữ liệu", "",
         "**Hoàn toàn giả lập (`source=synthetic`), không gọi mạng và không dùng khóa SSI/NEO.**", "",
-        "Hai mã hư cấu DEMO01 và HNDEMO01 minh họa hai nhóm; không phải thành phần VN30/HNX30 thật.",
+        "Hai mã hư cấu DEMO01 và DEMO02 trong nhóm VN30; không phải thành phần VN30 thật.",
         "`data_usable` là kết quả kiểm tra dữ liệu tại mốc chọn. Báo cáo replay dùng `ranking_ready=false`.", "",
         "## 1. Kiểm tra theo mốc", "",
-        "| Tình huống | Mốc giờ +07:00 | Trạng thái ghi nhận | VN30 dùng được | HNX30 dùng được |", 
-        "|---|---|---|---|---|"]
+        "| Tình huống | Mốc giờ +07:00 | Trạng thái ghi nhận | VN30 dùng được |",
+        "|---|---|---|---|"]
     for checkpoint in checkpoints:
         report=checkpoint["report"]
         coverage=report["group_coverage"]
-        counts=[f'{coverage[g]["data_usable"]}/{coverage[g]["members"]}' for g in ("VN30","HNX30")]
-        lines.append(f'| {checkpoint["name"]} | {report["as_of"].split("T")[1]} | {report["last_recorded_connection_state"]} | {counts[0]} | {counts[1]} |')
-    lines.extend(["", "Độ phủ được tính trên danh sách bootstrap của run này (mỗi nhóm chỉ 1 mã), không phải độ phủ 30 mã thực tế.",
+        counts=[f'{coverage[g]["data_usable"]}/{coverage[g]["members"]}' for g in ("VN30",)]
+        lines.append(f'| {checkpoint["name"]} | {report["as_of"].split("T")[1]} | {report["last_recorded_connection_state"]} | {counts[0]} |')
+    lines.extend(["", "Độ phủ được tính trên danh sách bootstrap của run này (2 mã), không phải độ phủ 30 mã thực tế.",
         "Các mốc phát lại không lấy giá/trường xuất hiện sau mốc chọn. Bản ghi `ssiMerged` chỉ để đối chiếu, không quyết định trạng thái replay.",
         "", "## 2. Những kết quả cần kiểm tra", "",
         "- 10:00:01: giá DEMO01 là **20.000**, chưa dùng giá ở các mốc sau.",
-        "- 10:00:03: `bidVol1=null` làm DEMO01 thiếu trường; mã HNX vẫn đủ dữ liệu.",
+        "- 10:00:03: `bidVol1=null` làm DEMO01 thiếu trường; DEMO02 vẫn đủ dữ liệu.",
         "- 10:00:06,5: mất kết nối; dữ liệu nền cũ bị xóa. Gap đang mở được ghi nhận 0,5 giây tại mốc này.",
         "- 10:00:09: đã kết nối lại nhưng chỉ có giá Trade; vẫn thiếu mở cửa, sổ lệnh và khối ngoại.",
-        "- 10:00:13: cả hai mã qua kiểm tra dữ liệu; gap hoàn tất dài **1 giây**. Cờ ngoại ước tính của mã HOSE vẫn được giữ.",
-        "- 10:00:14, ngay sau F: HNX bị HALT; VN30 vẫn qua kiểm tra. Dùng event ID để phân biệt với sự kiện dừng cùng giây.",
+        "- 10:00:13: cả hai mã qua kiểm tra dữ liệu; gap hoàn tất dài **1 giây**. Cờ khối ngoại ước tính của mã HOSE vẫn được giữ.",
+        "- 10:00:14, ngay sau F: DEMO02 bị HALT nên bị chặn; DEMO01 vẫn qua kiểm tra. Dùng event ID để phân biệt với sự kiện dừng cùng giây.",
         "- Sau sự kiện dừng: vẫn xem được snapshot lịch sử, nhưng dữ liệu bị chặn vì kết nối đã dừng.", "",
         "## 3. Trường mới không làm mới các trường khác", "",
         "Run thứ hai giữ luồng hoạt động bằng các quote cách nhau tối đa 13 giây. Tại 10:01:03:", "",

@@ -4,14 +4,14 @@
 
 Chạy `RUN_APP.ps1` tại thư mục dự án. Cấu hình mặc định `APP_MODE=demo`, `DATA_PROVIDER=ssi` có hai lựa chọn ở mục **Dữ liệu minh họa**.
 
-- **Bảng điểm giả lập** có 12 mã mỗi nhóm. Chọn VN30 hoặc HNX30, đổi trọng số, lọc mã và xem điểm từng yếu tố. Bộ lọc áp dụng sau khi tính hạng trong cả nhóm.
+- **Bảng điểm giả lập** có 12 mã VN30 hư cấu. Đổi trọng số, lọc mã và xem điểm từng yếu tố. Bộ lọc áp dụng sau khi tính hạng trong cả nhóm.
 - **Nhật ký SSI mẫu** dựng hai lần thu thập giả lập trong kho tạm của phiên chạy ứng dụng. Mẫu dùng hai mã để minh họa chất lượng dữ liệu và ngưỡng tối thiểu 10 mã của mỗi nhóm.
 
 | Tình huống mẫu | Thao tác và kết quả |
 |---|---|
 | Mất kết nối | Chọn lần **Mất kết nối và phục hồi** và mốc **10:00:06 · Mất kết nối**. Giao diện hiện trạng thái gián đoạn và chờ snapshot. |
 | Phục hồi | Chọn mốc **10:00:13 · Dữ liệu cổ phiếu**. Lần kết nối thứ hai có dữ liệu mới và tab chất lượng hiển thị khoảng gián đoạn đã đóng. |
-| Tạm ngừng một mã | Ở mốc **10:00:14 · Dữ liệu cổ phiếu**, chọn HNX30 để xem trạng thái HALT và lý do chưa xếp hạng. Mốc **Đã dừng thu thập** cùng giây có số thứ tự riêng. |
+| Tạm ngừng một mã | Ở mốc **10:00:14 · Dữ liệu cổ phiếu**, xem mã DEMO02 ở trạng thái HALT và lý do chưa xếp hạng. Mốc **Đã dừng thu thập** cùng giây có số thứ tự riêng. |
 | Dữ liệu cũ | Chọn lần **Dữ liệu khối ngoại cũ** rồi mở tab **Chất lượng dữ liệu**. Mốc mặc định 10:01:03 hiện khối ngoại 63 giây tuổi, cờ ước tính ở mã HOSE và lý do “Trường quá cũ”. |
 
 Trong tab chất lượng, tuổi theo cụm là tuổi nguồn lớn nhất trong những trường của cụm. Mở **Xem dấu thời gian từng trường** để xem giờ nguồn, giờ nhận và cờ thiếu/cũ. Trạng thái kết nối phản ánh bản ghi SQLite tại mốc đang xem.

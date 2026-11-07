@@ -1,6 +1,6 @@
 """Synthetic FastConnect V3 frames in the wire shape read from ``ssi-sdk`` 3.3.2.
 
-DỮ LIỆU GIẢ LẬP: tickers are fictional (V3HOSExx / V3HNXxx). Used by tests and offline demos;
+DỮ LIỆU GIẢ LẬP: tickers are fictional (V3HOSExx). Used by tests and offline demos;
 it says nothing about real SSI values, units or update frequency.
 """
 from datetime import timedelta
@@ -10,8 +10,7 @@ from src.ssi_api.stream_collector import Frame
 
 
 def v3_members(per_group=11):
-    return ([{"symbol": f"V3HOSE{i:02d}", "index_group": "VN30", "marketCode": "HOSE"} for i in range(1, per_group + 1)]
-            + [{"symbol": f"V3HNX{i:02d}", "index_group": "HNX30", "marketCode": "HNX"} for i in range(1, per_group + 1)])
+    return [{"symbol": f"V3HOSE{i:02d}", "index_group": "VN30", "marketCode": "HOSE"} for i in range(1, per_group + 1)]
 
 
 def frame(topic, data, received):
@@ -24,7 +23,7 @@ def baseline_frames(members, at, *, flag=True, seed=0):
     source = (received - timedelta(seconds=1)).strftime("%H:%M:%S")
     frames = []
     if flag:
-        frames += [frame("market.flag", {"b": board, "t": source, "f": "LO"}, received) for board in ("HOSE", "HNX")]
+        frames += [frame("market.flag", {"b": board, "t": source, "f": "LO"}, received) for board in ("HOSE",)]
     for n, member in enumerate(members):
         k = (n * 7 + seed) % 11
         base = 20_000 + 500 * n

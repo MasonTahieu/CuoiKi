@@ -31,7 +31,7 @@
 | `quote.<rổ>@*` | `bids`, `asks` = `[[giá, KL], …]` | bid/askPrice1–3, bid/askVol1–3 | Chênh lệch, độ sâu, cung–cầu |
 | `room.<rổ>@*` | `bq`, `bv`, `sq`, `sv`, `tr`, `cr` | foreignBuy/SellVolume, foreignBuy/SellValue, foreignRoom, foreignRemain | Dòng tiền ngoại |
 | `market.flag` | `b`, `f`, `t` | tradingSession của cả sàn, trải xuống từng mã | Chỉ chấm điểm khi ở phiên LO |
-| REST `securitiesByBoard?index=` | `symbol`, `board` | Thành phần VN30 và HNX30 | Danh sách mã của mỗi lần kết nối |
+| REST `securitiesByBoard?index=` | `symbol`, `board` | Thành phần VN30 | Danh sách mã của mỗi lần kết nối |
 | REST `securitiesSummary` | `open`, `close`, `totalMatch`, `totalMatchValue`, `totalForeignBuy(Value)`… | Dữ liệu ngày | Đối chiếu cuối phiên và phân tích nhiều phiên |
 
 ### Khác biệt so với v2 và cách đã xử lý
@@ -42,7 +42,7 @@
 | Cờ phiên chỉ phát khi đổi phiên, nên có thể lỡ nếu bắt đầu thu giữa phiên | Suy phiên theo lịch giao dịch HOSE/HNX. Ghi cảnh báo `SESSION_FROM_SCHEDULE` | Giá trị thật của `f` và thời điểm phát |
 | Gói trade không có tổng giá trị khớp | `a × v`, gắn cờ suy ra. Đối chiếu với `totalMatchValue` của REST lúc 15:05 | **Đã ủng hộ trên dữ liệu ngày thật** (07/11): trung vị `average × totalMatch / totalMatchValue` = 1,0000 trên 599 dòng. Vẫn cần đối chiếu stream/REST |
 | `securitiesSummary?index=` | **Quan sát 07/11:** trả về chính chỉ số, không phải các mã thành phần | Code lấy theo từng mã (`symbol=`), 60 lần gọi, giới hạn 2 lần/giây |
-| Khối ngoại để trống ở dữ liệu ngày | 43,5% dòng HNX30 trả null | Null có thể nghĩa là "không giao dịch". Đối chiếu với gói `room` trước khi đổi thành 0 |
+| Khối ngoại để trống ở dữ liệu ngày | 43,5% dòng HNX30 trả null, VN30 1,6%. Đây là một lý do bỏ HNX30 | Null có thể nghĩa là "không giao dịch". Đối chiếu với gói `room` trước khi đổi thành 0 |
 | Không rõ giá trị ngoại là số ước tính hay số sở báo | `foreign_value_estimated=None`, `foreign_value_basis=pending_live_validation` | Đối chiếu `bv/sv` với REST và với cách tính theo khối lượng |
 | Định dạng thời gian `t` chưa được tài liệu nêu rõ | Đọc được epoch ms/s, ISO và HH:MM:SS. Giờ thiếu ngày thì gắn `SOURCE_DATE_FROM_RECEIVED` | Smoke test ghi lại dạng thật |
 | Server chỉ giữ một phiên đăng nhập cho mỗi apiKey | Một tiến trình dùng chung một đăng nhập cho REST và stream | Không chạy hai lệnh SSI cùng lúc |

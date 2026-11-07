@@ -1,5 +1,7 @@
 # FastConnect SSI: cách kết nối và công việc có thể làm trước
 
+> Phạm vi sau đó thu hẹp về **VN30** (07/11/2026). Nội dung dưới giữ nguyên để truy vết. [Lý do](../evidence/v3_history/PHAM_VI_VN30.md)
+
 Ngày khảo sát: **04/11/2026**. Người học xác nhận “FlashAPI” trong yêu cầu là **FastConnect của SSI**.
 Không tìm thấy tài liệu FlashAPI riêng trong thư mục Cuối kì; đã đọc tài liệu công khai và các tệp mã nguồn client chính thức SSI.
 Người học chưa đăng ký SSI, nên kết quả dưới đây là đối chiếu hợp đồng và kiểm thử offline, không phải kết nối thành công.

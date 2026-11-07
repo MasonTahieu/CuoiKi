@@ -24,13 +24,13 @@ def collect_rest(settings):
     store=None
     try:
         client.authenticate()
-        members=[m for index in ("VN30","HNX30") for m in client.components(index)]
+        members=[m for index in ("VN30",) for m in client.components(index)]
         symbols={m["symbol"] for m in members}
         if len(symbols)!=len(members):
-            raise ValueError("Thành phần hai nhóm bị trùng; cần kiểm tra dữ liệu SSI.")
+            raise ValueError("Danh sách thành phần có mã trùng; cần kiểm tra dữ liệu SSI.")
         from datetime import datetime
         day=datetime.now(TZ).strftime("%d/%m/%Y")
-        rows=[row for market in ("HOSE","HNX") for row in client.list_all(
+        rows=[row for market in ("HOSE",) for row in client.list_all(
             "DailyStockPrice",market=market,fromDate=day,toDate=day) if row.get("Symbol") in symbols]
         if len({r["Symbol"] for r in rows})!=len(rows):
             raise ValueError("SSI trả nhiều snapshot ngày cho cùng mã; cần đối chiếu.")
@@ -38,12 +38,12 @@ def collect_rest(settings):
         run="ssi-"+uuid.uuid4().hex
         at=now()
         store.append("ssi",run,at,"connection",{"state":"connecting","update_mode":"snapshot","profile":settings.profile})
-        store.append("ssi",run,at,"universe",{"indices":["VN30","HNX30"],"members":members})
+        store.append("ssi",run,at,"universe",{"indices":["VN30"],"members":members})
         for row in rows:
             store.append("ssi",run,at,"ssiRaw",{"endpoint":"DailyStockPrice","data":row})
             store.append("ssi",run,at,"stockInfo",canonical_daily(row))
         store.append("ssi",run,now(),"connection",{"state":"snapshot_complete"})
-        return {"source":"ssi","run":run,"groups":["VN30","HNX30"],"members":len(members),"daily_rows":len(rows),
+        return {"source":"ssi","run":run,"groups":["VN30"],"members":len(members),"daily_rows":len(rows),
             "four_factor_ready":False,"note":"Chưa có sổ lệnh và phiên intraday; không dùng dữ liệu ngày thay thế."}
     finally:
         client.close()

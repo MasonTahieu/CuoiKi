@@ -38,7 +38,7 @@ def connection_plan(profile="unselected"):
             "market_routes":{name:V3_REST+path for name,path in V3_DATA_ROUTES.items()},
             "stream_url":V3_STREAM,"stream_transport":"websocket","sdk":V3_SDK,
             "subscribe_frame":{"method":"subscribe","channel":"DATA","topics":["trade.VN30@*","quote.VN30@*","room.VN30@*"]},
-            "topics":[f"{kind}.{{VN30|HNX30}}@*" for kind in V3_GROUP_TOPICS]+list(V3_BOARD_TOPICS),
+            "topics":[f"{kind}.VN30@*" for kind in V3_GROUP_TOPICS]+list(V3_BOARD_TOPICS),
             "auth_note":"REST dữ liệu dùng token không OTP; tài liệu SDK yêu cầu đăng nhập có OTP trước khi mở stream. Cần xác nhận với tài khoản thật.",
             "session_note":"Server giữ một phiên cho mỗi apiKey: REST và stream phải dùng chung một đăng nhập trong một tiến trình.",
             "rest_implemented":True,"stream_implemented":True,

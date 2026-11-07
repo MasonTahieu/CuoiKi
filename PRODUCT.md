@@ -14,14 +14,14 @@ Python is required by the course brief. Decided 06/11/2026 with the user: the UI
 
 Two audiences, weighted equally (confirmed 06/11/2026):
 
-- **Retail investors and brokers in Vietnam** using it during the trading session to narrow a watch list inside VN30 or HNX30 before deeper research, and to explain to themselves or a client why a stock stands out.
+- **Retail investors and brokers in Vietnam** using it during the trading session to narrow a watch list inside VN30 before deeper research, and to explain to themselves or a client why a stock stands out.
 - **The course lecturer grading the final project** through a live demo or recorded video, who must understand quickly what data comes in, how it is processed, and why a stock ranks where it does.
 
 All UI copy is Vietnamese.
 
 ## Product Purpose
 
-An intraday multi-factor screener: four factors (momentum from the open, liquidity from matched value + 3-level book depth + spread, relative foreign net flow, 3-level order-book imbalance) are percentile-ranked within each group (VN30 or HNX30) at one moment of the continuous LO session, then weighted into a total score. Success: the user sees which stocks lead the group and which factor drives each one, and can trust (or see why not to trust) the data behind it.
+An intraday multi-factor screener: four factors (momentum from the open, liquidity from matched value + 3-level book depth + spread, relative foreign net flow, 3-level order-book imbalance) are percentile-ranked within the VN30 basket at one moment of the continuous LO session, then weighted into a total score. Success: the user sees which stocks lead the group and which factor drives each one, and can trust (or see why not to trust) the data behind it.
 
 ## Positioning
 
@@ -36,7 +36,7 @@ Not a price board. It ranks within a group at a stated moment and refuses to ran
 
 ## Capabilities and Constraints
 
-- Group switch VN30 / HNX30; weights 25/25/25/25 or momentum-tilted 40/20/20/20; foreign factor by value (default) or volume.
+- Scope is VN30 only (HNX30 dropped 07/11/2026: thin liquidity, 43% missing foreign data); weights 25/25/25/25 or momentum-tilted 40/20/20/20; foreign factor by value (default) or volume.
 - Filters by symbol and minimum score apply after ranking and never change the cohort.
 - Minimum 10 eligible stocks per group; ties share a rank; no silent reweighting when a factor is missing.
 - Per-stock quality reasons and warnings (missing, stale, invalid, lagging, session not LO, no baseline after reconnect, V3-specific warnings).
@@ -46,7 +46,7 @@ Not a price board. It ranks within a group at a stated moment and refuses to ran
 
 ## Brand Commitments
 
-- Name in use: "Bộ lọc cổ phiếu đa yếu tố" / "VN30 & HNX30 Screener".
+- Name in use: "Bộ lọc cổ phiếu đa yếu tố" / "VN30 Screener".
 - Must state it is an academic analysis tool, not investment advice, and that scores are not probabilities of price increase.
 - Visual standard (user choice, 06/11/2026): the category standard played straight — a dark stock-dashboard in the convention Vietnamese investors already use, at the craft level of **SSI iBoard** and **FireAnt / Simplize**. No novelty world, no smuggled quirks.
 - Avoid: long text blocks and stacked warning boxes covering the main result (user's stated failure mode).

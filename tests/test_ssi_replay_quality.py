@@ -100,10 +100,9 @@ def test_field_missing_and_group_coverage_are_asof_specific(journal):
     path,collected=journal
     report=at(path,collected["run"],"03")
     assert symbol(report)["missing_fields"]==["bidVol1"]
-    assert symbol(report,"HNDEMO01")["data_usable"]
-    assert report["group_coverage"]["VN30"]["data_usable_percent"]==0
-    assert report["group_coverage"]["HNX30"]["data_usable_percent"]==100
-    assert report["group_coverage"]["VN30"]["fields"]["bidVol1"]["present"]==0
+    assert symbol(report,"DEMO02")["data_usable"]
+    assert report["group_coverage"]["VN30"]["data_usable_percent"]==50
+    assert report["group_coverage"]["VN30"]["fields"]["bidVol1"]["present"]==1
 
 
 def test_status_is_per_symbol_and_full_fields_do_not_mean_usable(journal):
@@ -112,10 +111,11 @@ def test_status_is_per_symbol_and_full_fields_do_not_mean_usable(journal):
     with SSIJournal(path) as reader:
         marker=[e for e in reader.events(collected["run"]) if e["channel"]=="ssiDecoded"][-1]
     report=replay(path,collected["run"],through_event_id=marker["event_id"])
-    halted=symbol(report,"HNDEMO01")
+    halted=symbol(report,"DEMO02")
     assert halted["fields_complete"] and "STATUS_NOT_NORMAL" in halted["reasons"]
     assert symbol(report)["data_usable"]
-    assert report["group_coverage"]["HNX30"]["fields_complete"]==1
+    assert report["group_coverage"]["VN30"]["fields_complete"]==2
+    assert report["group_coverage"]["VN30"]["data_usable"]==1
 
 
 def test_stale_foreign_fields_are_not_refreshed_by_new_quote(tmp_path):

@@ -16,7 +16,7 @@ from src.ranking.engine import rank_groups
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="VN30–HNX30 Screener — SSI FastConnect")
+    parser = argparse.ArgumentParser(description="VN30 Screener — SSI FastConnect")
     parser.add_argument("command", choices=["check", "demo", "readiness", "connection-plan", "demo-pipeline", "collect", "replay",
                                             "smoke-v3", "history-v3", "session-v3", "evaluate-v3"])
     parser.add_argument("--transport", choices=["rest", "ws"], default=None)
@@ -112,7 +112,7 @@ def main():
                         store.append(**e)
                 finally:
                     store.close()
-                events = read_events(path, "synthetic-two-groups-v1" if settings.provider == "ssi" else "synthetic-v1")
+                events = read_events(path, "synthetic-vn30-v1" if settings.provider == "ssi" else "synthetic-v1")
             else:
                 events = read_events(args.db or neo.database, args.run)
             if not events:

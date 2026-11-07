@@ -1,4 +1,4 @@
-# Bàn giao dự án bộ lọc cổ phiếu VN30 và HNX30
+# Bàn giao dự án bộ lọc cổ phiếu VN30
 
 **Ngày cập nhật 06/11/2026.** File này giúp người tiếp quản hiểu đề tài, mở lại bản demo, tìm bằng chứng kiểm thử và tiếp tục tích hợp SSI từ đúng chỗ đang dừng.
 
@@ -8,7 +8,7 @@
 - Đề cập nhật (`../261BFF401101_261BFF401102_GPMUD1_DETHICUOIKY_DOAN_CAPNHAT.docx`) chính thức cho phép dùng thêm SSI FastConnect API.
 - Đã viết xong bộ nối **FastConnect V3** dùng SDK chính thức `ssi-sdk==3.3.2`: đăng nhập và OTP, REST thành phần nhóm và dữ liệu ngày, WebSocket `trade`/`quote`/`room`/`market.flag`, bộ giải mã, thu theo phiên, đối chiếu stream với REST, đánh giá nhiều phiên.
 - Mã nguồn hiện tại đạt **268/268 kiểm thử** offline. ZIP ngày 05/11 **chưa** chứa phần V3.
-- **07/11/2026: đã có API Key FastConnect V3** (lưu trong `.env`, profile `fastconnect_v3`). REST thật đã chạy được: 10 phiên × 60 mã (599/600 dòng) vào `runtime/ssi_daily.sqlite`. Phát hiện `securitiesSummary?index=` trả về chính chỉ số nên code đã sửa sang lấy theo từng mã. Đã kiểm chứng giá trị khớp = giá bình quân × khối lượng (trung vị tỷ lệ 1,0000). Stream chưa thử vì sàn nghỉ. `SSI_SEMANTICS_VERIFIED` vẫn `false`. [Kết quả REST thật](evidence/v3_history/KET_QUA_REST_THAT.md)
+- **07/11/2026: đã có API Key FastConnect V3** (lưu trong `.env`, profile `fastconnect_v3`). REST thật đã chạy được: 10 phiên × 60 mã (599/600 dòng), sau đó GitHub Actions lấy 15 phiên. Từ 07/11 kho chỉ giữ 30 mã VN30. Phát hiện `securitiesSummary?index=` trả về chính chỉ số nên code đã sửa sang lấy theo từng mã. Đã kiểm chứng giá trị khớp = giá bình quân × khối lượng (trung vị tỷ lệ 1,0000). Stream chưa thử vì sàn nghỉ. `SSI_SEMANTICS_VERIFIED` vẫn `false`. [Kết quả REST thật](evidence/v3_history/KET_QUA_REST_THAT.md)
 - Giao diện có nguồn **"Cuối ngày · SSI thật"** (phương pháp `daily-v1`, 3 yếu tố, không có sổ lệnh), chạy được cả ngoài giờ giao dịch trên 10 phiên REST thật.
 - Đã chuẩn bị triển khai miễn phí **Vercel + GitHub Actions** (không cần thẻ, máy tắt vẫn chạy): workflow lấy dữ liệu ngày lúc 15:20, Vercel hiển thị. Mã đã đẩy lên [MasonTahieu/CuoiKi](https://github.com/MasonTahieu/CuoiKi) (công khai). Còn thêm GitHub Secrets, chạy thử workflow và import vào Vercel. [Hướng dẫn](docs/TRIEN_KHAI_VERCEL.md)
 - Khóa đã từng được dán vào chat. Nên thu hồi và tạo khóa mới trên Developer Portal, rồi tự điền vào `.env`.
@@ -16,11 +16,11 @@
 
 ## Đề tài và mục đích
 
-**Tên đề tài:** Xây dựng hệ thống sàng lọc và xếp hạng cổ phiếu đa yếu tố trong phiên cho VN30 và HNX30 sử dụng SSI FastConnect, phục vụ nhà đầu tư và môi giới.
+**Tên đề tài:** Xây dựng hệ thống sàng lọc và xếp hạng cổ phiếu đa yếu tố trong phiên cho rổ VN30 sử dụng SSI FastConnect, phục vụ nhà đầu tư và môi giới.
 
 Người dùng chọn nhóm và mốc quan sát, xem mã nổi bật theo bốn yếu tố, rồi mở chi tiết để hiểu vì sao một mã có điểm cao, thấp hoặc chưa được xếp hạng. Sản phẩm giúp thu hẹp danh sách cần nghiên cứu. Phạm vi là dữ liệu thị trường cổ phiếu, xếp hạng tương đối trong từng nhóm và chạy theo chế độ chỉ đọc.
 
-Dự án ban đầu hướng tới VN30 và VPBankS NEO API. Đã lấy được token NEO nhưng yêu cầu đọc dữ liệu thị trường trả HTTP 401 với mã `NEOINP000401`. Theo xác nhận của người học, giảng viên đã đồng ý đổi nguồn sang SSI FastConnect. Phạm vi hiện tại gồm hai nhóm VN30 và HNX30. Thư mục mã nguồn vẫn mang tên `neo-vn30-screener` và giữ nhánh NEO để truy vết. Tên ZIP giữ mẫu `MSSV_HoTen_NEOAPI_FinTech.zip` theo quy cách đề. [Đề (bản cập nhật)](../261BFF401101_261BFF401102_GPMUD1_DETHICUOIKY_DOAN_CAPNHAT.docx)
+Dự án ban đầu hướng tới VN30 và VPBankS NEO API. Đã lấy được token NEO nhưng yêu cầu đọc dữ liệu thị trường trả HTTP 401 với mã `NEOINP000401`. Theo xác nhận của người học, giảng viên đã đồng ý đổi nguồn sang SSI FastConnect. Ngày 07/11/2026 phạm vi thu hẹp về rổ VN30, vì trên 15 phiên SSI thật HNX30 có 11/30 mã giao dịch dưới 1 tỷ đồng mỗi phiên và 43% dòng thiếu dữ liệu khối ngoại. [Số liệu](evidence/v3_history/PHAM_VI_VN30.md) Thư mục mã nguồn vẫn mang tên `neo-vn30-screener` và giữ nhánh NEO để truy vết. Tên ZIP giữ mẫu `MSSV_HoTen_NEOAPI_FinTech.zip` theo quy cách đề. [Đề (bản cập nhật)](../261BFF401101_261BFF401102_GPMUD1_DETHICUOIKY_DOAN_CAPNHAT.docx)
 
 ## Tiến trình đã làm
 
@@ -82,9 +82,9 @@ Mở PowerShell tại thư mục chứa `app.py`. Trong ZIP có sẵn thư việ
 
 Giao diện web chạy cục bộ tại `http://127.0.0.1:8501` (thêm `-Streamlit` để mở giao diện cũ). Mặc định `DATA_PROVIDER=ssi` và `APP_MODE=demo`. Các lệnh dùng môi trường chung `~/.venv` theo mặc định. Truyền cùng `-VenvPath` cho các script nếu cần dùng một môi trường Python 3.13 khác. [README](README.md)
 
-- **Bảng điểm giả lập:** 24 mã hư cấu, 12 mã mỗi nhóm, 75 sự kiện. Thử chọn nhóm, đổi trọng số, lọc mã và xuất CSV.
+- **Bảng điểm giả lập:** 12 mã VN30 hư cấu. Thử đổi trọng số, lọc mã và xuất CSV.
 - **Nhật ký SSI mẫu:** 2 mã hư cấu để minh họa chất lượng. Chọn lần **Mất kết nối và phục hồi**, xem mốc 10:00:06 rồi 10:00:13. Chọn lần **Dữ liệu khối ngoại cũ** để xem tuổi nguồn 63 giây vượt ngưỡng thử nghiệm 60 giây. [Hướng dẫn giao diện](docs/TASK_5_GIAO_DIEN.md)
-- **Kiểm chứng toàn tuyến:** bộ riêng 22 mã hư cấu, 11 mã mỗi nhóm. Khi VN30 còn 9 mã hợp lệ, nhóm này dừng xếp hạng còn HNX30 vẫn xếp 11 mã. Ca HOSETEST11 lên từ 55 điểm/hạng 4 đến 64 điểm/hạng 1 khi đổi trọng số. Đây là kết quả trên dữ liệu dựng để kiểm thử. [Kết quả toàn tuyến](docs/TASK_6_KIEM_THU_TOAN_TUYEN.md)
+- **Kiểm chứng toàn tuyến:** bộ riêng 11 mã VN30 hư cấu. Khi chỉ còn 9 mã hợp lệ (dưới ngưỡng 10), nhóm dừng xếp hạng và nêu lý do. Ca HOSETEST11 lên từ 55 điểm/hạng 4 đến 64 điểm/hạng 1 khi đổi trọng số. Đây là kết quả trên dữ liệu dựng để kiểm thử. [Kết quả toàn tuyến](docs/TASK_6_KIEM_THU_TOAN_TUYEN.md)
 
 ```powershell
 .\CHECK_PROJECT.ps1

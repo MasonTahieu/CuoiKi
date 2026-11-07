@@ -1,5 +1,7 @@
 # Kiểm tra chuyển nền sang SSI — 04/11/2026
 
+> Phạm vi sau đó thu hẹp về **VN30** (07/11/2026). Nội dung dưới giữ nguyên để truy vết. [Lý do](v3_history/PHAM_VI_VN30.md)
+
 - Người học xác nhận giảng viên đồng ý đổi nguồn; hiện chưa đăng ký SSI.
 - Mặc định SSI, profile unselected; chỉ đọc đúng nguồn cấu hình, không dùng token NEO cho SSI.
 - Mock FCData v2: auth, nested IndexComponents HNX30, kiểm tra tổng và sàn, chặn endpoint ngoài thị trường.

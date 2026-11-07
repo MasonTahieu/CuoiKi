@@ -337,7 +337,7 @@
       {
         "name": "tab-lift",
         "value": "0 1px 2px rgba(0,0,0,.35)",
-        "purpose": "Selected VN30/HNX30 tab inside its track."
+        "purpose": "VN30 badge in the top bar."
       },
       {
         "name": "tab-underline",
@@ -422,8 +422,8 @@
       "name": "Group Tabs",
       "kind": "nav",
       "refersTo": "group-tab-selected",
-      "description": "VN30 / HNX30 switch in the top bar with muted counts.",
-      "html": "<div class=\"ds-gtabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\">VN30 <small>11/11</small></button><button role=\"tab\" aria-selected=\"false\">HNX30 <small>11/11</small></button></div>",
+      "description": "VN30 badge in the top bar with a muted ranked/members count.",
+      "html": "<div class=\"ds-gtabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\">VN30 <small>11/11</small></button></div>",
       "css": ".ds-gtabs { display: inline-flex; padding: 3px; gap: 2px; background: #131823; border: 1px solid #232A36; border-radius: 9px; } .ds-gtabs button { border: 0; background: transparent; padding: 6px 18px; border-radius: 7px; cursor: pointer; font: 600 14px \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif; color: #A3ACBA; display: inline-flex; gap: 8px; align-items: baseline; } .ds-gtabs small { font-weight: 500; font-size: 12px; color: #8892A2; font-variant-numeric: tabular-nums; } .ds-gtabs button:hover { color: #E7EAF0; } .ds-gtabs button[aria-selected=\"true\"] { background: #1D2535; color: #E7EAF0; box-shadow: 0 1px 2px rgba(0,0,0,.35); } .ds-gtabs button:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; }"
     },
     {

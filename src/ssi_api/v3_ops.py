@@ -42,7 +42,7 @@ def login(settings, otp_mode=None, read_otp=None, notify=print, client=None):
 
 
 def collect(settings, client, *, seconds, database=None, ws_factory=None, idle_seconds=120, max_reconnects=20,
-            groups=("VN30", "HNX30")):
+            groups=("VN30",)):
     store = EventStore(database or settings.database)
     sink = BufferedSink(store, batch_size=256)
     factory = V3Factory(client, groups, settings.subscribe_mode, ws_factory)
@@ -121,13 +121,13 @@ def reconcile(stream_totals, summaries):
             "note": "Tỷ lệ stream/REST gần 1 ủng hộ cách hiểu đơn vị; lệch có hệ thống cần đối chiếu trước khi bật SSI_SEMANTICS_VERIFIED."}
 
 
-def fetch_summaries(client, day, groups=("VN30", "HNX30"), members=None):
+def fetch_summaries(client, day, groups=("VN30",), members=None):
     """Per-member daily rows for one day (``index=`` would return the index itself)."""
     members = members or client.universe(groups)
     return client.member_summaries(members, day, day)
 
 
-def history(settings, client, *, sessions=10, database=DAILY_DB, today=None, groups=("VN30", "HNX30")):
+def history(settings, client, *, sessions=10, database=DAILY_DB, today=None, groups=("VN30",)):
     """Fetch about ``sessions`` trading days of daily summaries (calendar window ×1.6 + 7)."""
     today = today or datetime.now(TZ).date()
     start = today - timedelta(days=int(sessions * 1.6) + 7)
@@ -155,10 +155,9 @@ def smoke(settings, client, *, seconds=30, out_root=None, ws_factory=None, today
     database = database or PROJECT_ROOT / "runtime" / "ssi-smoke.sqlite"
     report = {"schema_version": "ssi-v3-smoke-1", "started_at": now(), "login_mode": client.login_mode, "steps": {}}
     members = client.universe()
-    report["steps"]["universe"] = {"VN30": sum(m["index_group"] == "VN30" for m in members),
-                                   "HNX30": sum(m["index_group"] == "HNX30" for m in members)}
+    report["steps"]["universe"] = {"VN30": sum(m["index_group"] == "VN30" for m in members)}
     today = today or datetime.now(TZ).date()
-    summaries = [row for group in ("VN30", "HNX30") for row in client.summaries(group, today, today)]
+    summaries = [row for group in ("VN30",) for row in client.summaries(group, today, today)]
     report["steps"]["summary_today"] = {"index_rows": len(summaries),
         "present_fields": sorted({f for row in summaries for f in row["present_fields"].split(";") if f})}
     collected = collect(settings, client, seconds=seconds, database=database, ws_factory=ws_factory,
@@ -188,7 +187,7 @@ def smoke_markdown(report):
     lines = ["# Smoke test FastConnect V3", "",
              f"Bắt đầu {report['started_at']} · kết thúc {report['finished_at']} · đăng nhập `{report['login_mode']}`.", "",
              "| Bước | Kết quả |", "|---|---|",
-             f"| Thành phần nhóm | VN30 {s['universe']['VN30']} mã · HNX30 {s['universe']['HNX30']} mã |",
+             f"| Thành phần nhóm | VN30 {s['universe']['VN30']} mã |",
              f"| securitiesSummary chỉ số hôm nay | {s['summary_today']['index_rows']} dòng |",
              f"| Stream | dừng vì `{stream['stop_reason']}` · nhận {stream['counters']['received']} · ghép {stream['counters']['merged']} · lỗi giải mã {stream['counters']['decode_errors']} |",
              f"| Ack đăng ký | {stream['acks']} |",

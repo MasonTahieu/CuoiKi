@@ -64,9 +64,9 @@
         ]
       },
       "topics": [
-        "trade.{VN30|HNX30}@*",
-        "quote.{VN30|HNX30}@*",
-        "room.{VN30|HNX30}@*",
+        "trade.VN30@*",
+        "quote.VN30@*",
+        "room.VN30@*",
         "market.flag"
       ],
       "auth_note": "REST dữ liệu dùng token không OTP; tài liệu SDK yêu cầu đăng nhập có OTP trước khi mở stream. Cần xác nhận với tài khoản thật.",

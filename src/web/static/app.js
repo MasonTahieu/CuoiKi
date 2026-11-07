@@ -55,6 +55,7 @@
 
   async function init() {
     readHash();
+    state.group = "VN30";  // scope is VN30 only; old links may still carry g=HNX30
     try {
       state.ctx = await get("/api/context");
     } catch (err) { return fatal(err); }
@@ -195,7 +196,7 @@
     $("clock").textContent = d.method_kind === "daily" ? day(d.as_of) : clock(d.as_of);
     $("synthetic-chip").hidden = !d.synthetic;
     $("unverified-chip").hidden = d.verified;
-    for (const name of ["VN30", "HNX30"]) {
+    for (const name of ["VN30"]) {
       const g = d.groups[name];
       document.querySelector(`[data-count="${name}"]`).textContent = g ? `${g.ranked}/${g.members}` : "";
     }
@@ -482,7 +483,7 @@
     const d = state.data, g = groupData();
     $("method").innerHTML = `
       ${d.method_kind === "daily" ? `<div><h3>Đang xem chế độ cuối ngày</h3><p>Xếp hạng theo dữ liệu tổng hợp từng phiên của SSI (REST securitiesSummary, từng mã). Ba yếu tố: động lượng = % đóng cửa so với mở cửa; thanh khoản = điểm phân vị của giá trị khớp cả phiên; dòng tiền ngoại = (mua − bán của khối ngoại) / giá trị khớp. Trọng số 33/33/33 hoặc 50/25/25. Không có sổ lệnh nên không có cung–cầu, độ sâu và chênh lệch giá. Mã thiếu dữ liệu khối ngoại (SSI trả trống) không được xếp hạng. Đây là phương pháp khác (daily-v1), không so trực tiếp với bảng trong phiên.</p></div>` : ""}
-      <div><h3>Sản phẩm làm gì</h3><p>Xếp hạng tương đối các cổ phiếu trong cùng nhóm VN30 hoặc HNX30 tại một mốc của phiên khớp lệnh liên tục, để thu hẹp danh sách cần nghiên cứu tiếp. Không dự báo giá, không đặt lệnh.</p></div>
+      <div><h3>Sản phẩm làm gì</h3><p>Xếp hạng tương đối các cổ phiếu trong rổ VN30 tại một mốc của phiên khớp lệnh liên tục, để thu hẹp danh sách cần nghiên cứu tiếp. Không dự báo giá, không đặt lệnh. Phạm vi chỉ gồm VN30: trên dữ liệu SSI 15 phiên, HNX30 có 11/30 mã giao dịch dưới 1 tỷ đồng mỗi phiên và 43% dòng thiếu dữ liệu khối ngoại, nên động lượng và dòng tiền ngoại của nhóm này không đủ tin cậy để xếp hạng.</p></div>
       <div><h3>Bốn yếu tố</h3><ul>
         <li><b>Động lượng</b>: % thay đổi từ giá mở cửa đến giá khớp gần nhất.</li>
         <li><b>Thanh khoản</b>: trung bình điểm phân vị của giá trị khớp, độ sâu ba mức giá mỗi bên và chênh lệch mua–bán (hẹp hơn tốt hơn).</li>

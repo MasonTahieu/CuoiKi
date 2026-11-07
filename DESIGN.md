@@ -1,5 +1,5 @@
 ---
-name: Bộ lọc cổ phiếu đa yếu tố (VN30 & HNX30 Screener)
+name: Bộ lọc cổ phiếu đa yếu tố (VN30 Screener)
 description: A dark Vietnamese stock dashboard that ranks a group at one moment and shows why each stock ranks there.
 colors:
   ground: "#0B0E14"
@@ -261,7 +261,7 @@ Four hues that mean one factor each, everywhere the factor appears: segments of 
 
 ## Layout
 
-A sticky 60px top bar (brand left, VN30/HNX30 tabs centred, mode chips, connection and clock right) above a page with 16px vertical gap and 24px side padding. Below it: a four-cell metrics strip in one panel, a wrapping toolbar of labelled controls (aligned to their bottoms, gaps 12px by 18px), then the workspace.
+A sticky 60px top bar (brand left, VN30 badge centred, mode chips, connection and clock right) above a page with 16px vertical gap and 24px side padding. Below it: a four-cell metrics strip in one panel, a wrapping toolbar of labelled controls (aligned to their bottoms, gaps 12px by 18px), then the workspace.
 
 The workspace is two columns, ranking panel left (1.7fr, about 62%) and a side column (min 340px) with the "why" panel above the total-score chart. The side column is sticky below the top bar.
 
@@ -281,7 +281,7 @@ Spacing rhythm is 4/8/12/16 with 24px page gutters; component heights are fixed 
 Flat by default. Depth is tonal: ground, surface, surface-2, raised, separated by 1px seams. Shadows appear only as functional state cues.
 
 ### Shadow Vocabulary
-- **Selected tab lift** (`box-shadow: 0 1px 2px rgba(0,0,0,.35)`): the selected VN30/HNX30 tab inside its track.
+- **Selected tab lift** (`box-shadow: 0 1px 2px rgba(0,0,0,.35)`): the VN30 badge in the top bar.
 - **Tab underline** (`box-shadow: inset 0 -2px 0 #3B82F6`): the active view tab.
 - **Live halo** (`box-shadow: 0 0 0 3px rgba(22, 199, 132, .18)`): the connected status dot only.
 
@@ -318,7 +318,7 @@ Quiet and solid; the accent is reserved.
 - **Focus:** global 2px blue outline.
 
 ### Navigation
-- **Group tabs:** VN30/HNX30 in a pill track at the top bar's centre, each with a muted count; selected tab is raised with a 1px lift.
+- **Group badge:** a single raised VN30 chip at the top bar's centre with a muted ranked/members count (the HNX30 tab was removed when scope narrowed to VN30).
 - **View tabs:** Xếp hạng / Chất lượng dữ liệu / Phương pháp as full-height text tabs in the panel head; active tab in Primary Ink with a 2px blue underline.
 
 ### Ranking Row (signature)

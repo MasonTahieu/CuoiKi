@@ -18,7 +18,7 @@ def sample_messages():
         {"DataType":"B","Content":{"RType":"B","Symbol":"DEMO01","Exchange":"HOSE",
             "Time":"2026-11-04T10:00:00+07:00","Open":19900,"High":20100,"Low":19800,
             "Close":20050,"Volume":100,"Value":0}},
-        {"DataType":"X","Content":{**common,"Symbol":"HNDEMO01","Exchange":"HNX","MarketId":"HNX",
+        {"DataType":"X","Content":{**common,"Symbol":"DEMO02","Exchange":"HOSE","MarketId":"HOSE",
             "LastPrice":15000,"Close":14900,"Open":14800,"TotalVal":1500000000,"TotalVol":100000,
             "TradingSession":"ATC","TradingStatus":"N","BidPrice1":"ATC","AskPrice1":"ATC"}},
     ]

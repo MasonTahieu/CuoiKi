@@ -7,7 +7,7 @@ Không gọi SSI thật và chưa triển khai task 3.
 
 Mở [bảng diễn biến mẫu](../evidence/task2/KET_QUA_MAU.md).
 
-Kịch bản gồm hai mã hư cấu DEMO01 (nhóm minh họa VN30/HOSE) và HNDEMO01 (nhóm minh họa HNX30/HNX),
+Kịch bản gồm hai mã hư cấu DEMO01 và DEMO02 (nhóm VN30, sàn HOSE),
 **15 thông điệp nhận, 14 giải mã thành công, 11 lần ghép, 1 trùng, 2 bị loại, 1 JSON lỗi, 1 lần kết nối lại**.
 Hai mã chỉ nhằm kiểm tra cơ chế collector; không phải thành phần thật hoặc số lượng đủ để xếp hạng chỉ số.
 
@@ -31,7 +31,7 @@ JSON và bảng mẫu cùng tên được ghi lại khi chạy lại; SQLite gi�
 ## 2. Những gì collector đã làm
 
 ```text
-FakeFactory.bootstrap: danh sách hai nhóm
+FakeFactory.bootstrap: danh sách thành phần VN30
   → tạo session, connect và gửi ý định đăng ký kênh
   → receive Frame(raw, received_at)
   → decoder task 1

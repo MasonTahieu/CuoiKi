@@ -1,5 +1,7 @@
 # Kết quả REST thật đầu tiên với SSI FastConnect API V3
 
+> Phạm vi sau đó thu hẹp về **VN30** (07/11/2026). Nội dung dưới giữ nguyên để truy vết. [Lý do](PHAM_VI_VN30.md)
+
 **Ngày chạy: 07/11/2026** (thứ Bảy, sàn nghỉ). Đây là **dữ liệu SSI thật**, lấy qua REST bằng API Key của người học. Đăng nhập không cần OTP. Chưa có dữ liệu stream trong phiên.
 
 Lệnh đã chạy:

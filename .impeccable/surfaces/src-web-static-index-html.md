@@ -9,7 +9,7 @@ related_targets: ["src/web/static/app.css","src/web/static/app.js"]
 
 Scope: the single working screen of the web UI (`src/web/static/`), served by `src/web/server.py`. Mode: **Operate**.
 
-Audience and job: brokers and retail investors keeping it open beside the price board for the whole session; the lecturer evaluating via demo/video and report screenshots. Job: see which stocks lead VN30 or HNX30 at a stated moment, which factor drives each, and whether the data can be trusted. Success: top names and their drivers readable in one glance; every unranked stock has one short reason; no warning boxes covering the result.
+Audience and job: brokers and retail investors keeping it open beside the price board for the whole session; the lecturer evaluating via demo/video and report screenshots. Job: see which stocks lead VN30 at a stated moment, which factor drives each, and whether the data can be trusted. Success: top names and their drivers readable in one glance; every unranked stock has one short reason; no warning boxes covering the result.
 
 Constraints: Vietnamese copy; offline (no CDN, system font stack); read-only; synthetic data always labelled; course brief §6 elements all present; demo, replay and live modes; Streamlit app kept as fallback.
 
@@ -21,7 +21,7 @@ OWN-WORLD: Near-black blue ground #0B0E14, raised surfaces #131823 with 1px #232
 
 STORY: The visitor reads group, moment and connection in the top bar, sees the leaders in the ranking table with four factor bars per row, clicks a row to read why it ranks there, and switches group, weights, foreign basis or moment without leaving the screen.
 
-FIRST VIEWPORT: Top bar (product name and audience, VN30/HNX30 tabs, mode/source chips, connection pill and moment). Status strip of four compact metrics. Toolbar of standard controls (weights, foreign basis, search, minimum score, replay run/moment, CSV). Left about 62%: sortable ranking table, rank and symbol at left, total score with stacked contribution bar, four factor cells with inline percentile bars, one status word. Right about 38%: selected-stock panel (score, factor breakdown, raw indicators, single-line reason) above a total-score chart.
+FIRST VIEWPORT: Top bar (product name and audience, VN30 badge, mode/source chips, connection pill and moment). Status strip of four compact metrics. Toolbar of standard controls (weights, foreign basis, search, minimum score, replay run/moment, CSV). Left about 62%: sortable ranking table, rank and symbol at left, total score with stacked contribution bar, four factor cells with inline percentile bars, one status word. Right about 38%: selected-stock panel (score, factor breakdown, raw indicators, single-line reason) above a total-score chart.
 
 FORM: Category standard (canon), chosen by the user in the direction round; reference products SSI iBoard, FireAnt/Simplize. seed:661706d535d8c3a5
 

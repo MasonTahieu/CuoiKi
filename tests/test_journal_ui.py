@@ -36,10 +36,8 @@ def test_sample_demo_replay_distinguishes_disconnect_and_stock_halt(monkeypatch)
     app.radio[0].set_value("Nhật ký SSI mẫu").run()
     assert not app.exception
     assert app.dataframe[0].value.loc[0, "Cảnh báo"] == "Giá trị ngoại ước tính"
-    widget(app, "Nhóm so sánh").set_value("HNX30").run()
-    hnx = app.dataframe[0].value.iloc[0]
-    assert hnx["Mã"] == "HNDEMO01"
-    assert "trạng thái giao dịch bình thường" in hnx["Lý do chưa xếp hạng"]
+    halted = app.dataframe[0].value.set_index("Mã").loc["DEMO02"]
+    assert "trạng thái giao dịch bình thường" in halted["Lý do chưa xếp hạng"]
 
     select_moment(app, "10:00:06 · Mất kết nối")
     assert any("Kết nối tại mốc chọn · Mất kết nối" in notice.value for notice in app.warning)

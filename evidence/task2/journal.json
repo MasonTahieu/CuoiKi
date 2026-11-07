@@ -1,7 +1,7 @@
 [
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:00+07:00",
     "channel": "connection",
     "payload": {
@@ -13,7 +13,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:00+07:00",
     "channel": "universe",
     "payload": {
@@ -24,9 +24,9 @@
           "marketCode": "HOSE"
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX"
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE"
         }
       ],
       "connection_epoch": 1
@@ -34,7 +34,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:00+07:00",
     "channel": "connection",
     "payload": {
@@ -46,7 +46,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -83,7 +83,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -243,7 +243,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiMerged",
     "payload": {
@@ -358,7 +358,9 @@
         "askVol2": [],
         "askVol3": []
       },
-      "metadata": {},
+      "metadata": {
+        "derived_fields": {}
+      },
       "last_received_at": "2026-11-04T10:00:01+07:00",
       "missing_fields": [
         "foreignBuyValue",
@@ -392,7 +394,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -414,7 +416,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -489,7 +491,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiMerged",
     "payload": {
@@ -625,6 +627,7 @@
         "foreignSellValue": []
       },
       "metadata": {
+        "derived_fields": {},
         "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:01+07:00",
@@ -642,7 +645,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -650,8 +653,8 @@
       "message": {
         "DataType": "X",
         "Content": {
-          "Symbol": "HNDEMO01",
-          "Exchange": "HNX",
+          "Symbol": "DEMO02",
+          "Exchange": "HOSE",
           "TradingDate": "04/11/2026",
           "Time": "10:00:00",
           "Open": 19900,
@@ -679,7 +682,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -692,8 +695,8 @@
       "source_at": "2026-11-04T10:00:00+07:00",
       "update_mode": "patch",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "NORMAL",
         "openPrice": 19900.0,
@@ -839,16 +842,16 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiMerged",
     "payload": {
-      "symbol": "HNDEMO01",
-      "index_group": "HNX30",
-      "marketCode": "HNX",
+      "symbol": "DEMO02",
+      "index_group": "VN30",
+      "marketCode": "HOSE",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "NORMAL",
         "openPrice": 19900.0,
@@ -954,7 +957,9 @@
         "askVol2": [],
         "askVol3": []
       },
-      "metadata": {},
+      "metadata": {
+        "derived_fields": {}
+      },
       "last_received_at": "2026-11-04T10:00:01+07:00",
       "missing_fields": [
         "foreignBuyValue",
@@ -988,7 +993,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -996,8 +1001,8 @@
       "message": {
         "DataType": "R",
         "Content": {
-          "Symbol": "HNDEMO01",
-          "Exchange": "HNX",
+          "Symbol": "DEMO02",
+          "Exchange": "HOSE",
           "TradingDate": "04/11/2026",
           "Time": "10:00:00",
           "BuyVal": 40000000,
@@ -1010,7 +1015,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -1023,8 +1028,8 @@
       "source_at": "2026-11-04T10:00:00+07:00",
       "update_mode": "patch",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "foreignBuyVolume": 2000.0,
         "foreignSellVolume": 1000.0,
         "foreignBuyValue": 40000000.0,
@@ -1064,12 +1069,17 @@
           "sellval"
         ]
       },
-      "issues": [],
+      "issues": [
+        {
+          "code": "FOREIGN_VALUE_ESTIMATED",
+          "field": "foreignBuyValue/foreignSellValue"
+        }
+      ],
       "metadata": {
         "book_levels": null,
         "price_unit": "VND_documented_pending_live_validation",
         "volume_unit": "pending_live_validation",
-        "foreign_value_estimated": null,
+        "foreign_value_estimated": true,
         "counter_fields": [
           "foreignBuyVolume",
           "foreignSellVolume"
@@ -1080,16 +1090,16 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:01+07:00",
     "channel": "ssiMerged",
     "payload": {
-      "symbol": "HNDEMO01",
-      "index_group": "HNX30",
-      "marketCode": "HNX",
+      "symbol": "DEMO02",
+      "index_group": "VN30",
+      "marketCode": "HOSE",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "NORMAL",
         "openPrice": 19900.0,
@@ -1216,7 +1226,8 @@
         "foreignSellValue": []
       },
       "metadata": {
-        "foreign_value_estimated": null
+        "derived_fields": {},
+        "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:01+07:00",
       "missing_fields": [],
@@ -1233,7 +1244,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:02+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -1255,7 +1266,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:02+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -1325,7 +1336,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:02+07:00",
     "channel": "connection",
     "payload": {
@@ -1335,7 +1346,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:03+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -1355,7 +1366,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:03+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -1410,7 +1421,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:03+07:00",
     "channel": "ssiMerged",
     "payload": {
@@ -1546,6 +1557,7 @@
         "foreignSellValue": []
       },
       "metadata": {
+        "derived_fields": {},
         "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:03+07:00",
@@ -1563,7 +1575,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:04+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -1583,7 +1595,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:04+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -1638,7 +1650,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:04+07:00",
     "channel": "connection",
     "payload": {
@@ -1648,7 +1660,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:05+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -1667,7 +1679,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:05+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -1716,7 +1728,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:05+07:00",
     "channel": "connection",
     "payload": {
@@ -1726,7 +1738,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:06+07:00",
     "channel": "connection",
     "payload": {
@@ -1736,7 +1748,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:06+07:00",
     "channel": "connection",
     "payload": {
@@ -1748,7 +1760,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:07+07:00",
     "channel": "connection",
     "payload": {
@@ -1760,7 +1772,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:07+07:00",
     "channel": "universe",
     "payload": {
@@ -1771,9 +1783,9 @@
           "marketCode": "HOSE"
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX"
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE"
         }
       ],
       "connection_epoch": 2
@@ -1781,7 +1793,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:07+07:00",
     "channel": "connection",
     "payload": {
@@ -1793,7 +1805,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:09+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -1812,7 +1824,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:09+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -1861,7 +1873,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:09+07:00",
     "channel": "ssiMerged",
     "payload": {
@@ -1918,7 +1930,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:10+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -1955,7 +1967,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:10+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -2115,7 +2127,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:10+07:00",
     "channel": "ssiMerged",
     "payload": {
@@ -2230,7 +2242,9 @@
         "askVol2": [],
         "askVol3": []
       },
-      "metadata": {},
+      "metadata": {
+        "derived_fields": {}
+      },
       "last_received_at": "2026-11-04T10:00:10+07:00",
       "missing_fields": [
         "foreignBuyValue",
@@ -2264,7 +2278,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:11+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -2286,7 +2300,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:11+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -2361,7 +2375,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:11+07:00",
     "channel": "ssiMerged",
     "payload": {
@@ -2497,6 +2511,7 @@
         "foreignSellValue": []
       },
       "metadata": {
+        "derived_fields": {},
         "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:11+07:00",
@@ -2514,7 +2529,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:12+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -2522,8 +2537,8 @@
       "message": {
         "DataType": "X",
         "Content": {
-          "Symbol": "HNDEMO01",
-          "Exchange": "HNX",
+          "Symbol": "DEMO02",
+          "Exchange": "HOSE",
           "TradingDate": "04/11/2026",
           "Time": "10:00:11",
           "Open": 19900,
@@ -2551,7 +2566,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:12+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -2564,8 +2579,8 @@
       "source_at": "2026-11-04T10:00:11+07:00",
       "update_mode": "patch",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "NORMAL",
         "openPrice": 19900.0,
@@ -2711,16 +2726,16 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:12+07:00",
     "channel": "ssiMerged",
     "payload": {
-      "symbol": "HNDEMO01",
-      "index_group": "HNX30",
-      "marketCode": "HNX",
+      "symbol": "DEMO02",
+      "index_group": "VN30",
+      "marketCode": "HOSE",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "NORMAL",
         "openPrice": 19900.0,
@@ -2826,7 +2841,9 @@
         "askVol2": [],
         "askVol3": []
       },
-      "metadata": {},
+      "metadata": {
+        "derived_fields": {}
+      },
       "last_received_at": "2026-11-04T10:00:12+07:00",
       "missing_fields": [
         "foreignBuyValue",
@@ -2860,7 +2877,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:13+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -2868,8 +2885,8 @@
       "message": {
         "DataType": "R",
         "Content": {
-          "Symbol": "HNDEMO01",
-          "Exchange": "HNX",
+          "Symbol": "DEMO02",
+          "Exchange": "HOSE",
           "TradingDate": "04/11/2026",
           "Time": "10:00:12",
           "BuyVal": 40120000,
@@ -2882,7 +2899,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:13+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -2895,8 +2912,8 @@
       "source_at": "2026-11-04T10:00:12+07:00",
       "update_mode": "patch",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "foreignBuyVolume": 2012.0,
         "foreignSellVolume": 1000.0,
         "foreignBuyValue": 40120000.0,
@@ -2936,12 +2953,17 @@
           "sellval"
         ]
       },
-      "issues": [],
+      "issues": [
+        {
+          "code": "FOREIGN_VALUE_ESTIMATED",
+          "field": "foreignBuyValue/foreignSellValue"
+        }
+      ],
       "metadata": {
         "book_levels": null,
         "price_unit": "VND_documented_pending_live_validation",
         "volume_unit": "pending_live_validation",
-        "foreign_value_estimated": null,
+        "foreign_value_estimated": true,
         "counter_fields": [
           "foreignBuyVolume",
           "foreignSellVolume"
@@ -2952,16 +2974,16 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:13+07:00",
     "channel": "ssiMerged",
     "payload": {
-      "symbol": "HNDEMO01",
-      "index_group": "HNX30",
-      "marketCode": "HNX",
+      "symbol": "DEMO02",
+      "index_group": "VN30",
+      "marketCode": "HOSE",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "NORMAL",
         "openPrice": 19900.0,
@@ -3088,7 +3110,8 @@
         "foreignSellValue": []
       },
       "metadata": {
-        "foreign_value_estimated": null
+        "derived_fields": {},
+        "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:13+07:00",
       "missing_fields": [],
@@ -3105,7 +3128,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:14+07:00",
     "channel": "ssiRaw",
     "payload": {
@@ -3113,8 +3136,8 @@
       "message": {
         "DataType": "F",
         "Content": {
-          "Symbol": "HNDEMO01",
-          "Exchange": "HNX",
+          "Symbol": "DEMO02",
+          "Exchange": "HOSE",
           "TradingDate": "04/11/2026",
           "Time": "10:00:13",
           "TradingStatus": "H"
@@ -3124,7 +3147,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:14+07:00",
     "channel": "ssiDecoded",
     "payload": {
@@ -3137,8 +3160,8 @@
       "source_at": "2026-11-04T10:00:13+07:00",
       "update_mode": "patch",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingStatus": "HALT",
         "tradingDate": "04/11/2026"
       },
@@ -3173,16 +3196,16 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:14+07:00",
     "channel": "ssiMerged",
     "payload": {
-      "symbol": "HNDEMO01",
-      "index_group": "HNX30",
-      "marketCode": "HNX",
+      "symbol": "DEMO02",
+      "index_group": "VN30",
+      "marketCode": "HOSE",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "HALT",
         "openPrice": 19900.0,
@@ -3309,7 +3332,8 @@
         "foreignSellValue": []
       },
       "metadata": {
-        "foreign_value_estimated": null
+        "derived_fields": {},
+        "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:14+07:00",
       "missing_fields": [],
@@ -3323,7 +3347,7 @@
   },
   {
     "source": "synthetic",
-    "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+    "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
     "received_at": "2026-11-04T10:00:14+07:00",
     "channel": "connection",
     "payload": {

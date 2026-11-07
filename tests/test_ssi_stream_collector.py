@@ -10,11 +10,11 @@ from src.ssi_api.fake_stream import FakeClock, FakeFactory
 from src.data.store import EventStore, read_events
 
 MEMBERS=[{"symbol":"DEMO01","marketCode":"HOSE","index_group":"VN30"},
-         {"symbol":"HNDEMO01","marketCode":"HNX","index_group":"HNX30"}]
+         {"symbol":"DEMO02","marketCode":"HOSE","index_group":"VN30"}]
 
 
 def frame(kind="X",symbol="DEMO01",at="10:00:00",received="10:00:01",**fields):
-    return Frame({"DataType":kind,"Content":{"Symbol":symbol,"Exchange":"HNX" if symbol.startswith("HN") else "HOSE",
+    return Frame({"DataType":kind,"Content":{"Symbol":symbol,"Exchange":"HOSE",
         "TradingDate":"04/11/2026","Time":at,**fields}},"2026-11-04T"+received+"+07:00")
 
 
@@ -73,11 +73,11 @@ def test_exact_duplicate_does_not_refresh_clock_but_newer_same_value_does():
 
 def test_status_is_per_symbol_and_equal_timestamp_uses_arrival_order():
     merge=PatchState(MEMBERS,date(2026,11,4))
-    for symbol in ("DEMO01","HNDEMO01"):
+    for symbol in ("DEMO01","DEMO02"):
         merge.apply(decoded(frame("F",symbol,TradingStatus="N",TradingSession="LO")))
     merge.apply(decoded(frame("F",TradingStatus="H")))
     assert merge.states["DEMO01"]["payload"]["tradingStatus"]=="HALT"
-    assert merge.states["HNDEMO01"]["payload"]["tradingStatus"]=="NORMAL"
+    assert merge.states["DEMO02"]["payload"]["tradingStatus"]=="NORMAL"
 
 
 @pytest.mark.parametrize("change,reason",[("market","market_mismatch"),("symbol","outside_universe"),

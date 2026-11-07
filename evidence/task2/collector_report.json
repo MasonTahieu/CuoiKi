@@ -1,6 +1,7 @@
 {
   "source": "synthetic",
-  "run": "synthetic-stream-3762d8cd38494365b85cb1695d6f53e5",
+  "profile": "fcdata_v2",
+  "run": "synthetic-stream-faaafc1a2f7b4db19a577cfe71077359",
   "stop_reason": "message_limit",
   "counters": {
     "received": 15,
@@ -145,6 +146,7 @@
         "foreignSellValue": []
       },
       "metadata": {
+        "derived_fields": {},
         "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:11+07:00",
@@ -158,13 +160,13 @@
         "foreignSellValue"
       ]
     },
-    "HNDEMO01": {
-      "symbol": "HNDEMO01",
-      "index_group": "HNX30",
-      "marketCode": "HNX",
+    "DEMO02": {
+      "symbol": "DEMO02",
+      "index_group": "VN30",
+      "marketCode": "HOSE",
       "payload": {
-        "symbol": "HNDEMO01",
-        "marketCode": "HNX",
+        "symbol": "DEMO02",
+        "marketCode": "HOSE",
         "tradingSession": "LO",
         "tradingStatus": "HALT",
         "openPrice": 19900.0,
@@ -291,7 +293,8 @@
         "foreignSellValue": []
       },
       "metadata": {
-        "foreign_value_estimated": null
+        "derived_fields": {},
+        "foreign_value_estimated": true
       },
       "last_received_at": "2026-11-04T10:00:14+07:00",
       "missing_fields": [],

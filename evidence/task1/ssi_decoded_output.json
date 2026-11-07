@@ -373,8 +373,8 @@
     "source_at": "2026-11-04T10:00:00+07:00",
     "update_mode": "patch",
     "payload": {
-      "symbol": "HNDEMO01",
-      "marketCode": "HNX",
+      "symbol": "DEMO02",
+      "marketCode": "HOSE",
       "tradingSession": "ATC",
       "tradingStatus": "NORMAL",
       "openPrice": 14800.0,

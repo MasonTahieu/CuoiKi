@@ -167,7 +167,7 @@ def collect_v3(path, scripts=None, members=None, **kwargs):
     return result, factory
 
 
-def test_v3_pipeline_ranks_both_groups_and_rebuilds_after_disconnect(tmp_path):
+def test_v3_pipeline_ranks_vn30_and_rebuilds_after_disconnect(tmp_path):
     path = tmp_path / "v3.sqlite"
     result, factory = collect_v3(path)
     assert result["profile"] == "fastconnect_v3" and result["counters"]["decode_errors"] == 0
@@ -178,7 +178,7 @@ def test_v3_pipeline_ranks_both_groups_and_rebuilds_after_disconnect(tmp_path):
     assert all(row["data_usable"] for row in first["rows"])
     assert {"SYMBOL_STATUS_NOT_PROVIDED", "TOTAL_VALUE_DERIVED"} <= {w for row in first["rows"] for w in row["warnings"]}
     ranked = rank_groups(report_frame(first), semantics_verified=True)
-    assert ranked.groupby("index_group")["rank"].count().to_dict() == {"HNX30": 11, "VN30": 11}
+    assert ranked.groupby("index_group")["rank"].count().to_dict() == {"VN30": 11}
     gap = replay(path, result["run"], as_of="2026-11-04T10:00:45+07:00")
     assert all("NO_BASELINE" in row["reasons"] for row in gap["rows"])
     as_real = report_frame(first).assign(source="ssi")
@@ -276,8 +276,7 @@ def test_adapter_connect_errors_and_overflow():
 def test_factory_topics():
     members = v3_members(1)
     by_index = V3Factory(None).topics(members)
-    assert by_index == ("trade.HNX30@*", "quote.HNX30@*", "room.HNX30@*", "trade.VN30@*", "quote.VN30@*",
-                        "room.VN30@*", "market.flag")
+    assert by_index == ("trade.VN30@*", "quote.VN30@*", "room.VN30@*", "market.flag")
     by_symbol = V3Factory(None, subscribe_mode="symbols").topics(members)
     assert "quote.V3HOSE01" in by_symbol and by_symbol[-1] == "market.flag"
     with pytest.raises(ValueError):V3Factory(None, subscribe_mode="all")
@@ -361,7 +360,7 @@ def test_index_members_validate_board_and_routes_are_allow_listed():
     assert client.index_members("VN30") == [{"symbol": "FPT", "index_group": "VN30", "marketCode": "HOSE"},
                                             {"symbol": "VNM", "index_group": "VN30", "marketCode": "HOSE"}]
     assert auth.rest_client.calls[0] == ("/api/v3/data/securitiesByBoard", {"index": "VN30"})
-    with pytest.raises(NeoError):client.index_members("HNX30")  # HOSE rows for an HNX basket
+    with pytest.raises(NeoError):client.index_members("HNX30")  # outside the VN30-only scope
     with pytest.raises(NeoError):client.get("trading/order")
     empty, _ = client_with({"/api/v3/data/securitiesByBoard": {"code": 204}})
     empty.login("none")
@@ -431,8 +430,8 @@ class HistoryClient:
     def __init__(self, days):
         self.days = days
 
-    def universe(self, groups=("VN30", "HNX30")):
-        return [{"symbol": f"{g[:3]}{i:02d}", "index_group": g, "marketCode": "HOSE" if g == "VN30" else "HNX"}
+    def universe(self, groups=("VN30",)):
+        return [{"symbol": f"{g[:3]}{i:02d}", "index_group": g, "marketCode": "HOSE"}
                 for g in groups for i in range(12)]
 
     def member_summaries(self, members, start, end):
@@ -453,15 +452,16 @@ class HistoryClient:
 def test_history_store_and_daily_evaluation(tmp_path):
     days = [f"2026-10-{d:02d}" for d in (26, 27, 28, 29, 30, 31)]
     result = history(V3_SETTINGS, HistoryClient(days), sessions=5, database=tmp_path / "daily.sqlite", today=date(2026, 11, 1))
-    assert result["sessions"] == 5 and result["trading_dates"][0] == "2026-10-27" and result["rows"] == 120
-    assert result["index_rows"] == 10 and set(result["rows_per_day"].values()) == {24}
+    assert result["sessions"] == 5 and result["trading_dates"][0] == "2026-10-27" and result["rows"] == 60
+    assert result["index_rows"] == 5 and set(result["rows_per_day"].values()) == {12}
     frame = read_daily(tmp_path / "daily.sqlite")
     evaluated = evaluate_daily(frame)
     vn = evaluated["groups"]["VN30"]
     assert evaluated["sessions"] == 5 and vn["day_to_day_persistence"]["turnover"]["mean_spearman"] == pytest.approx(1)
     with DailyStore(tmp_path / "daily.sqlite") as store:
-        store.upsert("ssi", frame.drop(columns=["fetched_at", "source"]).to_dict("records")[:1], now())
-    assert len(read_daily(tmp_path / "daily.sqlite")) == 130  # 120 member rows + 10 index rows, upsert not duplicate
+        member = frame[frame["index_group"].eq("VN30")].drop(columns=["fetched_at", "source"])
+        store.upsert("ssi", member.to_dict("records")[:1], now())
+    assert len(read_daily(tmp_path / "daily.sqlite")) == 65  # 60 member rows + 5 index rows, upsert not duplicate
 
 
 class SmokeClient(HistoryClient):
@@ -469,7 +469,7 @@ class SmokeClient(HistoryClient):
         super().__init__([])
         self.members = members
 
-    def universe(self, groups=("VN30", "HNX30")):
+    def universe(self, groups=("VN30",)):
         return [dict(m) for m in self.members]
 
     def summaries(self, index, start, end):
@@ -492,9 +492,9 @@ def test_smoke_writes_evidence_without_secrets(tmp_path):
     report = smoke(V3_SETTINGS, client, seconds=1, out_root=tmp_path / "evidence", today=received.date(),
                    database=tmp_path / "smoke.sqlite", ws_factory=lambda c: FakeWS(script=raws))
     profile = report["steps"]["stream_profile"]
-    assert report["steps"]["universe"] == {"VN30": 11, "HNX30": 11}
-    assert profile["message_types"] == {"MARKET_FLAG": 2, "TRADE": 22, "QUOTE": 22, "ROOM": 22}
-    assert profile["source_time_formats"]["TRADE"] == {"epoch_ms": 22}
+    assert report["steps"]["universe"] == {"VN30": 11}
+    assert profile["message_types"] == {"MARKET_FLAG": 1, "TRADE": 11, "QUOTE": 11, "ROOM": 11}
+    assert profile["source_time_formats"]["TRADE"] == {"epoch_ms": 11}
     text = (tmp_path / "evidence").rglob("SMOKE.md").__next__().read_text(encoding="utf-8")
     assert "Smoke test FastConnect V3" in text and "api_secret" not in text.lower()
 

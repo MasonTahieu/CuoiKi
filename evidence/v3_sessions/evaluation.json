@@ -20,34 +20,6 @@
       "2026-11-06"
     ],
     "groups": {
-      "HNX30": {
-        "symbols": 30,
-        "days": 15,
-        "day_to_day_persistence": {
-          "momentum": {
-            "pairs": 14,
-            "mean_spearman": -0.011909793832052595
-          },
-          "turnover": {
-            "pairs": 14,
-            "mean_spearman": 0.9319334407845451
-          },
-          "foreign_ratio": {
-            "pairs": 14,
-            "mean_spearman": 0.3136246806414874
-          }
-        },
-        "factor_rank_correlation": {
-          "momentum~turnover": -0.0018515180842639098,
-          "momentum~foreign_ratio": 0.18433659737283373,
-          "turnover~foreign_ratio": 0.09545047068969417
-        },
-        "missing_share": {
-          "momentum": 0.0,
-          "turnover": 0.0,
-          "foreign_ratio": 0.43080357142857145
-        }
-      },
       "VN30": {
         "symbols": 30,
         "days": 15,

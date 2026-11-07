@@ -13,7 +13,7 @@ Xem trước [kết quả mẫu có tám mốc kiểm tra](../evidence/task3/KET
 - Tái tạo trạng thái từ `ssiDecoded`, theo thứ tự event ID; không lấy snapshot cache làm dữ liệu quyết định.
 - Chọn mốc thời gian có múi giờ, thêm event ID khi cần phân biệt các sự kiện cùng giây.
 - Kiểm tra từng trường: thiếu, null, lỗi số, dấu thời gian, quá cũ và chênh nguồn–nhận.
-- Thống kê độ phủ riêng hai nhóm, khoảng mất kết nối, thông điệp trùng/cũ và counter giảm.
+- Thống kê độ phủ của nhóm, khoảng mất kết nối, thông điệp trùng/cũ và counter giảm.
 - Xuất snapshot, chất lượng từng trường, gap và manifest để đối chiếu.
 
 ## 2. Các phần đã thêm

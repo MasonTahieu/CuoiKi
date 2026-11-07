@@ -29,19 +29,13 @@ def hand_quote():
 
 def verification_frame():
     rows = []
-    for group, market in (("VN30", "HOSE"), ("HNX30", "HNX")):
+    for group, market in (("VN30", "HOSE"),):
         for i in range(11):
             # Different factor orders create tradeoffs while keeping all 11 rows eligible.
-            if group == "VN30":
-                liquidity = 10 - i
-                value_order = (3*i + 2) % 11
-                volume_order = (7*i + 3) % 11
-                book = (2*i + 4) % 11
-            else:
-                liquidity = (7*i + 1) % 11
-                value_order = 10 - i
-                volume_order = (3*i + 4) % 11
-                book = (2*i + 5) % 11
+            liquidity = 10 - i
+            value_order = (3*i + 2) % 11
+            volume_order = (7*i + 3) % 11
+            book = (2*i + 4) % 11
             price = 19_500 + 100*i
             turnover = (liquidity + 10) * 10_000_000
             volume = turnover // 20_000
@@ -107,7 +101,7 @@ def main():
         results[name] = {"foreign_basis": basis, "weights": weights, "rows": scored[columns].to_dict("records")}
 
     comparisons = {}
-    for group in ("VN30", "HNX30"):
+    for group in ("VN30",):
         baseline = ranked["value_balanced"].loc[lambda rows: rows.index_group.eq(group)]
         comparisons[group] = {}
         for name in ("value_momentum", "volume_balanced"):
@@ -115,7 +109,7 @@ def main():
             comparisons[group][name] = compare_ranks(baseline, variant)
 
     small = frame.drop(frame.index[:2])
-    small_group_counts = rank_groups(small).groupby("index_group")["rank"].count().to_dict()
+    small_group_counts = {"VN30": int(rank_groups(small)["rank"].count())}
     evidence = {
         "source": "synthetic", "run": "synthetic-task4-v1",
         "hand_quote": quote, "hand_cases": hand_cases,
@@ -127,7 +121,7 @@ def main():
 
     lines = [
         "# Task 4 — Đối chiếu bốn yếu tố", "",
-        "Dữ liệu giả lập gồm 11 mã mỗi nhóm. Các thứ tự yếu tố được thiết kế để kiểm tra sự đánh đổi khi chấm điểm.", "",
+        "Dữ liệu giả lập gồm 11 mã VN30 hư cấu. Các thứ tự yếu tố được thiết kế để kiểm tra sự đánh đổi khi chấm điểm.", "",
         "## Ca tính tay", "",
         "Giá cuối 110, mở cửa 100, tổng giá trị khớp 10.000. Giá mua 99/98/97, giá bán 101/102/103.",
         "Ba mức mua có 200 đơn vị mỗi mức, ba mức bán có 100 mỗi mức.",
@@ -151,8 +145,8 @@ def main():
             lines.append(f"| {group} | {labels[name]} | {result['changed']}/11 | {result['max_shift']} | "
                          f"{result['top_overlap']}/{len(result['top_before'])} |")
     lines.extend([
-        "", "Khi giảm VN30 còn 9 mã, số mã được xếp hạng là "
-        f"**{small_group_counts['VN30']} ở VN30** và **{small_group_counts['HNX30']} ở HNX30**.", "",
+        "", "Khi giảm nhóm còn 9 mã (dưới ngưỡng tối thiểu 10), số mã được xếp hạng là "
+        f"**{small_group_counts['VN30']}**: hệ thống không xếp hạng một nhóm quá nhỏ.", "",
         "## Đóng góp vào tổng điểm của HOSETEST11", "",
         "| Cấu hình | Động lượng | Thanh khoản | Khối ngoại | Cung–cầu | Tổng | Hạng |",
         "|---|---:|---:|---:|---:|---:|---:|",

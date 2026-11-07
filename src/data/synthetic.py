@@ -33,20 +33,13 @@ def demo_events():
 
 
 def demo_groups():
+    """Demo board in the SSI shape: one VN30 group of fictional DEMO tickers."""
     from copy import deepcopy
     base=demo_events()
-    members=base[0]["payload"]["members"]
-    first=[dict(m,index_group="VN30") for m in members]
-    second=[dict(m,symbol=m["symbol"].replace("DEMO","HNDEMO"),marketCode="HNX",index_group="HNX30") for m in members]
-    events=[dict(base[0],run="synthetic-two-groups-v1",payload={"indices":["VN30","HNX30"],"members":first+second})]
+    members=[dict(m,index_group="VN30") for m in base[0]["payload"]["members"]]
+    events=[dict(base[0],run="synthetic-vn30-v1",payload={"indices":["VN30"],"members":members})]
     for event in base[1:]:
-        for hnx in (False,True):
-            copy=deepcopy(event)
-            copy["run"]="synthetic-two-groups-v1"
-            payload=copy["payload"]
-            if hnx:
-                payload["marketCode"]="HNX"
-                if "symbol" in payload:
-                    payload["symbol"]=payload["symbol"].replace("DEMO","HNDEMO")
-            events.append(copy)
+        copy=deepcopy(event)
+        copy["run"]="synthetic-vn30-v1"
+        events.append(copy)
     return events

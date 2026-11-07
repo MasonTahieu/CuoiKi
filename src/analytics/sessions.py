@@ -187,7 +187,7 @@ def evaluate_daily(frame):
     """Rank persistence of each daily factor between consecutive sessions, per group."""
     if frame.empty:
         return {"sessions": 0}
-    frame = frame[frame["index_group"].isin(["VN30", "HNX30"])]  # index-level rows are context, not members
+    frame = frame[frame["index_group"].isin(["VN30"])]  # index-level rows are context, not members
     if frame.empty:
         return {"sessions": 0}
     data = daily_factors(frame)

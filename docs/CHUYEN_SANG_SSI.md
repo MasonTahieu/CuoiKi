@@ -1,5 +1,7 @@
 # Chuyển sang SSI FastConnect — 04/11/2026
 
+> Phạm vi sau đó thu hẹp về **VN30** (07/11/2026). Nội dung dưới giữ nguyên để truy vết. [Lý do](../evidence/v3_history/PHAM_VI_VN30.md)
+
 Người học xác nhận giảng viên đã chấp thuận thay NEO bằng SSI. Nguồn chính mới là SSI;
 phạm vi VN30 và HNX30, xếp hạng trong phiên theo bốn yếu tố. Hiện người học **chưa đăng ký SSI**.
 Không cần cung cấp bằng chứng chấp thuận bổ sung để tiếp tục phần đã được người học cho phép.

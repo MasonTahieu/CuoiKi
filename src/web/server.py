@@ -93,7 +93,7 @@ def make_server(port=8501):
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="Bộ lọc VN30 & HNX30 — giao diện web cục bộ")
+    parser = argparse.ArgumentParser(description="Bộ lọc VN30 — giao diện web cục bộ")
     parser.add_argument("--port", type=int, default=8501)
     args = parser.parse_args()
     server = make_server(args.port)

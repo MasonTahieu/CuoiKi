@@ -10,7 +10,7 @@ import re
 from src.neo_api.rest import AuthError, NeoError
 from src.ssi_api.connections import V3_DATA_ROUTES, v3_api_base, v3_stream_url
 
-EXPECTED_BOARD = {"VN30": "HOSE", "HNX30": "HNX"}
+EXPECTED_BOARD = {"VN30": "HOSE"}  # scope: VN30 only
 OTP_PATTERN = re.compile(r"\d{4,8}")
 SYMBOL = re.compile(r"[A-Z0-9][A-Z0-9._-]{0,31}")
 MAX_PAGES = 20
@@ -177,7 +177,7 @@ class V3Client:
 
     def index_members(self, index):
         if index not in EXPECTED_BOARD:
-            raise NeoError("Nhóm ngoài phạm vi VN30/HNX30.")
+            raise NeoError("Nhóm ngoài phạm vi VN30.")
         body = self.get("securitiesByBoard", {"index": index})
         if isinstance(body, dict) and str(body.get("code")) == "204":
             body = []
@@ -203,17 +203,17 @@ class V3Client:
             raise NeoError(f"SSI chưa trả thành phần {index}.")
         return members
 
-    def universe(self, groups=("VN30", "HNX30")):
+    def universe(self, groups=("VN30",)):
         members = [m for group in groups for m in self.index_members(group)]
         if len({m["symbol"] for m in members}) != len(members):
-            raise NeoError("Một mã thuộc cả hai nhóm; cần kiểm tra dữ liệu thành phần.")
+            raise NeoError("Danh sách thành phần có mã trùng; cần kiểm tra dữ liệu thành phần.")
         return members
 
     def summaries(self, index, from_day, to_day):
         """Daily summary rows of the INDEX itself (observed 07/11/2026: ``index=VN30`` returns the
         index level, one row per day, not its members). Members come from ``member_summaries``."""
         if index not in EXPECTED_BOARD:
-            raise NeoError("Nhóm ngoài phạm vi VN30/HNX30.")
+            raise NeoError("Nhóm ngoài phạm vi VN30.")
         return self._summary_pages({"index": index}, index, from_day, to_day)
 
     def symbol_summaries(self, symbol, group, from_day, to_day):

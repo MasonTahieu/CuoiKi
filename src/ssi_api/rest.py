@@ -79,8 +79,8 @@ class SSIClient:
         raise NeoError("Chưa lấy đủ trang SSI; không sử dụng kết quả thiếu.")
 
     def components(self,index):
-        if index not in {"VN30","HNX30"}:
-            raise NeoError("Nhóm ngoài phạm vi VN30/HNX30.")
+        if index not in {"VN30"}:
+            raise NeoError("Nhóm ngoài phạm vi VN30.")
         records=self.list_all("IndexComponents",indexCode=index)
         if len(records)!=1 or records[0].get("IndexCode")!=index:
             raise NeoError("SSI trả nhóm chỉ số khác yêu cầu.")
@@ -92,7 +92,7 @@ class SSIClient:
         if (len(symbols)!=len(members) or not all(isinstance(s,str) and s for s in symbols)
                 or len(set(symbols))!=len(symbols) or str(record.get("TotalSymbolNo"))!=str(len(symbols))):
             raise NeoError("Danh sách thành phần thiếu/trùng hoặc không khớp tổng.")
-        exchange={"VN30":"HOSE","HNX30":"HNX"}[index]
+        exchange={"VN30":"HOSE"}[index]
         if record.get("Exchange")!=exchange:
             raise NeoError("Sàn SSI không khớp nhóm chỉ số.")
         return [dict(symbol=s,index_group=index,marketCode=exchange,stockType="ST") for s in symbols]

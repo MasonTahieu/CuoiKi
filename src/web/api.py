@@ -28,7 +28,7 @@ from src.data.daily_store import default_daily_path
 DAILY_DB = default_daily_path()
 DAILY_RUN = "ssi-daily"
 
-GROUPS = ("VN30", "HNX30")
+GROUPS = ("VN30",)
 WEIGHTS = {"balanced": dict.fromkeys(FACTOR_NAMES, 0.25),
            "momentum": {"momentum": .4, "liquidity": .2, "foreign": .2, "imbalance": .2}}
 WEIGHT_LABELS = {"balanced": "Cân bằng 25/25/25/25", "momentum": "Ưu tiên động lượng 40/20/20/20"}
@@ -143,7 +143,7 @@ def runs(source):
         _daily_frame()
         return [{"id": DAILY_RUN, "label": "Dữ liệu ngày SSI (REST)", "source": "ssi"}]
     if source == "demo-board":
-        return [{"id": "synthetic-two-groups-v1", "label": "Bảng điểm giả lập", "source": "synthetic"}]
+        return [{"id": "synthetic-vn30-v1", "label": "Bảng điểm giả lập", "source": "synthetic"}]
     if source == "demo-journal":
         _, path, labels = _demo_journals()
         return [{"id": run, "label": label, "source": "synthetic"} for run, label in labels.items()]

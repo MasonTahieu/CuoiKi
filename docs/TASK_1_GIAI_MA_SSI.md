@@ -66,7 +66,7 @@ result = decode_fcdata(
 | metadata | Đơn vị còn cần kiểm chứng, cờ ước tính và danh sách trường cộng dồn |
 
 `book_levels=3` là phạm vi chuẩn hóa của phương pháp, không chứng minh thông điệp đã có đủ ba mức.
-Decoder không tự suy ra thành phần VN30/HNX30 từ mã; danh sách nhóm do bước bootstrap cung cấp.
+Decoder không tự suy ra thành phần VN30 từ mã; danh sách nhóm do bước bootstrap cung cấp.
 Không có source_at hoặc có issues không mặc định đồng nghĩa đủ điều kiện chấm điểm;
 collector/chất lượng dữ liệu cần chính sách xử lý tương ứng trong task 2–3.
 

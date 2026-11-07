@@ -37,8 +37,8 @@ def live_refresh():
 
 
 def render():
-    st.set_page_config(page_title="Bộ lọc VN30 và HNX30", page_icon="📊", layout="wide", initial_sidebar_state="expanded")
-    st.caption("VN30 & HNX30 SCREENER · DÀNH CHO NHÀ ĐẦU TƯ VÀ MÔI GIỚI")
+    st.set_page_config(page_title="Bộ lọc VN30", page_icon="📊", layout="wide", initial_sidebar_state="expanded")
+    st.caption("VN30 SCREENER · DÀNH CHO NHÀ ĐẦU TƯ VÀ MÔI GIỚI")
     st.title("Bộ lọc cổ phiếu đa yếu tố")
     report = None
     events = []
@@ -97,7 +97,7 @@ def render():
         st.info("Mặc định APP_MODE=demo để chạy offline. Khi có quyền API, xem docs/CHUYEN_SANG_SSI.md.")
         st.stop()
     if source == "synthetic":
-        st.warning("DỮ LIỆU GIẢ LẬP — mã DEMO hư cấu, không phải thành phần VN30/HNX30 hoặc dữ liệu thị trường thật.")
+        st.warning("DỮ LIỆU GIẢ LẬP — mã DEMO hư cấu, không phải thành phần VN30 hoặc dữ liệu thị trường thật.")
     else:
         st.info(f"DỮ LIỆU {source.upper()} ĐÃ LƯU · thời gian nhận tại máy, chưa khẳng định độ trễ từ sàn.")
     if source != "synthetic" and not provider.semantics_verified:

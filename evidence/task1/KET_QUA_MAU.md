@@ -9,7 +9,7 @@
 | X-TRADE | DEMO01 | 2026-11-04T10:00:00+07:00 | refPrice=19900.0, closePrice=20050.0, lastTradeVolume=100.0, totalTradingVolume=100000.0, totalTradingValue=2000000000.0 | Không có lỗi trường trong mẫu |
 | R | DEMO01 | 2026-11-04T10:00:00+07:00 | foreignBuyVolume=2000.0, foreignSellVolume=1000.0, foreignBuyValue=40100000.0, foreignSellValue=20050000.0 | FOREIGN_VALUE_ESTIMATED |
 | B | DEMO01 | 2026-11-04T10:00:00+07:00 | openPrice=19900.0, highPrice=20100.0, lowPrice=19800.0, closePrice=20050.0, lastTradeVolume=100.0 | B_VALUE_NOT_CUMULATIVE |
-| X | HNDEMO01 | 2026-11-04T10:00:00+07:00 | tradingSession=ATC, tradingStatus=NORMAL, openPrice=14800.0, closePrice=15000.0, totalTradingVolume=100000.0, totalTradingValue=1500000000.0, ohlcClosePrice=14900.0, bidPrice1=ATC, askPrice1=ATC | Không có lỗi trường trong mẫu |
+| X | DEMO02 | 2026-11-04T10:00:00+07:00 | tradingSession=ATC, tradingStatus=NORMAL, openPrice=14800.0, closePrice=15000.0, totalTradingVolume=100000.0, totalTradingValue=1500000000.0, ohlcClosePrice=14900.0, bidPrice1=ATC, askPrice1=ATC | Không có lỗi trường trong mẫu |
 
 ## Bạn kiểm tra những gì?
 

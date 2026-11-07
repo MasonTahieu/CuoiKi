@@ -10,14 +10,14 @@ Bản nháp này dùng để thay hoặc bổ sung các mục tương ứng củ
 
 **Kết nối.** Sản phẩm dùng thư viện chính thức `ssi-sdk` 3.3.2. Ứng dụng đăng nhập bằng API Key/Secret, kèm OTP khi mở luồng trực tiếp. REST gửi tới `https://api.ssi.com.vn/api/v3/data/…` và luồng WebSocket tới `wss://stream.ssi.com.vn/ws/v3`. Ứng dụng chỉ gọi dữ liệu thị trường, không gọi route giao dịch hay tài khoản. Máy chủ chỉ giữ một phiên đăng nhập cho mỗi API Key, nên REST và luồng trực tiếp dùng chung một lần đăng nhập.
 
-**Mức sử dụng so với yêu cầu tối thiểu của đề.** Sản phẩm dùng một luồng WebSocket có lưu trữ (ba topic theo rổ cho mỗi nhóm, cộng cờ phiên) và hai nhóm REST: thành phần chỉ số và tổng hợp giao dịch ngày.
+**Mức sử dụng so với yêu cầu tối thiểu của đề.** Sản phẩm dùng một luồng WebSocket có lưu trữ (ba topic theo rổ VN30, cộng cờ phiên) và hai nhóm REST: thành phần chỉ số và tổng hợp giao dịch ngày.
 
 | Nhóm | Endpoint / topic | Tần suất | Lưu ở đâu |
 |---|---|---|---|
-| Thành phần nhóm | `GET data/securitiesByBoard?index=VN30|HNX30` | Mỗi lần kết nối | Sự kiện `universe` trong `runtime/ssi.sqlite` |
-| Giao dịch khớp | `trade.VN30@*`, `trade.HNX30@*` | Theo từng lệnh khớp | `ssiRaw`, `ssiDecoded` |
-| Sổ lệnh | `quote.VN30@*`, `quote.HNX30@*` | Theo thay đổi sổ lệnh | như trên |
-| Khối ngoại | `room.VN30@*`, `room.HNX30@*` | Theo thay đổi | như trên |
+| Thành phần nhóm | `GET data/securitiesByBoard?index=VN30` | Mỗi lần kết nối | Sự kiện `universe` trong `runtime/ssi.sqlite` |
+| Giao dịch khớp | `trade.VN30@*` | Theo từng lệnh khớp | `ssiRaw`, `ssiDecoded` |
+| Sổ lệnh | `quote.VN30@*` | Theo thay đổi sổ lệnh | như trên |
+| Khối ngoại | `room.VN30@*` | Theo thay đổi | như trên |
 | Phiên | `market.flag` | Khi đổi phiên | như trên, trải xuống từng mã |
 | Tổng hợp ngày | `GET data/securitiesSummary?index=…&from=…&to=…` | 15:05 mỗi ngày và khi lấy lịch sử | `runtime/ssi_daily.sqlite` |
 

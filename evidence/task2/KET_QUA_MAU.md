@@ -10,15 +10,15 @@ Kết quả: 15 thông điệp nhận, 11 lần ghép trạng thái, 1 lần k�
 |---|---|---|---|---|---|---|---|
 | 1 | 10:00:01 | X | DEMO01 | 20000.0 | — | False | NORMAL |
 | 1 | 10:00:01 | R | DEMO01 | 20000.0 | 40000000.0 | True | NORMAL |
-| 1 | 10:00:01 | X | HNDEMO01 | 20000.0 | — | False | NORMAL |
-| 1 | 10:00:01 | R | HNDEMO01 | 20000.0 | 40000000.0 | True | NORMAL |
+| 1 | 10:00:01 | X | DEMO02 | 20000.0 | — | False | NORMAL |
+| 1 | 10:00:01 | R | DEMO02 | 20000.0 | 40000000.0 | True | NORMAL |
 | 1 | 10:00:03 | X-QUOTE | DEMO01 | 20000.0 | 40000000.0 | False | NORMAL |
 | 2 | 10:00:09 | X-TRADE | DEMO01 | 20100.0 | — | False | chưa có |
 | 2 | 10:00:10 | X | DEMO01 | 20090.0 | — | False | NORMAL |
 | 2 | 10:00:11 | R | DEMO01 | 20090.0 | 40100000.0 | True | NORMAL |
-| 2 | 10:00:12 | X | HNDEMO01 | 20110.0 | — | False | NORMAL |
-| 2 | 10:00:13 | R | HNDEMO01 | 20110.0 | 40120000.0 | True | NORMAL |
-| 2 | 10:00:14 | F | HNDEMO01 | 20110.0 | 40120000.0 | True | HALT |
+| 2 | 10:00:12 | X | DEMO02 | 20110.0 | — | False | NORMAL |
+| 2 | 10:00:13 | R | DEMO02 | 20110.0 | 40120000.0 | True | NORMAL |
+| 2 | 10:00:14 | F | DEMO02 | 20110.0 | 40120000.0 | True | HALT |
 
 ## Các điểm cần kiểm tra
 
@@ -27,7 +27,7 @@ Kết quả: 15 thông điệp nhận, 11 lần ghép trạng thái, 1 lần k�
 3. Thông điệp cũ có LastPrice=1 không ghi đè giá mới; thông điệp ngoài nhóm và JSON lỗi không vào trạng thái.
 4. Có disconnected rồi connecting/connected lần 2. Các kênh được đăng ký lại, danh sách nhóm lấy lại.
 5. Bản ghi đầu của lần kết nối 2 chỉ có giá khớp, chưa có ngoại và fields_complete=False: không dùng dữ liệu trước ngắt.
-6. Khi X và R mới đến, trạng thái mới đủ trường. HNX bị HALT chỉ ảnh hưởng HNDEMO01; DEMO01 vẫn NORMAL.
+6. Khi X và R mới đến, trạng thái mới đủ trường. DEMO02 bị tạm ngừng (HALT) chỉ ảnh hưởng DEMO02; DEMO01 vẫn NORMAL.
 
 fields_complete chỉ kiểm tra có trường và khác null, không phải đủ điều kiện xếp hạng. ranking_ready luôn False ở task 2.
 

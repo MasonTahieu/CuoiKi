@@ -33,7 +33,7 @@ def rank_snapshot(frame, weights=None, semantics_verified=False, min_cohort=10, 
     if result.empty:
         return result
     if "index_group" in result and result["index_group"].nunique()!=1:
-        raise ValueError("Chấm điểm riêng từng nhóm VN30/HNX30 bằng rank_groups.")
+        raise ValueError("Chấm điểm theo nhóm bằng rank_groups.")
     if result["symbol"].duplicated().any() or result["as_of"].nunique() != 1 or result["source"].nunique() != 1:
         raise ValueError("Snapshot phải cùng mốc, cùng nguồn và không trùng mã.")
     for name in FACTOR_NAMES:

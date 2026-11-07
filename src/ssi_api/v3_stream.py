@@ -110,11 +110,11 @@ class V3Stream:
 
 
 class V3Factory:
-    """Bootstraps the VN30/HNX30 universe through REST, then opens one V3 stream."""
+    """Bootstraps the VN30 universe through REST, then opens one V3 stream."""
     source = "ssi"
     profile = "fastconnect_v3"
 
-    def __init__(self, client, groups=("VN30", "HNX30"), subscribe_mode="index", ws_factory=None):
+    def __init__(self, client, groups=("VN30",), subscribe_mode="index", ws_factory=None):
         if subscribe_mode not in {"index", "symbols"}:
             raise ValueError("subscribe_mode phải là index hoặc symbols.")
         self.client, self.groups, self.subscribe_mode, self.ws_factory = client, tuple(groups), subscribe_mode, ws_factory

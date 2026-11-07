@@ -4,7 +4,7 @@ Sau khi làm theo hướng dẫn này, hệ thống vẫn chạy khi máy bạn 
 
 ```text
 GitHub Actions (15:20, thứ Hai–thứ Sáu)
-   └─ lấy dữ liệu ngày của 60 mã từ SSI (REST, không cần OTP) ─▶ commit webdata/ssi_daily.sqlite
+   └─ lấy dữ liệu ngày của 30 mã VN30 từ SSI (REST, không cần OTP) ─▶ commit webdata/ssi_daily.sqlite
                                                                     │ push
 Vercel (tự triển khai lại khi có commit) ◀──────────────────────────┘
    └─ trang web: Cuối ngày · SSI thật (mặc định) · Minh họa: Bảng điểm giả lập, Nhật ký SSI mẫu

@@ -62,11 +62,11 @@
     {
       "DataType": "X",
       "Content": {
-        "Symbol": "HNDEMO01",
-        "Exchange": "HNX",
+        "Symbol": "DEMO02",
+        "Exchange": "HOSE",
         "TradingDate": "04/11/2026",
         "Time": "10:00:00",
-        "MarketId": "HNX",
+        "MarketId": "HOSE",
         "LastPrice": 15000,
         "Close": 14900,
         "Open": 14800,

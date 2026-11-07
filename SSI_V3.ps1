@@ -8,7 +8,7 @@ param(
 # Lenh:
 #   kiemtra  - doc cau hinh, khong goi mang
 #   smoke    - dang nhap, doc thanh phan nhom + securitiesSummary, stream $Giay giay, ghi evidence/v3_smoke
-#   lichsu   - lay $SoPhien phien securitiesSummary cua VN30/HNX30 vao runtime/ssi_daily.sqlite (REST, khong OTP)
+#   lichsu   - lay $SoPhien phien securitiesSummary cua VN30 vao runtime/ssi_daily.sqlite (REST, khong OTP)
 #   phien    - thu ca ngay giao dich: 08:58-11:31 va 12:59-14:46, doi chieu REST luc 15:05
 #   danhgia  - danh gia nhieu phien tu kho cuc bo (khong goi mang)
 # Khong luu OTP, API Key hay token vao tep. Chay trong cua so PowerShell de nhap OTP khi duoc hoi.

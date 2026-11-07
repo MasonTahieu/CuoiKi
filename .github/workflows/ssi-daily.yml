@@ -1,4 +1,4 @@
-# Fetch SSI FastConnect V3 daily summaries for VN30/HNX30 after each session and commit them.
+# Fetch SSI FastConnect V3 daily summaries for VN30 after each session and commit them.
 # REST market data needs no OTP. Vercel redeploys on the push, so the "Cuối ngày" view updates
 # without any local machine running. Secrets: SSI_API_KEY, SSI_API_SECRET (repository secrets).
 name: SSI daily summaries

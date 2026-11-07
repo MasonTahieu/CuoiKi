@@ -10,9 +10,9 @@ from src.ssi_api.stream_collector import Frame, StreamDisconnected, collect_stre
 
 def scenario():
     members=[{"symbol":"DEMO01","index_group":"VN30","marketCode":"HOSE"},
-             {"symbol":"HNDEMO01","index_group":"HNX30","marketCode":"HNX"}]
+             {"symbol":"DEMO02","index_group":"VN30","marketCode":"HOSE"}]
     def message(kind,symbol,second,received,**fields):
-        content={"Symbol":symbol,"Exchange":"HNX" if symbol.startswith("HN") else "HOSE",
+        content={"Symbol":symbol,"Exchange":"HOSE",
             "TradingDate":"04/11/2026","Time":f"10:00:{second:02d}",**fields}
         return Frame({"DataType":kind,"Content":content},f"2026-11-04T10:00:{received:02d}+07:00")
     def snapshot(symbol,second,received):
@@ -28,11 +28,11 @@ def scenario():
     late=message("X-TRADE","DEMO01",0,2,LastPrice=1,LastVol=1,TotalVol=1,TotalVal=1)
     # Source time explicitly earlier than baseline; collector must not overwrite any field.
     late.raw["Content"]["Time"]="09:59:59"
-    first=[snapshot("DEMO01",0,1),room("DEMO01",0,1),snapshot("HNDEMO01",0,1),room("HNDEMO01",0,1),
+    first=[snapshot("DEMO01",0,1),room("DEMO01",0,1),snapshot("DEMO02",0,1),room("DEMO02",0,1),
         late,quote,duplicate,message("X-TRADE","OUTSIDE",4,5,LastPrice=1),
         Frame("not valid JSON", "2026-11-04T10:00:06+07:00"),StreamDisconnected()]
     second=[message("X-TRADE","DEMO01",8,9,LastPrice=20100),snapshot("DEMO01",9,10),room("DEMO01",10,11),
-        snapshot("HNDEMO01",11,12),room("HNDEMO01",12,13),message("F","HNDEMO01",13,14,TradingStatus="H")]
+        snapshot("DEMO02",11,12),room("DEMO02",12,13),message("F","DEMO02",13,14,TradingStatus="H")]
     return members,[first,second]
 
 
@@ -74,7 +74,7 @@ def main():
         "3. Thông điệp cũ có LastPrice=1 không ghi đè giá mới; thông điệp ngoài nhóm và JSON lỗi không vào trạng thái.",
         "4. Có disconnected rồi connecting/connected lần 2. Các kênh được đăng ký lại, danh sách nhóm lấy lại.",
         "5. Bản ghi đầu của lần kết nối 2 chỉ có giá khớp, chưa có ngoại và fields_complete=False: không dùng dữ liệu trước ngắt.",
-        "6. Khi X và R mới đến, trạng thái mới đủ trường. HNX bị HALT chỉ ảnh hưởng HNDEMO01; DEMO01 vẫn NORMAL.",
+        "6. Khi X và R mới đến, trạng thái mới đủ trường. DEMO02 bị tạm ngừng (HALT) chỉ ảnh hưởng DEMO02; DEMO01 vẫn NORMAL.",
         "", "fields_complete chỉ kiểm tra có trường và khác null, không phải đủ điều kiện xếp hạng. ranking_ready luôn False ở task 2.",
         "", "## Kết quả đã lưu", "",
         "- collector_report.json: kết quả và trạng thái cuối.",

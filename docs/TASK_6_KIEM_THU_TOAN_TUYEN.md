@@ -6,7 +6,7 @@ Luồng kiểm thử đi từ gói tin FCData v2 giả lập qua decoder, collec
 
 - **95 thông điệp** được đưa vào collector. Có 94 gói giải mã được và 92 lần cập nhật trạng thái. Ba gói còn lại lần lượt là gói trùng, gói cũ bị bỏ và loại thông điệp chưa hỗ trợ.
 - Ở mốc đủ dữ liệu, HOSETEST11 có điểm yếu tố **100/0/100/20**, tổng **55**, hạng **4**. Lọc bảng còn một mã giữ nguyên điểm, hạng và tập mã dùng để tính. Đổi trọng số sang 40/20/20/20 cho **64 điểm, hạng 1** và mã cấu hình khác.
-- Khi hai mã VN30 thiếu một mức khối lượng chào mua, VN30 còn **9 mã hợp lệ** và dừng xếp hạng. HNX30 vẫn xếp hạng **11 mã**. Sau mất kết nối, chỉ một bản cập nhật giá chưa đủ để xếp hạng. Khi nhận lại đầy đủ dữ liệu nền, cả hai nhóm khôi phục điểm và hạng trước đó.
+- Khi hai mã VN30 thiếu một mức khối lượng chào mua, VN30 còn **9 mã hợp lệ** và dừng xếp hạng, có lý do cho từng mã. Sau mất kết nối, chỉ một bản cập nhật giá chưa đủ để xếp hạng. Khi nhận lại đầy đủ dữ liệu nền, nhóm khôi phục điểm và hạng trước đó.
 - Giao diện hiện xác thực thất bại ở đúng mốc mô phỏng token hết hạn và chặn điểm từ dữ liệu cũ. CSV có nguồn, lần thu thập, mốc, ID sự kiện, nhóm, tập mã, phương pháp và trọng số.
 - Bản sao mã nguồn ở thư mục mới chạy được kiểm tra cấu hình, lệnh demo xếp hạng 24 mã và cả hai màn hình demo. Bản sao dùng môi trường Python hiện có và bắt đầu với kho trống, khóa API trống.
 
@@ -26,7 +26,7 @@ T01–T23 có bằng chứng kiểm thử offline. T24 đã chạy thử mã ngu
 | T08 | ATO/ATC giữ nhãn ở bước giải mã và bị loại khi cần giá số. | B, D |
 | T09 | Ba giá trị tăng dần cho phân vị 0, 50, 100. | A |
 | T10 | Nhóm đồng giá trị nhận 50 điểm phân vị. | A, B |
-| T11 | VN30 còn 9 mã thì dừng xếp hạng và hiện lý do. HNX30 đủ 11 mã vẫn có hạng. | A |
+| T11 | VN30 còn 9 mã thì dừng xếp hạng và hiện lý do. | A |
 | T12 | Mã thiếu yếu tố có hạng và tổng điểm trống. | A, B |
 | T13 | Điểm 80/60/40/20 với trọng số đều cho tổng 50. | A |
 | T14 | Lọc hiển thị một mã giữ nguyên điểm, hạng và tập mã so sánh. | A |
@@ -56,7 +56,7 @@ T01–T23 có bằng chứng kiểm thử offline. T24 đã chạy thử mã ngu
 | Danh sách REST chứa bản ghi sai kiểu | REST báo lỗi hợp đồng trước khi đọc các trường của bản ghi. |
 | REST trả HTTP 401 | Client bỏ token trong phiên và yêu cầu xác thực lại. Lần đọc kế tiếp bị chặn trước khi gửi cho đến khi xác thực thành công. |
 
-Ca REST theo ngày dùng 20 mã và bật cờ xác minh để kiểm riêng ràng buộc dữ liệu. Cả hai nhóm vẫn để trống hạng vì thiếu sổ lệnh intraday. HTTP 429, 503, 403, timeout và schema lỗi được kiểm qua phản hồi giả lập. Chính sách hiện tại giãn nhịp yêu cầu và dừng khi gặp lỗi để tránh gửi dồn.
+Ca REST theo ngày dùng 10 mã và bật cờ xác minh để kiểm riêng ràng buộc dữ liệu. Nhóm vẫn để trống hạng vì thiếu sổ lệnh intraday. HTTP 429, 503, 403, timeout và schema lỗi được kiểm qua phản hồi giả lập. Chính sách hiện tại giãn nhịp yêu cầu và dừng khi gặp lỗi để tránh gửi dồn.
 
 ## Chạy lại
 

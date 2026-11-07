@@ -1,6 +1,6 @@
 # Task 4 — Đối chiếu bốn yếu tố
 
-Dữ liệu giả lập gồm 11 mã mỗi nhóm. Các thứ tự yếu tố được thiết kế để kiểm tra sự đánh đổi khi chấm điểm.
+Dữ liệu giả lập gồm 11 mã VN30 hư cấu. Các thứ tự yếu tố được thiết kế để kiểm tra sự đánh đổi khi chấm điểm.
 
 ## Ca tính tay
 
@@ -24,10 +24,8 @@ Các mã đồng hạng 3 đều được tính vào nhóm dẫn đầu.
 |---|---|---:|---:|---:|
 | VN30 | Giá trị, 40/20/20/20 | 10/11 | 4 | 2/3 |
 | VN30 | Khối lượng, 25/25/25/25 | 11/11 | 8 | 1/3 |
-| HNX30 | Giá trị, 40/20/20/20 | 7/11 | 4 | 2/3 |
-| HNX30 | Khối lượng, 25/25/25/25 | 8/11 | 5 | 0/3 |
 
-Khi giảm VN30 còn 9 mã, số mã được xếp hạng là **0 ở VN30** và **11 ở HNX30**.
+Khi giảm nhóm còn 9 mã (dưới ngưỡng tối thiểu 10), số mã được xếp hạng là **0**: hệ thống không xếp hạng một nhóm quá nhỏ.
 
 ## Đóng góp vào tổng điểm của HOSETEST11
 

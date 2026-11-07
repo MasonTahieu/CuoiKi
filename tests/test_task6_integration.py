@@ -118,7 +118,7 @@ def test_raw_ssi_to_ranked_ui_and_traceable_csv(market_journal, journal_app):
     event_id = at(app, events, second=1)
     assert collected["network_called"] is False
     raw = [event for event in events if event["channel"] == "ssiRaw"]
-    assert len(raw) == 94
+    assert len(raw) == 50  # 11 members x (X+R) x 2 baselines + 6 scripted frames
     assert raw[0]["payload"]["message"]["Content"]["LastPrice"] == 19500
     table = app.dataframe[0].value
     assert len(table) == table["Hạng"].count() == 11
@@ -147,7 +147,7 @@ def test_raw_ssi_to_ranked_ui_and_traceable_csv(market_journal, journal_app):
 def test_ui_replays_null_gap_recovery_and_expired_auth(market_journal, journal_app):
     path, collected, events = market_journal
     app, downloads = journal_app
-    assert collected["counters"] == dict(received=95, decoded=94, merged=92, duplicate=1,
+    assert collected["counters"] == dict(received=51, decoded=50, merged=48, duplicate=1,
                                          rejected=1, decode_errors=1, reconnects=1)
     assert "PRIVATE_SENTINEL" not in json.dumps(events)
     first_id = at(app, events, second=1)
@@ -165,14 +165,12 @@ def test_ui_replays_null_gap_recovery_and_expired_auth(market_journal, journal_a
     assert probe["field_received_at"]["totalTradingValue"] == "2026-11-04T10:00:02+07:00"
     assert probe["field_received_at"]["foreignBuyValue"] == "2026-11-04T10:00:01+07:00"
 
-    control(app, "Nhóm so sánh").set_value("HNX30").run()
     assert not app.exception
-    assert app.dataframe[0].value["Hạng"].count() == 11
+    assert app.dataframe[0].value["Hạng"].count() == 0  # degraded VN30 cohort stays unranked
     at(app, events, state="disconnected")
     assert any("Mất kết nối" in notice.value for notice in app.warning)
     assert app.dataframe[0].value["Hạng"].isna().all()
-    at(app, events, second=5)
-    assert any("Đang chờ snapshot" in notice.value for notice in app.info)
+    at(app, events, second=5)  # new epoch: only one trade for HOSETEST11, no baseline for the rest
     assert app.dataframe[0].value["Hạng"].isna().all()
 
     recovered_id = at(app, events, second=6)

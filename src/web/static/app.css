@@ -67,6 +67,8 @@ button, input, select { font: inherit; color: inherit; }
 .group-tabs button small { font-weight: 500; font-size: 12px; color: var(--text-3); }
 .group-tabs button[aria-selected="true"] { background: var(--raised); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.35); }
 .group-tabs button[aria-selected="true"] small { color: var(--text-2); }
+.group-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 7px; font-weight: 600; background: var(--raised); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.35); }
+.group-badge small { font-weight: 500; font-size: 12px; color: var(--text-2); }
 .status-cluster { display: flex; justify-content: flex-end; align-items: center; gap: 10px; min-width: 0; }
 .chip {
   display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px;

@@ -39,18 +39,20 @@ def test_ssi_configuration_never_uses_neo_token(tmp_path):
     with pytest.raises(ConfigurationError):config.validate_v2()
 
 
-def test_two_groups_rank_independently_and_filters_preserve_scores():
+def test_vn30_group_ranks_consistently_and_mixed_groups_are_refused():
     frame=state_at(demo_groups())
-    assert len(frame)==24
+    assert len(frame)==12 and set(frame.index_group)=={"VN30"}
     ranked=rank_groups(frame)
-    for group in ("VN30","HNX30"):
+    for group in ("VN30",):
         subset=ranked.loc[ranked.index_group.eq(group)]
         assert subset["rank"].notna().sum()==12
         assert subset["rank"].min()==1
         assert subset["cohort_size"].eq(12).all()
         expected=rank_snapshot(frame.loc[frame.index_group.eq(group)])
         pd.testing.assert_series_equal(subset.total_score,expected.total_score)
-    with pytest.raises(ValueError):rank_snapshot(frame)
+    mixed=frame.copy()
+    mixed.loc[mixed.index[:6],"index_group"]="OTHER"
+    with pytest.raises(ValueError):rank_snapshot(mixed)
 
 
 def test_ssi_scores_remain_locked_and_sources_not_mixed(tmp_path):
@@ -65,13 +67,14 @@ def test_ssi_scores_remain_locked_and_sources_not_mixed(tmp_path):
 
 def test_ssi_v2_auth_and_nested_index_contract():
     session=FakeSession([Response({"status":200,"data":{"accessToken":"mock-token"}}),
-        Response({"status":"Success","totalRecord":1,"data":[{"IndexCode":"HNX30","Exchange":"HNX","TotalSymbolNo":"2", "IndexComponent":[{"StockSymbol":"A"},{"StockSymbol":"B"}]}]})])
+        Response({"status":"Success","totalRecord":1,"data":[{"IndexCode":"VN30","Exchange":"HOSE","TotalSymbolNo":"2", "IndexComponent":[{"StockSymbol":"A"},{"StockSymbol":"B"}]}]})])
     settings=SSISettings(profile="fcdata_v2",consumer_id="id",consumer_secret="SECRET")
     client=SSIClient(settings,session=session,sleep=lambda _:None,clock=lambda:0)
     client.authenticate()
-    members=client.components("HNX30")
+    members=client.components("VN30")
     assert [m["symbol"] for m in members]==["A","B"]
-    assert all(m["marketCode"]=="HNX" for m in members)
+    assert all(m["marketCode"]=="HOSE" for m in members)
+    with pytest.raises(NeoError):client.components("HNX30")  # outside the VN30-only scope
     assert session.calls[0][1]["json"]=={"consumerID":"id","consumerSecret":"SECRET"}
     assert all(call[1]["allow_redirects"] is False for call in session.calls)
     assert "SECRET" not in repr(settings)
@@ -89,12 +92,12 @@ def test_daily_data_never_invents_intraday_book_or_session():
     with pytest.raises(ValueError):canonical_daily({"Foreignsellvaltotal":1,"Toreignsellvaltotal":2})
 
 
-def test_ui_switches_groups_without_mixing_ranks(monkeypatch):
+def test_ui_offers_only_the_vn30_group(monkeypatch):
     monkeypatch.setenv("APP_MODE","demo")
     monkeypatch.setenv("DATA_PROVIDER","ssi")
     app=AppTest.from_file(str(PROJECT_ROOT/"app.py"),default_timeout=30).run()
     chooser=next(s for s in app.selectbox if s.label=="Nhóm so sánh")
-    chooser.set_value("HNX30").run()
+    assert list(chooser.options)==["VN30"]
     assert not app.exception
     assert len(app.dataframe[0].value)==12
-    assert all(s.startswith("HNDEMO") for s in app.dataframe[0].value["Mã"])
+    assert all(s.startswith("DEMO") for s in app.dataframe[0].value["Mã"])

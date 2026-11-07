@@ -107,7 +107,7 @@ def test_rest_daily_snapshot_stays_unranked_in_ui_even_when_verified(monkeypatch
     day = datetime.now(TZ).strftime("%d/%m/%Y")
     replies = [token()]
     daily = []
-    for group, market in (("VN30", "HOSE"), ("HNX30", "HNX")):
+    for group, market in (("VN30", "HOSE"),):
         symbols = [f"{market}DAY{i:02d}" for i in range(10)]
         replies.append(page([{"IndexCode": group, "Exchange": market, "TotalSymbolNo": 10,
                               "IndexComponent": [{"StockSymbol": symbol} for symbol in symbols]}]))
@@ -119,14 +119,14 @@ def test_rest_daily_snapshot_stays_unranked_in_ui_even_when_verified(monkeypatch
     monkeypatch.setattr(collector, "SSIClient", lambda settings: SSIClient(
         settings, session=session, sleep=clock.sleep, clock=clock.monotonic))
     report = collector.collect_rest(settings_for(db))
-    assert report["daily_rows"] == 20 and report["four_factor_ready"] is False and session.closed
+    assert report["daily_rows"] == 10 and report["four_factor_ready"] is False and session.closed
     monkeypatch.setenv("APP_MODE", "replay")
     monkeypatch.setenv("DATA_PROVIDER", "ssi")
     monkeypatch.setenv("SSI_DATABASE", str(db))
     monkeypatch.setenv("SSI_SEMANTICS_VERIFIED", "true")
     app = AppTest.from_file(str(PROJECT_ROOT / "app.py"), default_timeout=30).run()
     assert not app.exception and not app.error
-    for group in ("VN30", "HNX30"):
+    for group in ("VN30",):
         chooser = next(control for control in app.selectbox if control.label == "Nhóm so sánh")
         chooser.set_value(group).run()
         assert not app.exception

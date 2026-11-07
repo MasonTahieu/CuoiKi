@@ -55,7 +55,6 @@ def test_volume_method_excludes_bad_row_without_switching_to_value(field, value,
     assert pd.isna(invalid["rank"])
     assert message in invalid["quality_reason"]
     assert volume.loc[volume.index_group.eq("VN30"), "rank"].count() == 10
-    assert volume.loc[volume.index_group.eq("HNX30"), "rank"].count() == 11
 
 
 def test_volume_method_uses_its_own_fields_and_validates_configuration():
@@ -75,7 +74,7 @@ def test_weights_and_foreign_basis_change_expected_score_on_a_fixed_cohort():
     for name, (basis, weights) in CONFIGURATIONS.items():
         ranked = rank_groups(frame, weights=weights, foreign_basis=basis).set_index("symbol")
         results[name] = ranked.loc["HOSETEST11"]
-        assert ranked.groupby("index_group")["rank"].count().to_dict() == {"HNX30": 11, "VN30": 11}
+        assert ranked.groupby("index_group")["rank"].count().to_dict() == {"VN30": 11}
     balanced, momentum, volume = results.values()
     assert balanced[["score_momentum", "score_liquidity", "score_foreign", "score_imbalance"]].tolist() == [100, 0, 100, 20]
     assert volume[["score_momentum", "score_liquidity", "score_foreign", "score_imbalance"]].tolist() == [100, 0, 70, 20]
@@ -87,10 +86,11 @@ def test_weights_and_foreign_basis_change_expected_score_on_a_fixed_cohort():
     assert pd.isna(volume["foreign_net_vnd"])
 
 
-def test_small_vn30_group_does_not_block_hnx30_and_ssi_gate_still_applies():
-    frame = verification_frame().iloc[2:].copy()
+def test_group_below_minimum_is_not_ranked_and_ssi_gate_still_applies():
+    frame = verification_frame().iloc[2:].copy()  # 9 of 11 members: below the minimum cohort of 10
     ranked = rank_groups(frame, foreign_basis="volume")
-    assert ranked.groupby("index_group")["rank"].count().to_dict() == {"HNX30": 11, "VN30": 0}
+    assert ranked["rank"].count() == 0
+    assert ranked["quality_reason"].str.contains("9/10").all()
     frame["source"] = "ssi"
     locked = rank_groups(frame, foreign_basis="volume")
     assert locked["rank"].isna().all()

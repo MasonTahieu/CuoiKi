@@ -32,7 +32,8 @@ def test_context_lists_both_demo_sources(demo):
 def test_demo_board_snapshot_ranks_each_group_and_explains_contributions(demo):
     data = api.snapshot("demo-board")
     assert data["synthetic"] and data["verified"] and data["connection"]["state"] == "demo" and data["connection"]["label"] == "Bảng điểm giả lập"
-    for name in ("VN30", "HNX30"):
+    assert set(data["groups"]) == {"VN30"}  # scope: VN30 only
+    for name in ("VN30",):
         group = data["groups"][name]
         assert group["members"] == group["ranked"] == 12 and group["cohort_size"] == 12
         ranks = [row["rank"] for row in group["rows"]]
@@ -57,8 +58,8 @@ def test_demo_journal_replays_v3_and_reports_disconnect_per_stock(demo):
     assert "Nguồn không gửi trạng thái từng mã" in latest["groups"]["VN30"]["rows"][0]["warnings"]
     reconnecting = next(p["id"] for p in points if p["label"] == "Đang kết nối" and p["at"].endswith("10:00:31+07:00"))
     gap = api.snapshot("demo-journal", v3, reconnecting)
-    rows = gap["groups"]["HNX30"]["rows"]
-    assert gap["groups"]["HNX30"]["ranked"] == 0 and gap["connection"]["severity"] == "warn"
+    rows = gap["groups"]["VN30"]["rows"]
+    assert gap["groups"]["VN30"]["ranked"] == 0 and gap["connection"]["severity"] == "warn"
     assert {r["status"]["kind"] for r in rows} == {"disconnected"} and rows[0]["status"]["details"]
     history = api.history("demo-journal", v3, None, latest["groups"]["VN30"]["rows"][0]["symbol"])
     assert len(history["points"]) == 2
@@ -98,9 +99,10 @@ def test_daily_source_ranks_three_factors_and_names_missing_foreign_data(demo, m
     days = ["2026-11-05", "2026-11-06"]
     rows = []
     for d, day in enumerate(days):
-        for group, prefix, size in (("VN30", "AAA", 12), ("HNX30", "BBB", 14)):
+        # Legacy HNX30 rows may still sit in an old store: they must not appear on the page.
+        for group, prefix, size in (("VN30", "AAA", 14), ("HNX30", "BBB", 12)):
             for i in range(size):
-                foreign_missing = group == "HNX30" and i < 3
+                foreign_missing = group == "VN30" and i < 3
                 rows.append({"symbol": f"{prefix}{i:02d}", "index_group": group, "tradingDate": day,
                              "openPrice": 10_000 + 100 * i, "closePrice": 10_000 + 100 * i + 50 * ((i + d) % 5 - 2),
                              "totalTradingValue": 1e9 * (i + 1 + d), "totalTradingVolume": 1e5 * (i + 1),
@@ -120,14 +122,14 @@ def test_daily_source_ranks_three_factors_and_names_missing_foreign_data(demo, m
     data = api.snapshot("daily", compare="prev")
     assert data["method_kind"] == "daily" and data["source"] == "ssi" and data["compare"]["as_of"].startswith("2026-11-05")
     vn = data["groups"]["VN30"]
-    assert vn["members"] == 12 and vn["ranked"] == 12 and vn["method"] == "daily-v1"  # the INDEX row is not a member
+    assert set(data["groups"]) == {"VN30"}
+    assert vn["members"] == 14 and vn["ranked"] == 11 and vn["method"] == "daily-v1"  # the INDEX row is not a member
     row = vn["rows"][0]
     assert row["scores"]["imbalance"] is None and row["contributions"]["imbalance"] is None
     assert sum(v for v in row["contributions"].values() if v is not None) == pytest.approx(row["total"])
     assert row["rank_change"] == row["prev_rank"] - row["rank"]
-    hnx = data["groups"]["HNX30"]
-    missing = [r for r in hnx["rows"] if r["rank"] is None]
-    assert hnx["ranked"] == 11 and len(missing) == 3
+    missing = [r for r in vn["rows"] if r["rank"] is None]
+    assert len(missing) == 3
     assert missing[0]["status"]["details"] == ["Thiếu dữ liệu khối ngoại (SSI trả trống)"]
     assert [p["label"] for p in api.history("daily", "ssi-daily", None, "AAA03")["points"]] == ["05/11", "06/11"]
     with pytest.raises(api.ApiError):
@@ -187,7 +189,7 @@ def test_server_serves_static_files_json_and_safe_errors(server):
     assert status == 400 and "trọng số" in json.loads(body)["error"]
     status, _, _ = fetch(server + "/../src/config.py")
     assert status == 404
-    status, headers, body = fetch(server + "/api/export.csv?source=demo-board&group=HNX30")
+    status, headers, body = fetch(server + "/api/export.csv?source=demo-board&group=VN30")
     assert status == 200 and "attachment" in headers["Content-Disposition"] and body.startswith(b"\xef\xbb\xbf")
 
 

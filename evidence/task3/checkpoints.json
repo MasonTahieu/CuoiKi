@@ -4,14 +4,17 @@
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-fbb32d3da9dc42938115a56b69323c91",
       "as_of": "2026-11-04T10:00:01+07:00",
       "through_event_id": null,
-      "last_applied_event_id": 118,
+      "last_applied_event_id": 15,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "connected",
       "connection_epoch": 1,
@@ -235,18 +238,42 @@
           "fields_complete": true,
           "data_usable": true,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
+            "derived_fields": {},
             "foreign_value_estimated": true
           }
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:00:01+07:00",
           "payload": {
-            "symbol": "HNDEMO01",
-            "marketCode": "HNX",
+            "symbol": "DEMO02",
+            "marketCode": "HOSE",
             "askPrice1": 20050.0,
             "askPrice2": 20100.0,
             "askPrice3": 20150.0,
@@ -442,256 +469,160 @@
           },
           "counter_issues": [],
           "reasons": [],
-          "warnings": [],
+          "warnings": [
+            "FOREIGN_VALUE_ESTIMATED"
+          ],
           "fields_complete": true,
           "data_usable": true,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
-            "foreign_value_estimated": null
+            "derived_fields": {},
+            "foreign_value_estimated": true
           }
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
-          "fields_complete": 1,
-          "data_usable": 1,
-          "data_usable_percent": 100.0,
-          "fields": {
-            "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            }
-          }
-        },
         "VN30": {
-          "members": 1,
-          "fields_complete": 1,
-          "data_usable": 1,
+          "members": 2,
+          "fields_complete": 2,
+          "data_usable": 2,
           "data_usable_percent": 100.0,
           "fields": {
             "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             }
           }
@@ -720,14 +651,17 @@
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-fbb32d3da9dc42938115a56b69323c91",
       "as_of": "2026-11-04T10:00:03+07:00",
       "through_event_id": null,
-      "last_applied_event_id": 124,
+      "last_applied_event_id": 21,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "connected",
       "connection_epoch": 1,
@@ -954,18 +888,42 @@
           "fields_complete": false,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
+            "derived_fields": {},
             "foreign_value_estimated": true
           }
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:00:03+07:00",
           "payload": {
-            "symbol": "HNDEMO01",
-            "marketCode": "HNX",
+            "symbol": "DEMO02",
+            "marketCode": "HOSE",
             "askPrice1": 20050.0,
             "askPrice2": 20100.0,
             "askPrice3": 20150.0,
@@ -1161,256 +1119,160 @@
           },
           "counter_issues": [],
           "reasons": [],
-          "warnings": [],
+          "warnings": [
+            "FOREIGN_VALUE_ESTIMATED"
+          ],
           "fields_complete": true,
           "data_usable": true,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
-            "foreign_value_estimated": null
+            "derived_fields": {},
+            "foreign_value_estimated": true
           }
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
+        "VN30": {
+          "members": 2,
           "fields_complete": 1,
           "data_usable": 1,
-          "data_usable_percent": 100.0,
+          "data_usable_percent": 50.0,
           "fields": {
             "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol1": {
               "present": 1,
               "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
+              "total": 2,
+              "fresh_valid_percent": 50.0
             },
             "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            }
-          }
-        },
-        "VN30": {
-          "members": 1,
-          "fields_complete": 0,
-          "data_usable": 0,
-          "data_usable_percent": 0.0,
-          "fields": {
-            "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             }
           }
@@ -1439,14 +1301,17 @@
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-fbb32d3da9dc42938115a56b69323c91",
       "as_of": "2026-11-04T10:00:06.500000+07:00",
       "through_event_id": null,
-      "last_applied_event_id": 132,
+      "last_applied_event_id": 29,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "disconnected",
       "connection_epoch": 1,
@@ -1516,12 +1381,35 @@
           "fields_complete": false,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": null,
+          "session_basis": null,
           "metadata": {}
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:00:06.500000+07:00",
           "payload": {},
           "field_updated_at": {},
@@ -1568,134 +1456,35 @@
           "fields_complete": false,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": null,
+          "session_basis": null,
           "metadata": {}
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
-          "fields_complete": 0,
-          "data_usable": 0,
-          "data_usable_percent": 0.0,
-          "fields": {
-            "closePrice": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "openPrice": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "totalTradingValue": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "foreignBuyValue": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "foreignSellValue": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "tradingSession": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "tradingStatus": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            }
-          }
-        },
         "VN30": {
-          "members": 1,
+          "members": 2,
           "fields_complete": 0,
           "data_usable": 0,
           "data_usable_percent": 0.0,
@@ -1703,115 +1492,115 @@
             "closePrice": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "openPrice": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "totalTradingValue": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "foreignBuyValue": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "foreignSellValue": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "tradingSession": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "tradingStatus": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             }
           }
@@ -1845,14 +1634,17 @@
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-fbb32d3da9dc42938115a56b69323c91",
       "as_of": "2026-11-04T10:00:09+07:00",
       "through_event_id": null,
-      "last_applied_event_id": 138,
+      "last_applied_event_id": 35,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "connected",
       "connection_epoch": 2,
@@ -1938,12 +1730,35 @@
           "fields_complete": false,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": null,
+          "session_basis": null,
           "metadata": {}
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:00:09+07:00",
           "payload": {},
           "field_updated_at": {},
@@ -1989,134 +1804,35 @@
           "fields_complete": false,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": null,
+          "session_basis": null,
           "metadata": {}
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
-          "fields_complete": 0,
-          "data_usable": 0,
-          "data_usable_percent": 0.0,
-          "fields": {
-            "closePrice": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "openPrice": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "totalTradingValue": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "foreignBuyValue": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "foreignSellValue": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol1": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol2": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol3": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "tradingSession": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "tradingStatus": {
-              "present": 0,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            }
-          }
-        },
         "VN30": {
-          "members": 1,
+          "members": 2,
           "fields_complete": 0,
           "data_usable": 0,
           "data_usable_percent": 0.0,
@@ -2124,115 +1840,115 @@
             "closePrice": {
               "present": 1,
               "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
+              "total": 2,
+              "fresh_valid_percent": 50.0
             },
             "openPrice": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "totalTradingValue": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "foreignBuyValue": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "foreignSellValue": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol1": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol2": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol3": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "tradingSession": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "tradingStatus": {
               "present": 0,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             }
           }
@@ -2275,14 +1991,17 @@
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-fbb32d3da9dc42938115a56b69323c91",
       "as_of": "2026-11-04T10:00:13+07:00",
       "through_event_id": null,
-      "last_applied_event_id": 150,
+      "last_applied_event_id": 47,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "connected",
       "connection_epoch": 2,
@@ -2511,18 +2230,42 @@
           "fields_complete": true,
           "data_usable": true,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
+            "derived_fields": {},
             "foreign_value_estimated": true
           }
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:00:13+07:00",
           "payload": {
-            "symbol": "HNDEMO01",
-            "marketCode": "HNX",
+            "symbol": "DEMO02",
+            "marketCode": "HOSE",
             "askPrice1": 20050.0,
             "askPrice2": 20100.0,
             "askPrice3": 20150.0,
@@ -2718,256 +2461,160 @@
           },
           "counter_issues": [],
           "reasons": [],
-          "warnings": [],
+          "warnings": [
+            "FOREIGN_VALUE_ESTIMATED"
+          ],
           "fields_complete": true,
           "data_usable": true,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
-            "foreign_value_estimated": null
+            "derived_fields": {},
+            "foreign_value_estimated": true
           }
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
-          "fields_complete": 1,
-          "data_usable": 1,
-          "data_usable_percent": 100.0,
-          "fields": {
-            "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            }
-          }
-        },
         "VN30": {
-          "members": 1,
-          "fields_complete": 1,
-          "data_usable": 1,
+          "members": 2,
+          "fields_complete": 2,
+          "data_usable": 2,
           "data_usable_percent": 100.0,
           "fields": {
             "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             }
           }
@@ -3006,18 +2653,21 @@
     }
   },
   {
-    "name": "HNX tạm ngừng giao dịch, trước khi collector dừng",
+    "name": "DEMO02 tạm ngừng giao dịch, trước khi collector dừng",
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-fbb32d3da9dc42938115a56b69323c91",
       "as_of": "2026-11-04T10:00:14+07:00",
-      "through_event_id": 152,
-      "last_applied_event_id": 152,
+      "through_event_id": 49,
+      "last_applied_event_id": 49,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "connected",
       "connection_epoch": 2,
@@ -3246,18 +2896,42 @@
           "fields_complete": true,
           "data_usable": true,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
+            "derived_fields": {},
             "foreign_value_estimated": true
           }
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:00:14+07:00",
           "payload": {
-            "symbol": "HNDEMO01",
-            "marketCode": "HNX",
+            "symbol": "DEMO02",
+            "marketCode": "HOSE",
             "askPrice1": 20050.0,
             "askPrice2": 20100.0,
             "askPrice3": 20150.0,
@@ -3455,256 +3129,160 @@
           "reasons": [
             "STATUS_NOT_NORMAL"
           ],
-          "warnings": [],
+          "warnings": [
+            "FOREIGN_VALUE_ESTIMATED"
+          ],
           "fields_complete": true,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
-            "foreign_value_estimated": null
+            "derived_fields": {},
+            "foreign_value_estimated": true
           }
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
-          "fields_complete": 1,
-          "data_usable": 0,
-          "data_usable_percent": 0.0,
-          "fields": {
-            "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            }
-          }
-        },
         "VN30": {
-          "members": 1,
-          "fields_complete": 1,
+          "members": 2,
+          "fields_complete": 2,
           "data_usable": 1,
-          "data_usable_percent": 100.0,
+          "data_usable_percent": 50.0,
           "fields": {
             "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             }
           }
@@ -3747,14 +3325,17 @@
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-3aa0f355ad12458cbf7431bfc274647b",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-fbb32d3da9dc42938115a56b69323c91",
       "as_of": "2026-11-04T10:00:14+07:00",
       "through_event_id": null,
-      "last_applied_event_id": 154,
+      "last_applied_event_id": 51,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "stopped",
       "connection_epoch": 2,
@@ -3985,18 +3566,42 @@
           "fields_complete": true,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
+            "derived_fields": {},
             "foreign_value_estimated": true
           }
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:00:14+07:00",
           "payload": {
-            "symbol": "HNDEMO01",
-            "marketCode": "HNX",
+            "symbol": "DEMO02",
+            "marketCode": "HOSE",
             "askPrice1": 20050.0,
             "askPrice2": 20100.0,
             "askPrice3": 20150.0,
@@ -4195,256 +3800,160 @@
             "CONNECTION_NOT_ACTIVE",
             "STATUS_NOT_NORMAL"
           ],
-          "warnings": [],
+          "warnings": [
+            "FOREIGN_VALUE_ESTIMATED"
+          ],
           "fields_complete": true,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
-            "foreign_value_estimated": null
+            "derived_fields": {},
+            "foreign_value_estimated": true
           }
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
-          "fields_complete": 1,
-          "data_usable": 0,
-          "data_usable_percent": 0.0,
-          "fields": {
-            "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            }
-          }
-        },
         "VN30": {
-          "members": 1,
-          "fields_complete": 1,
+          "members": 2,
+          "fields_complete": 2,
           "data_usable": 0,
           "data_usable_percent": 0.0,
           "fields": {
             "closePrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askPrice3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol2": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "askVol3": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             }
           }
@@ -4487,14 +3996,17 @@
     "report": {
       "schema_version": "ssi-replay-quality-v1",
       "source": "synthetic",
-      "run": "synthetic-stream-7c506498d7d5484e820f3cc6a2a74590",
+      "profile": "fcdata_v2",
+      "run": "synthetic-stream-6e76f897f22247d7ba36b442cedd1d25",
       "as_of": "2026-11-04T10:01:03+07:00",
       "through_event_id": null,
-      "last_applied_event_id": 205,
+      "last_applied_event_id": 102,
       "policy": {
         "max_age_seconds": 60,
         "max_recorded_lag_seconds": 10,
-        "max_clock_skew_seconds": 5
+        "max_clock_skew_seconds": 5,
+        "require_symbol_status": true,
+        "session_fallback": "none"
       },
       "last_recorded_connection_state": "connected",
       "connection_epoch": 1,
@@ -4736,18 +4248,42 @@
           "fields_complete": true,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
+            "derived_fields": {},
             "foreign_value_estimated": true
           }
         },
         {
-          "symbol": "HNDEMO01",
-          "index_group": "HNX30",
-          "marketCode": "HNX",
+          "symbol": "DEMO02",
+          "index_group": "VN30",
+          "marketCode": "HOSE",
           "as_of": "2026-11-04T10:01:03+07:00",
           "payload": {
-            "symbol": "HNDEMO01",
-            "marketCode": "HNX",
+            "symbol": "DEMO02",
+            "marketCode": "HOSE",
             "askPrice1": 20050.0,
             "askPrice2": 20100.0,
             "askPrice3": 20150.0,
@@ -4961,256 +4497,160 @@
           "reasons": [
             "STALE_FIELDS"
           ],
-          "warnings": [],
+          "warnings": [
+            "FOREIGN_VALUE_ESTIMATED"
+          ],
           "fields_complete": true,
           "data_usable": false,
           "ranking_ready": false,
+          "needed_fields": [
+            "closePrice",
+            "openPrice",
+            "totalTradingValue",
+            "foreignBuyValue",
+            "foreignSellValue",
+            "bidPrice1",
+            "bidPrice2",
+            "bidPrice3",
+            "bidVol1",
+            "bidVol2",
+            "bidVol3",
+            "askPrice1",
+            "askPrice2",
+            "askPrice3",
+            "askVol1",
+            "askVol2",
+            "askVol3",
+            "tradingSession",
+            "tradingStatus"
+          ],
+          "trading_session": "LO",
+          "session_basis": "feed",
           "metadata": {
-            "foreign_value_estimated": null
+            "derived_fields": {},
+            "foreign_value_estimated": true
           }
         }
       ],
       "group_coverage": {
-        "HNX30": {
-          "members": 1,
-          "fields_complete": 1,
-          "data_usable": 0,
-          "data_usable_percent": 0.0,
-          "fields": {
-            "closePrice": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "totalTradingValue": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "foreignBuyValue": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "foreignSellValue": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "bidPrice2": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidPrice3": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol1": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol2": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "bidVol3": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice1": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice2": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askPrice3": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol1": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol2": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "askVol3": {
-              "present": 1,
-              "fresh_valid": 0,
-              "total": 1,
-              "fresh_valid_percent": 0.0
-            },
-            "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            },
-            "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
-              "fresh_valid_percent": 100.0
-            }
-          }
-        },
         "VN30": {
-          "members": 1,
-          "fields_complete": 1,
+          "members": 2,
+          "fields_complete": 2,
           "data_usable": 0,
           "data_usable_percent": 0.0,
           "fields": {
             "closePrice": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "openPrice": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "totalTradingValue": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "foreignBuyValue": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "foreignSellValue": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice1": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "bidPrice2": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidPrice3": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol1": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol2": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "bidVol3": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice1": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice2": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askPrice3": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol1": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol2": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "askVol3": {
-              "present": 1,
+              "present": 2,
               "fresh_valid": 0,
-              "total": 1,
+              "total": 2,
               "fresh_valid_percent": 0.0
             },
             "tradingSession": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             },
             "tradingStatus": {
-              "present": 1,
-              "fresh_valid": 1,
-              "total": 1,
+              "present": 2,
+              "fresh_valid": 2,
+              "total": 2,
               "fresh_valid_percent": 100.0
             }
           }

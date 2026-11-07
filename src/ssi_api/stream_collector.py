@@ -95,9 +95,9 @@ def validate_members(members):
             raise ValueError("Mã trong danh sách nhóm không hợp lệ.")
         if symbol in result:
             raise ValueError("Trùng mã trong danh sách nhóm.")
-        expected={"VN30":"HOSE","HNX30":"HNX"}.get(member.get("index_group"))
+        expected={"VN30":"HOSE"}.get(member.get("index_group"))
         if not expected or member.get("marketCode")!=expected:
-            raise ValueError("Nhóm/sàn không khớp VN30–HOSE hoặc HNX30–HNX.")
+            raise ValueError("Nhóm/sàn không khớp VN30–HOSE.")
         result[symbol]={k:member[k] for k in ("symbol","index_group","marketCode")}
     return result
 

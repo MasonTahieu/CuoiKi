@@ -1,10 +1,11 @@
-# Bộ lọc VN30 và HNX30 đa yếu tố — SSI FastConnect
+# Bộ lọc VN30 đa yếu tố — SSI FastConnect
 
-Cập nhật **06/11/2026**: đề cập nhật cho phép dùng thêm SSI FastConnect API (developers.ssi.com.vn).
-Đã có bộ nối **FastConnect V3** dùng SDK chính thức `ssi-sdk==3.3.2`, kiểm thử offline với gói tin giả lập.
-Hiện **chưa có khóa SSI**, nên chưa nghiệm thu dữ liệu thật. Khi có khóa, làm theo [hướng dẫn V3](docs/V3_KET_NOI.md).
+Cập nhật **07/11/2026**. Phạm vi: **rổ VN30** (HNX30 đã bỏ vì thanh khoản thấp và thiếu dữ liệu khối ngoại, [số liệu](evidence/v3_history/PHAM_VI_VN30.md)).
+Nguồn dữ liệu: **SSI FastConnect API V3** qua SDK chính thức `ssi-sdk==3.3.2`. Dữ liệu ngày thật (REST) đã có 15 phiên; stream trong phiên chờ kiểm thử trong giờ giao dịch.
+Trang công khai: https://cuoiki.vercel.app (mặc định chế độ **Cuối ngày · SSI thật**).
 
 - [Kết nối FastConnect V3](docs/V3_KET_NOI.md)
+- [Phạm vi chỉ VN30 và lý do bỏ HNX30](evidence/v3_history/PHAM_VI_VN30.md)
 - [Triển khai miễn phí lên Vercel + GitHub Actions](docs/TRIEN_KHAI_VERCEL.md) · Repo: [MasonTahieu/CuoiKi](https://github.com/MasonTahieu/CuoiKi)
 - [Đăng ký SSI và phạm vi chuyển đổi](docs/CHUYEN_SANG_SSI.md)
 - [Ghi chú bàn giao và tiến độ](HANDOFF.md)
@@ -32,7 +33,7 @@ Trong chế độ demo, mục **Dữ liệu minh họa** chuyển giữa bảng 
 
 ## Task 4 đã bàn giao
 
-Đã đối chiếu bốn yếu tố bằng ca tính tay, so sánh hai cách tính khối ngoại và đo mức đổi hạng khi đổi trọng số trên 22 mã giả lập. Toàn dự án đạt 191 kiểm thử. [Kết quả mẫu](evidence/task4/KET_QUA_MAU.md) · [Đặc tả kiểm chứng](docs/TASK_4_KIEM_CHUNG_BON_YEU_TO.md)
+Đã đối chiếu bốn yếu tố bằng ca tính tay, so sánh hai cách tính khối ngoại và đo mức đổi hạng khi đổi trọng số trên 11 mã VN30 giả lập. Toàn dự án hiện đạt 270 kiểm thử. [Kết quả mẫu](evidence/task4/KET_QUA_MAU.md) · [Đặc tả kiểm chứng](docs/TASK_4_KIEM_CHUNG_BON_YEU_TO.md)
 
 ```powershell
 & "$HOME\.venv\Scripts\Activate.ps1"
@@ -84,7 +85,7 @@ python -X utf8 -m src.ssi_api.decode_sample
 Từ 06/11/2026, `RUN_APP.ps1` mở **giao diện web mới** tại http://127.0.0.1:8501. Server là Python thư viện chuẩn (`src/web/server.py`), giao diện là HTML/CSS/JS tự viết (`src/web/static/`), chạy offline, không cần cài thêm gói. Giao diện Streamlit cũ vẫn mở được bằng `.\RUN_APP.ps1 -Streamlit`.
 
 Giao diện mới là dashboard nền tối theo chuẩn các ứng dụng chứng khoán Việt:
-- thanh trên cùng có nhóm VN30/HNX30, trạng thái kết nối và mốc phân tích;
+- thanh trên cùng có nhãn rổ VN30 kèm số mã đã xếp hạng, trạng thái kết nối và mốc phân tích;
 - bốn chỉ số tổng quan;
 - bảng xếp hạng: thanh điểm tổng chia theo phần đóng góp, mỗi yếu tố có thanh phân vị riêng, mỗi mã có một nhãn trạng thái;
 - khung bên phải giải thích vì sao mã đứng hạng đó, kèm đường giá đã ghi nhận và biểu đồ điểm tổng của cả nhóm;
@@ -153,7 +154,7 @@ src/ssi_api/      Cấu hình, REST v2, client/decoder/stream V3, collector, rep
 src/analytics/    Đánh giá nhiều phiên: độ phủ, độ ổn định hạng, khoảng cập nhật
 src/neo_api/      Nhánh NEO cũ, giữ để truy vết
 src/providers.py  Chọn cấu hình nguồn
-src/data/         Store, ghi lô/đọc journal SSI, chất lượng, replay và demo hai nhóm
+src/data/         Store, ghi lô/đọc journal SSI, chất lượng, replay và demo VN30
 src/finance/      Bốn yếu tố thô
 src/ranking/      Điểm và hạng riêng theo index_group
 src/web/          Giao diện web: server.py (thư viện chuẩn), api.py (JSON), static/ (HTML/CSS/JS)
@@ -162,7 +163,7 @@ runtime/          Dữ liệu/CSV cục bộ loại khỏi Git
 ```
 
 Bốn yếu tố: động lượng từ mở cửa; thanh khoản từ giá trị khớp, spread, độ sâu; ngoại ròng tương đối;
-mất cân bằng khối lượng ba mức. Tối thiểu 10 mã hợp lệ trong **mỗi nhóm**, điểm hòa có cùng hạng.
+mất cân bằng khối lượng ba mức. Tối thiểu 10 mã hợp lệ trong nhóm, điểm hòa có cùng hạng.
 Trọng số cân bằng/ưu tiên động lượng là baseline. Cần đánh giá lại ngữ nghĩa khối ngoại SSI và dữ liệu nhiều phiên.
 Điểm chỉ hỗ trợ sàng lọc, chưa có kiểm định dự báo. Không triển khai giao dịch tiền thật.
 

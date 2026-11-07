@@ -1,8 +1,13 @@
 {
   "intraday": null,
   "daily": {
-    "sessions": 10,
+    "sessions": 15,
     "trading_dates": [
+      "2026-10-19",
+      "2026-10-20",
+      "2026-10-21",
+      "2026-10-22",
+      "2026-10-23",
       "2026-10-26",
       "2026-10-27",
       "2026-10-28",
@@ -17,58 +22,58 @@
     "groups": {
       "HNX30": {
         "symbols": 30,
-        "days": 10,
+        "days": 15,
         "day_to_day_persistence": {
           "momentum": {
-            "pairs": 9,
-            "mean_spearman": 0.048446169887236906
+            "pairs": 14,
+            "mean_spearman": -0.011909793832052595
           },
           "turnover": {
-            "pairs": 9,
-            "mean_spearman": 0.9324028461959496
+            "pairs": 14,
+            "mean_spearman": 0.9319334407845451
           },
           "foreign_ratio": {
-            "pairs": 9,
-            "mean_spearman": 0.33022935669994496
+            "pairs": 14,
+            "mean_spearman": 0.3136246806414874
           }
         },
         "factor_rank_correlation": {
-          "momentum~turnover": -0.0763871096613337,
-          "momentum~foreign_ratio": 0.1255908847686246,
-          "turnover~foreign_ratio": 0.16896082581457753
+          "momentum~turnover": -0.0018515180842639098,
+          "momentum~foreign_ratio": 0.18433659737283373,
+          "turnover~foreign_ratio": 0.09545047068969417
         },
         "missing_share": {
           "momentum": 0.0,
           "turnover": 0.0,
-          "foreign_ratio": 0.43478260869565216
+          "foreign_ratio": 0.43080357142857145
         }
       },
       "VN30": {
         "symbols": 30,
-        "days": 10,
+        "days": 15,
         "day_to_day_persistence": {
           "momentum": {
-            "pairs": 9,
-            "mean_spearman": 0.05458993537798831
+            "pairs": 14,
+            "mean_spearman": 0.006849690766289905
           },
           "turnover": {
-            "pairs": 9,
-            "mean_spearman": 0.8846619700902237
+            "pairs": 14,
+            "mean_spearman": 0.8760209756872717
           },
           "foreign_ratio": {
-            "pairs": 9,
-            "mean_spearman": 0.4324964245987604
+            "pairs": 14,
+            "mean_spearman": 0.4327506753535673
           }
         },
         "factor_rank_correlation": {
-          "momentum~turnover": 0.05426378945310556,
-          "momentum~foreign_ratio": 0.34316818147589473,
-          "turnover~foreign_ratio": 0.1824298398053549
+          "momentum~turnover": 0.073202754492607,
+          "momentum~foreign_ratio": 0.3856223673684697,
+          "turnover~foreign_ratio": 0.17357399377910185
         },
         "missing_share": {
           "momentum": 0.0,
           "turnover": 0.0,
-          "foreign_ratio": 0.016666666666666666
+          "foreign_ratio": 0.015555555555555555
         }
       }
     }

@@ -111,14 +111,14 @@ def context():
     provider = load_provider_settings(settings.provider)
     sources = []
     if settings.mode == "demo":
-        sources = [{"id": "demo-board", "label": "Bảng điểm giả lập"},
-                   {"id": "demo-journal", "label": "Nhật ký SSI mẫu"}]
+        sources = [{"id": "demo-board", "label": "Minh họa · Bảng điểm giả lập"},
+                   {"id": "demo-journal", "label": "Minh họa · Nhật ký SSI mẫu"}]
     elif settings.provider == "ssi" and Path(provider.database).is_file():
         sources = [{"id": "store", "label": "Kho SSI cục bộ"}]
     elif Path(getattr(provider, "database", "")).is_file():
         sources = [{"id": "store", "label": "Kho cục bộ"}]
-    if Path(DAILY_DB).is_file():
-        sources.append({"id": "daily", "label": "Cuối ngày · SSI thật"})
+    if Path(DAILY_DB).is_file():  # real data first: the page opens on the first source
+        sources.insert(0, {"id": "daily", "label": "Cuối ngày · SSI thật"})
     return {"mode": settings.mode, "provider": settings.provider, "profile": getattr(provider, "profile", None),
             "semantics_verified": bool(provider.semantics_verified), "sources": sources,
             "weights": [{"id": k, "label": v} for k, v in WEIGHT_LABELS.items()],

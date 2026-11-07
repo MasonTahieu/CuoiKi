@@ -113,7 +113,9 @@ def test_daily_source_ranks_three_factors_and_names_missing_foreign_data(demo, m
     with DailyStore(path) as store:
         store.upsert("ssi", rows, now())
     monkeypatch.setattr(api, "DAILY_DB", path)
-    assert "daily" in [s["id"] for s in api.context()["sources"]]
+    sources = api.context()["sources"]
+    assert [s["id"] for s in sources] == ["daily", "demo-board", "demo-journal"]
+    assert all(s["label"].startswith("Minh họa · ") for s in sources[1:])
     assert [p["label"] for p in api.timeline("daily", "ssi-daily")] == ["Phiên 05/11/2026", "Phiên 06/11/2026"]
     data = api.snapshot("daily", compare="prev")
     assert data["method_kind"] == "daily" and data["source"] == "ssi" and data["compare"]["as_of"].startswith("2026-11-05")

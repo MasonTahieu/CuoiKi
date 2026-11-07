@@ -7,7 +7,7 @@ GitHub Actions (15:20, thứ Hai–thứ Sáu)
    └─ lấy dữ liệu ngày của 60 mã từ SSI (REST, không cần OTP) ─▶ commit webdata/ssi_daily.sqlite
                                                                     │ push
 Vercel (tự triển khai lại khi có commit) ◀──────────────────────────┘
-   └─ trang web: Bảng điểm giả lập · Nhật ký SSI mẫu · Cuối ngày · SSI thật
+   └─ trang web: Cuối ngày · SSI thật (mặc định) · Minh họa: Bảng điểm giả lập, Nhật ký SSI mẫu
 ```
 
 | Tệp | Vai trò |
@@ -84,7 +84,7 @@ Trong repo, vào **Settings → Secrets and variables → Actions → New reposi
 
    **Không** đưa khóa SSI lên Vercel. Trang web chỉ đọc dữ liệu đã lưu.
 4. Bấm **Deploy**. Xong sẽ có địa chỉ dạng `https://vn30-hnx30-screener.vercel.app`.
-5. Mở địa chỉ đó. Ô **Nguồn** phải có ba lựa chọn: Bảng điểm giả lập, Nhật ký SSI mẫu, **Cuối ngày · SSI thật**.
+5. Mở địa chỉ đó. Trang mở sẵn **Cuối ngày · SSI thật**. Ô **Nguồn** còn hai nguồn minh họa: Bảng điểm giả lập và Nhật ký SSI mẫu (mô hình 4 yếu tố trong phiên và cảnh báo chất lượng).
 
 ## Hằng ngày diễn ra thế nào
 

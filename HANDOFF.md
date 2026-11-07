@@ -20,7 +20,7 @@
 
 Người dùng chọn nhóm và mốc quan sát, xem mã nổi bật theo bốn yếu tố, rồi mở chi tiết để hiểu vì sao một mã có điểm cao, thấp hoặc chưa được xếp hạng. Sản phẩm giúp thu hẹp danh sách cần nghiên cứu. Phạm vi là dữ liệu thị trường cổ phiếu, xếp hạng tương đối trong từng nhóm và chạy theo chế độ chỉ đọc.
 
-Dự án ban đầu hướng tới VN30 và VPBankS NEO API. Đã lấy được token NEO nhưng yêu cầu đọc dữ liệu thị trường trả HTTP 401 với mã `NEOINP000401`. Theo xác nhận của người học, giảng viên đã đồng ý đổi nguồn sang SSI FastConnect. Phạm vi hiện tại gồm hai nhóm VN30 và HNX30. Thư mục mã nguồn vẫn mang tên `neo-vn30-screener` và giữ nhánh NEO để truy vết. Tên ZIP giữ mẫu `MSSV_HoTen_NEOAPI_FinTech.zip` theo quy cách đề. [Đề gốc](../261BFF401101_261BFF401102_GPMUD1_DETHICUOIKY_DOAN.docx) · [Kế hoạch SSI](../KE_HOACH_BO_LOC_VN30_HNX30_SSI.md) · [Tiến độ chi tiết](../TIEN_DO_DU_AN.md)
+Dự án ban đầu hướng tới VN30 và VPBankS NEO API. Đã lấy được token NEO nhưng yêu cầu đọc dữ liệu thị trường trả HTTP 401 với mã `NEOINP000401`. Theo xác nhận của người học, giảng viên đã đồng ý đổi nguồn sang SSI FastConnect. Phạm vi hiện tại gồm hai nhóm VN30 và HNX30. Thư mục mã nguồn vẫn mang tên `neo-vn30-screener` và giữ nhánh NEO để truy vết. Tên ZIP giữ mẫu `MSSV_HoTen_NEOAPI_FinTech.zip` theo quy cách đề. [Đề (bản cập nhật)](../261BFF401101_261BFF401102_GPMUD1_DETHICUOIKY_DOAN_CAPNHAT.docx)
 
 ## Tiến trình đã làm
 
@@ -99,15 +99,17 @@ Các lệnh trên kiểm tra cấu hình, chạy demo và phát lại mẫu cụ
 
 ## Bộ hồ sơ bàn giao
 
-Ba tệp nằm trong thư mục `Bo_nop_VN30_HNX30_SSI` cạnh thư mục dự án.
+Gói nộp ngày 05/11/2026 (ZIP, PDF, MP4) là bản trước SSI V3 và giao diện web. Gói này đã được gỡ khỏi máy ngày 07/11/2026 để làm gọn thư mục; cần dựng lại sau khi có dữ liệu thật.
 
-| Tệp | Nội dung |
+Công cụ dựng lại nằm trong `runtime/task7-build/` (không đưa lên GitHub):
+
+| Tệp | Vai trò |
 |---|---|
-| [Gói mã nguồn ZIP](../Bo_nop_VN30_HNX30_SSI/MSSV_HoTen_NEOAPI_FinTech.zip) | Khoảng 90 MB, gồm mã nguồn, thư viện cài offline, cấu hình mẫu, hướng dẫn chạy, kiểm thử và bằng chứng giả lập. |
-| [Báo cáo PDF](../Bo_nop_VN30_HNX30_SSI/MSSV_HoTen_BaoCao.pdf) | 11 trang gồm bìa, 9 trang nội dung và phụ lục. Ba trường thông tin trên bìa để trống. |
-| [Video MP4](../Bo_nop_VN30_HNX30_SSI/MSSV_HoTen_Demo.mp4) | Khoảng 32 giây, sáu cảnh có phụ đề, từ bảng điểm đến phát lại và cảnh báo chất lượng. |
+| `BaoCao_ban_soan.docx`, `write_report.py`, `write_pdf.py` | Bản soạn và script tạo báo cáo PDF |
+| `capture.cjs`, `check_video.cjs` | Chụp ảnh màn hình, dựng và kiểm video demo |
+| `package.py`, `check_zip.py` | Đóng gói ZIP có thư viện cài offline và kiểm lại gói |
 
-Bản ZIP được nghiệm thu ngày 05/11/2026. Gói không kèm tệp `.env` cá nhân, khóa API, kho SQLite vận hành hay lịch sử Git. File HANDOFF này là ghi chú bàn giao bổ sung trong thư mục mã nguồn. [Biên bản và SHA-256](evidence/task7/KIEM_TRA_GOI.md)
+Bản ZIP cũ đã được nghiệm thu ngày 05/11/2026. Gói không kèm tệp `.env` cá nhân, khóa API, kho SQLite vận hành hay lịch sử Git. File HANDOFF này là ghi chú bàn giao bổ sung trong thư mục mã nguồn. [Biên bản và SHA-256](evidence/task7/KIEM_TRA_GOI.md)
 
 ## Công việc còn lại
 

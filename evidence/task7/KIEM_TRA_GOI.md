@@ -20,4 +20,4 @@ E7ACAF006E23A5E131D3510E48598B917E61EE45D86AAD61A21217BE9EEA31EE
 
 Bằng chứng sử dụng dữ liệu giả lập. Quota, đơn vị, độ phủ và vận hành luồng SSI thật cần đối chiếu sau khi được cấp quyền.
 
-[Gói chạy](../../../Bo_nop_VN30_HNX30_SSI/MSSV_HoTen_NEOAPI_FinTech.zip) · [Báo cáo](../../../Bo_nop_VN30_HNX30_SSI/MSSV_HoTen_BaoCao.pdf) · [Video](../../../Bo_nop_VN30_HNX30_SSI/MSSV_HoTen_Demo.mp4)
+Gói này (`MSSV_HoTen_NEOAPI_FinTech.zip`, `MSSV_HoTen_BaoCao.pdf`, `MSSV_HoTen_Demo.mp4`) đã được gỡ khỏi máy ngày 07/11/2026. Dựng lại bằng `runtime/task7-build/package.py`.

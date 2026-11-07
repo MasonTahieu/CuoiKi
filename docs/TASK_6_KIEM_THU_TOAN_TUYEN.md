@@ -12,7 +12,7 @@ Luồng kiểm thử đi từ gói tin FCData v2 giả lập qua decoder, collec
 
 ## Đối chiếu ma trận gốc
 
-T01–T23 có bằng chứng kiểm thử offline. T24 đã chạy thử mã nguồn tại đường dẫn mới. Kiểm tra chính gói nộp thực hiện khi có gói ở task 7. [Ma trận gốc, mục 8](../../KE_HOACH_BO_LOC_VN30_DA_YEU_TO.md)
+T01–T23 có bằng chứng kiểm thử offline. T24 đã chạy thử mã nguồn tại đường dẫn mới. Kiểm tra chính gói nộp thực hiện khi có gói ở task 7. Ma trận gốc nằm ở mục 8 của kế hoạch NEO cũ, đã gỡ ngày 07/11/2026.
 
 | Mã | Kết quả đối chiếu | Bằng chứng |
 |---|---|---|

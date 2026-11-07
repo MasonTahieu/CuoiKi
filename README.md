@@ -6,9 +6,8 @@ Hiện **chưa có khóa SSI**, nên chưa nghiệm thu dữ liệu thật. Khi 
 
 - [Kết nối FastConnect V3](docs/V3_KET_NOI.md)
 - [Triển khai miễn phí lên Vercel + GitHub Actions](docs/TRIEN_KHAI_VERCEL.md) · Repo: [MasonTahieu/CuoiKi](https://github.com/MasonTahieu/CuoiKi)
-- [Kế hoạch hiện hành](../KE_HOACH_BO_LOC_VN30_HNX30_SSI.md)
 - [Đăng ký SSI và phạm vi chuyển đổi](docs/CHUYEN_SANG_SSI.md)
-- [Tiến độ](../TIEN_DO_DU_AN.md)
+- [Ghi chú bàn giao và tiến độ](HANDOFF.md)
 
 ## Chạy nhanh từ gói nộp
 

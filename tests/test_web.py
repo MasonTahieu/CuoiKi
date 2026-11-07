@@ -187,3 +187,9 @@ def test_server_serves_static_files_json_and_safe_errors(server):
     assert status == 404
     status, headers, body = fetch(server + "/api/export.csv?source=demo-board&group=HNX30")
     assert status == 200 and "attachment" in headers["Content-Disposition"] and body.startswith(b"\xef\xbb\xbf")
+
+
+def test_favicon_is_served_for_both_paths(server):
+    for path in ("/favicon.svg", "/favicon.ico"):
+        with urllib.request.urlopen(server + path, timeout=20) as response:
+            assert response.status == 200 and response.headers.get("Content-Type").startswith("image/svg+xml")

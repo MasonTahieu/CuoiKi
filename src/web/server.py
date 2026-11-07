@@ -17,7 +17,8 @@ from src.config import ConfigurationError
 from src.web import api
 
 STATIC = Path(__file__).resolve().parent / "static"
-FILES = {"/": "index.html", "/app.css": "app.css", "/app.js": "app.js", "/favicon.svg": "favicon.svg"}
+FILES = {"/": "index.html", "/app.css": "app.css", "/app.js": "app.js", "/favicon.svg": "favicon.svg",
+         "/favicon.ico": "favicon.svg"}  # browsers ask for /favicon.ico regardless of <link rel=icon>
 SAFE_ERRORS = (api.ApiError, ConfigurationError, ValueError, OSError, sqlite3.Error)
 
 

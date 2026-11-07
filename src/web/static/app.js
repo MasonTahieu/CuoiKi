@@ -95,7 +95,7 @@
   }
 
   function bindEvents() {
-    $("source").onchange = (e) => { state.source = e.target.value; state.run = null; state.point = null; bindWeights(); fillCompare(); loadRuns(); };
+    $("source").onchange = (e) => { state.source = e.target.value; state.run = null; state.point = null; state.selected = null; bindWeights(); fillCompare(); loadRuns(); };
     $("run").onchange = (e) => { state.run = e.target.value; state.point = null; loadTimeline(); };
     $("point").onchange = (e) => { state.point = e.target.value; loadSnapshot(); };
     $("compare").onchange = (e) => { state.compare = e.target.value; loadSnapshot(); };
@@ -298,6 +298,7 @@
     const g = groupData();
     if (!state.selected || !g.rows.some((r) => r.symbol === state.selected)) {
       state.selected = (g.rows.find((r) => r.rank === 1) || g.rows[0] || {}).symbol || null;
+      writeHash();  // keep the shared link on the symbol actually shown
     }
     const anyOpen = g.rows.some((r) => r.rank == null || ownWarnings(r).length);
     const head = [["rank", "#", ""], ["symbol", "Mã", ""], ["total", "Điểm tổng", ""], ...shownFactors().map((f) => [f, FLABEL[f], "n"]), [null, anyOpen ? "Trạng thái" : "", ""]];

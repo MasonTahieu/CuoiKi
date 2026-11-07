@@ -8,7 +8,6 @@ report/
 offline_wheels/
 .impeccable/
 .github/
-data_sample/
 src/app/
 app.py
 *.ps1

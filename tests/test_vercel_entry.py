@@ -85,3 +85,16 @@ def test_deployment_files_keep_secrets_and_heavy_stacks_out():
     workflow = (PROJECT_ROOT / ".github" / "workflows" / "ssi-daily.yml").read_text(encoding="utf-8")
     assert "secrets.SSI_API_KEY" in workflow and "SSI_DAILY_DATABASE: webdata/ssi_daily.sqlite" in workflow
     assert "!webdata/ssi_daily.sqlite" in (PROJECT_ROOT / ".gitignore").read_text(encoding="utf-8")
+
+
+def test_vercel_installs_the_same_runtime_and_ships_the_demo_data():
+    """Vercel reads pyproject.toml before requirements.txt; both must list the same pins."""
+    import tomllib
+    project = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    pins = [line.strip() for line in (PROJECT_ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.startswith("#")]
+    assert sorted(project["dependencies"]) == sorted(pins)
+    ignore = (PROJECT_ROOT / ".vercelignore").read_text(encoding="utf-8").split()
+    assert "data_sample/" not in ignore and "pyproject.toml" not in ignore
+    config = json.loads((PROJECT_ROOT / "vercel.json").read_text(encoding="utf-8"))
+    assert "data_sample/**" in config["functions"]["api/index.py"]["includeFiles"]

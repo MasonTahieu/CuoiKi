@@ -5,7 +5,7 @@
   ],
   "functions": {
     "api/index.py": {
-      "includeFiles": "{src/**,webdata/**}",
+      "includeFiles": "{src/**,webdata/**,data_sample/**}",
       "maxDuration": 30
     }
   }

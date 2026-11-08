@@ -305,8 +305,8 @@ Quiet and solid; the accent is reserved.
 - **Icon-only:** 34px square for replay prev/next, reload, and the CSV button at ≤560px.
 
 ### Chips
-- **Style:** 26px pills, 12px/600, strong-seam border, secondary ink. Show the mode (Demo/Replay/Live).
-- **State:** synthetic data is an amber-tinted chip ("Dữ liệu giả lập"); an unverified source is a red-tinted chip. Chips are statements of provenance, never filters.
+- **Style:** 26px pills, 12px/600, strong-seam border, secondary ink. Show the mode (Demo/Replay/Live), or "SSI thật" when the end-of-day source is showing real data whatever mode the app runs in.
+- **State:** synthetic data is an amber-tinted chip ("Dữ liệu giả lập"); a known open question about real data is also amber ("Khối ngoại chưa xác minh phạm vi", detail in the tooltip and the method tab); an unverified source is a red-tinted chip. Chips are statements of provenance, never filters.
 
 ### Cards / Containers
 - **Corner Style:** 10px.
@@ -327,13 +327,13 @@ Quiet and solid; the accent is reserved.
 Each row: rank (secondary ink), symbol (700), total score (15px) beside a **contribution-stacked total bar** (8px tall on a raised track, segments in factor hues sized by weighted contribution), then four **factor percentile bars** (6px, 0–100 width in the factor hue, value right-aligned). Row hover is a 2.5% white wash; selected row takes accent-soft. Bar widths animate 240ms on `cubic-bezier(.16, 1, .3, 1)`, off under reduced motion.
 
 ### Market Pulse
-An unpanelled band above the metrics strip, four items separated by 1px seams: VN30 index (17px/650 value, change and % in market green/red/amber with a 12px chevron), breadth (a 120px 6px bar split green/amber/red by advancers, unchanged and decliners, plus the three counts), basket matched value, and basket foreign net (signed, in tỷ, with "mua ròng"/"bán ròng" in Secondary Ink; never green or red, because flow is not a price move). Breadth states its basis: against the reference price for daily data, against the open for intraday data. The index item is hidden when the source has no index row. At ≤560px the band becomes a 2×2 grid and labels wrap.
+An unpanelled band above the metrics strip, four items separated by 1px seams: VN30 index (17px/650 value, change and % in market green/red/amber with a 12px chevron), breadth (a 120px 6px bar split green/amber/red by advancers, unchanged and decliners, plus the three counts), basket matched value, and basket foreign net (signed, in tỷ, with "mua ròng"/"bán ròng" in Secondary Ink; never green or red, because flow is not a price move). Breadth states its basis: SSI's change against the previous session for daily data, against the open for intraday data. The index item is hidden when the source has no index row. At ≤560px the band becomes a 2×2 grid and labels wrap.
 
 ### Rank History Heatmap (Lịch sử hạng)
 Symbols down, sessions across, one 22px row per symbol sorted by the latest rank; each cell shows the rank number in 11px (white on cells above ~50% alpha). The viewed session's column carries a 1px light outline and a bold header; the selected symbol's row carries a 1.5px Pale Selection Ink ring and its label turns the same ink. Clicking a row selects the stock everywhere. Cells are at least 28px wide; when narrower than 40px the header splits into a month line ("Th11") and a day line. A note names the weights and the stocks that stayed in the top 10 every session; a key shows the blue ramp and the unranked swatch. Daily source only; other sources show an empty state with a button to open the daily source.
 
 ### Validation (Kiểm chứng)
-The honest-verdict view: one 15px sentence stating whether the score has shown next-session predictive power, a four-cell stat strip (IC mean, t-statistic, pairs with IC > 0, top-5 minus bottom-5 spread) in 22px/650 values, a bar chart of IC per consecutive-session pair (positive bars Pale Change Blue, negative bars Tertiary Ink, a dashed mean line labelled at the left), a factor-IC table with factor swatches, and a short method note. Statistics are not price moves, so no green or red appears.
+The honest-verdict view: one 15px sentence stating whether the score has shown next-session predictive power, a four-cell stat strip (IC mean with its t-statistic, pairs with IC > 0, top-5 minus bottom-5 spread, the smallest IC this sample can detect) in 22px/650 values, one line comparing the close-to-close figure, a bar chart of IC per consecutive-session pair measured open to close of the next session (the score only exists after the close) (positive bars Pale Change Blue, negative bars Tertiary Ink, a dashed mean line whose value is named in the chart title), a factor-IC table with factor swatches, and a short method note. Statistics are not price moves, so no green or red appears.
 
 ### Factor Cell Tint
 Behind each factor score in the ranking table, the cell takes its factor hue at an alpha of `0.2 × (score/100)^2.2`: weak scores stay nearly untinted, strong ones read as a heat column, without displacing the percentile bar.

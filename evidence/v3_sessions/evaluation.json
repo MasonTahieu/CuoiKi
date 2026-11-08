@@ -52,12 +52,21 @@
   },
   "intraday_note": "Chưa có nhật ký stream trong phiên; chạy session-v3 trong giờ giao dịch.",
   "forward_check": {
-    "method": "next-session-rank-ic-v1",
+    "method": "next-session-rank-ic-v2",
     "group": "VN30",
     "sessions": 15,
     "pairs": 14,
     "top_n": 5,
-    "forward_return": "priceChangePercent của phiên t+1 (so với giá tham chiếu)",
+    "returns": {
+      "tradable": "mở cửa → đóng cửa của phiên t+1 (mua được sau khi có điểm)",
+      "close": "priceChangePercent của phiên t+1 do SSI tính (gồm cả chênh lệch qua đêm, không mua kịp)"
+    },
+    "adjustment": {
+      "tolerance_pp": 0.3,
+      "compared": 420,
+      "flagged": [],
+      "ref_price_present": 0
+    },
     "weights": {
       "balanced": {
         "pairs": [
@@ -65,123 +74,156 @@
             "date": "2026-10-19",
             "next_date": "2026-10-20",
             "ranked": 30,
-            "ic": 0.15213567494300229,
-            "top_minus_bottom_pp": 0.708,
-            "market_mean_pp": 0.089
+            "ic": 0.2706918098389358,
+            "top_minus_bottom_pp": 0.8336140771747425,
+            "ic_close": 0.15213567494300229,
+            "top_minus_bottom_close_pp": 0.708
           },
           {
             "date": "2026-10-20",
             "next_date": "2026-10-21",
             "ranked": 29,
-            "ic": -0.13252716323129657,
-            "top_minus_bottom_pp": -1.4279999999999995,
-            "market_mean_pp": 1.835
+            "ic": -0.11590629205715776,
+            "top_minus_bottom_pp": -1.3339963821459522,
+            "ic_close": -0.13252716323129657,
+            "top_minus_bottom_close_pp": -1.4279999999999995
           },
           {
             "date": "2026-10-21",
             "next_date": "2026-10-22",
             "ranked": 30,
-            "ic": -0.12533427437885433,
-            "top_minus_bottom_pp": -0.1060000000000001,
-            "market_mean_pp": 0.5633333333333332
+            "ic": -0.031197781076754527,
+            "top_minus_bottom_pp": 0.05482476414204296,
+            "ic_close": -0.12533427437885433,
+            "top_minus_bottom_close_pp": -0.1060000000000001
           },
           {
             "date": "2026-10-22",
             "next_date": "2026-10-23",
             "ranked": 29,
-            "ic": -0.29733735943939077,
-            "top_minus_bottom_pp": -1.75,
-            "market_mean_pp": 0.7243333333333333
+            "ic": -0.15629242844557487,
+            "top_minus_bottom_pp": -1.4704205935221548,
+            "ic_close": -0.29733735943939077,
+            "top_minus_bottom_close_pp": -1.75
           },
           {
             "date": "2026-10-23",
             "next_date": "2026-10-26",
             "ranked": 29,
-            "ic": -0.38362919132149914,
-            "top_minus_bottom_pp": -1.472,
-            "market_mean_pp": -0.894
+            "ic": -0.2669131420839175,
+            "top_minus_bottom_pp": -1.1237651930142056,
+            "ic_close": -0.38362919132149914,
+            "top_minus_bottom_close_pp": -1.472
           },
           {
             "date": "2026-10-26",
             "next_date": "2026-10-27",
             "ranked": 29,
-            "ic": 0.15799253930475604,
-            "top_minus_bottom_pp": 0.45199999999999985,
-            "market_mean_pp": -0.2943333333333333
+            "ic": 0.21417109162064013,
+            "top_minus_bottom_pp": 0.3287059535579374,
+            "ic_close": 0.15799253930475604,
+            "top_minus_bottom_close_pp": 0.45199999999999985
           },
           {
             "date": "2026-10-27",
             "next_date": "2026-10-28",
             "ranked": 29,
-            "ic": 0.13560158203061431,
-            "top_minus_bottom_pp": 0.19800000000000012,
-            "market_mean_pp": 0.17566666666666667
+            "ic": 0.12000986071631929,
+            "top_minus_bottom_pp": 0.2863087955765242,
+            "ic_close": 0.13560158203061431,
+            "top_minus_bottom_close_pp": 0.19800000000000012
           },
           {
             "date": "2026-10-28",
             "next_date": "2026-10-29",
             "ranked": 29,
-            "ic": 0.07083796610389441,
-            "top_minus_bottom_pp": 0.3959999999999999,
-            "market_mean_pp": -0.7853333333333334
+            "ic": 0.14403749906671878,
+            "top_minus_bottom_pp": -0.12171714268400136,
+            "ic_close": 0.07083796610389441,
+            "top_minus_bottom_close_pp": 0.3959999999999999
           },
           {
             "date": "2026-10-29",
             "next_date": "2026-10-30",
             "ranked": 29,
-            "ic": 0.056412792412859236,
-            "top_minus_bottom_pp": 1.0259999999999998,
-            "market_mean_pp": -1.1103333333333332
+            "ic": 0.09369994859192665,
+            "top_minus_bottom_pp": 1.1884432785607202,
+            "ic_close": 0.056412792412859236,
+            "top_minus_bottom_close_pp": 1.0259999999999998
           },
           {
             "date": "2026-10-30",
             "next_date": "2026-11-02",
             "ranked": 29,
-            "ic": -0.11535618853037524,
-            "top_minus_bottom_pp": -0.40600000000000014,
-            "market_mean_pp": -2.448666666666667
+            "ic": -0.1340727303166897,
+            "top_minus_bottom_pp": -0.45238047100625767,
+            "ic_close": -0.11535618853037524,
+            "top_minus_bottom_close_pp": -0.40600000000000014
           },
           {
             "date": "2026-11-02",
             "next_date": "2026-11-03",
             "ranked": 30,
-            "ic": -0.2556090138971782,
-            "top_minus_bottom_pp": -1.3719999999999999,
-            "market_mean_pp": 0.19499999999999995
+            "ic": -0.12090486321710933,
+            "top_minus_bottom_pp": -0.7953338086627526,
+            "ic_close": -0.2556090138971782,
+            "top_minus_bottom_close_pp": -1.3719999999999999
           },
           {
             "date": "2026-11-03",
             "next_date": "2026-11-04",
             "ranked": 30,
-            "ic": 0.4525109937024512,
-            "top_minus_bottom_pp": 1.7200000000000002,
-            "market_mean_pp": 2.5673333333333335
+            "ic": 0.4918728292569906,
+            "top_minus_bottom_pp": 1.5226675169104054,
+            "ic_close": 0.4525109937024512,
+            "top_minus_bottom_close_pp": 1.7200000000000002
           },
           {
             "date": "2026-11-04",
             "next_date": "2026-11-05",
             "ranked": 30,
-            "ic": -0.14857335404339747,
-            "top_minus_bottom_pp": -0.20199999999999999,
-            "market_mean_pp": 0.142
+            "ic": -0.3353001129343121,
+            "top_minus_bottom_pp": -0.8365046534289089,
+            "ic_close": -0.14857335404339747,
+            "top_minus_bottom_close_pp": -0.20199999999999999
           },
           {
             "date": "2026-11-05",
             "next_date": "2026-11-06",
             "ranked": 30,
-            "ic": 0.1004231081914453,
-            "top_minus_bottom_pp": -0.15599999999999997,
-            "market_mean_pp": -0.7713333333333332
+            "ic": 0.26377916931129597,
+            "top_minus_bottom_pp": 0.3697241506984028,
+            "ic_close": 0.1004231081914453,
+            "top_minus_bottom_close_pp": -0.15599999999999997
           }
         ],
         "ic": {
+          "pairs": 14,
+          "mean": 0.031262489876522255,
+          "sd": 0.23468552648784619,
+          "t": 0.49842667302916455,
+          "positive_share": 0.5
+        },
+        "power": {
+          "detectable_ic": 0.1254446905360259,
+          "target_ic": 0.05,
+          "sessions_for_target": 90
+        },
+        "top_minus_bottom_pp": {
+          "pairs": 14,
+          "mean": -0.11070212198881843,
+          "sd": 0.933985222772262,
+          "t": -0.4434860449307248,
+          "positive_share": 0.5
+        },
+        "ic_close": {
           "pairs": 14,
           "mean": -0.023746563439497777,
           "sd": 0.22381681671246667,
           "t": -0.3969831481342117,
           "positive_share": 0.5
         },
-        "top_minus_bottom_pp": {
+        "top_minus_bottom_close_pp": {
           "pairs": 14,
           "mean": -0.17085714285714285,
           "sd": 1.0338887648204607,
@@ -191,24 +233,24 @@
         "factor_ic": {
           "momentum": {
             "pairs": 14,
-            "mean": -0.016298505645716707,
-            "sd": 0.20132332408226483,
-            "t": -0.3029128607957696,
+            "mean": 0.004340385238182141,
+            "sd": 0.22947012600391709,
+            "t": 0.07077276145136016,
             "positive_share": 0.5
           },
           "liquidity": {
             "pairs": 14,
-            "mean": 0.038437716927934094,
-            "sd": 0.12886918954607365,
-            "t": 1.1160213545279665,
+            "mean": 0.07425862556649657,
+            "sd": 0.14943418850818319,
+            "t": 1.8593491734145344,
             "positive_share": 0.6428571428571429
           },
           "foreign": {
             "pairs": 14,
-            "mean": -0.06504291740240781,
-            "sd": 0.20722586818549776,
-            "t": -1.1744108710317764,
-            "positive_share": 0.35714285714285715
+            "mean": -0.01855800436324017,
+            "sd": 0.17536574411794095,
+            "t": -0.3959592818925959,
+            "positive_share": 0.5
           }
         }
       },
@@ -218,123 +260,156 @@
             "date": "2026-10-19",
             "next_date": "2026-10-20",
             "ranked": 30,
-            "ic": 0.11985731881210827,
-            "top_minus_bottom_pp": 1.4880000000000002,
-            "market_mean_pp": 0.089
+            "ic": 0.2825627600380342,
+            "top_minus_bottom_pp": 1.6747589122710906,
+            "ic_close": 0.11985731881210827,
+            "top_minus_bottom_close_pp": 1.4880000000000002
           },
           {
             "date": "2026-10-20",
             "next_date": "2026-10-21",
             "ranked": 29,
-            "ic": -0.16909233687224348,
-            "top_minus_bottom_pp": -1.428,
-            "market_mean_pp": 1.835
+            "ic": -0.14666009812051886,
+            "top_minus_bottom_pp": -1.3339963821459522,
+            "ic_close": -0.16909233687224348,
+            "top_minus_bottom_close_pp": -1.428
           },
           {
             "date": "2026-10-21",
             "next_date": "2026-10-22",
             "ranked": 30,
-            "ic": -0.1656086680643732,
-            "top_minus_bottom_pp": 0.2519999999999999,
-            "market_mean_pp": 0.5633333333333332
+            "ic": -0.06928047023095871,
+            "top_minus_bottom_pp": 0.34925604376289543,
+            "ic_close": -0.1656086680643732,
+            "top_minus_bottom_close_pp": 0.2519999999999999
           },
           {
             "date": "2026-10-22",
             "next_date": "2026-10-23",
             "ranked": 29,
-            "ic": -0.2223043898058111,
-            "top_minus_bottom_pp": -1.8960000000000001,
-            "market_mean_pp": 0.7243333333333333
+            "ic": -0.07762445496734746,
+            "top_minus_bottom_pp": -1.6959198254729981,
+            "ic_close": -0.2223043898058111,
+            "top_minus_bottom_close_pp": -1.8960000000000001
           },
           {
             "date": "2026-10-23",
             "next_date": "2026-10-26",
             "ranked": 29,
-            "ic": -0.3725345167652861,
-            "top_minus_bottom_pp": -1.7340000000000002,
-            "market_mean_pp": -0.894
+            "ic": -0.2692544854355308,
+            "top_minus_bottom_pp": -1.433056940902444,
+            "ic_close": -0.3725345167652861,
+            "top_minus_bottom_close_pp": -1.7340000000000002
           },
           {
             "date": "2026-10-26",
             "next_date": "2026-10-27",
             "ranked": 29,
-            "ic": 0.15530060641443375,
-            "top_minus_bottom_pp": 0.22400000000000014,
-            "market_mean_pp": -0.2943333333333333
+            "ic": 0.22279798849497098,
+            "top_minus_bottom_pp": 0.2642438728269526,
+            "ic_close": 0.15530060641443375,
+            "top_minus_bottom_close_pp": 0.22400000000000014
           },
           {
             "date": "2026-10-27",
             "next_date": "2026-10-28",
             "ranked": 29,
-            "ic": 0.18890258939580762,
-            "top_minus_bottom_pp": 0.506,
-            "market_mean_pp": 0.17566666666666667
+            "ic": 0.17870349718914974,
+            "top_minus_bottom_pp": 0.8323480643646075,
+            "ic_close": 0.18890258939580762,
+            "top_minus_bottom_close_pp": 0.506
           },
           {
             "date": "2026-10-28",
             "next_date": "2026-10-29",
             "ranked": 29,
-            "ic": 0.08363146080436487,
-            "top_minus_bottom_pp": 0.52,
-            "market_mean_pp": -0.7853333333333334
+            "ic": 0.19450265154530977,
+            "top_minus_bottom_pp": 0.5591296617364883,
+            "ic_close": 0.08363146080436487,
+            "top_minus_bottom_close_pp": 0.52
           },
           {
             "date": "2026-10-29",
             "next_date": "2026-10-30",
             "ranked": 29,
-            "ic": 0.06167513360176335,
-            "top_minus_bottom_pp": 0.8839999999999999,
-            "market_mean_pp": -1.1103333333333332
+            "ic": 0.035111494660938374,
+            "top_minus_bottom_pp": 1.146638010197869,
+            "ic_close": 0.06167513360176335,
+            "top_minus_bottom_close_pp": 0.8839999999999999
           },
           {
             "date": "2026-10-30",
             "next_date": "2026-11-02",
             "ranked": 29,
-            "ic": -0.1189742768305384,
-            "top_minus_bottom_pp": 0.3959999999999999,
-            "market_mean_pp": -2.448666666666667
+            "ic": -0.16444781172454068,
+            "top_minus_bottom_pp": 0.26672631525557144,
+            "ic_close": -0.1189742768305384,
+            "top_minus_bottom_close_pp": 0.3959999999999999
           },
           {
             "date": "2026-11-02",
             "next_date": "2026-11-03",
             "ranked": 30,
-            "ic": -0.22549388131555326,
-            "top_minus_bottom_pp": -0.9279999999999999,
-            "market_mean_pp": 0.19499999999999995
+            "ic": -0.09741705874990186,
+            "top_minus_bottom_pp": -0.21781634729773902,
+            "ic_close": -0.22549388131555326,
+            "top_minus_bottom_close_pp": -0.9279999999999999
           },
           {
             "date": "2026-11-03",
             "next_date": "2026-11-04",
             "ranked": 30,
-            "ic": 0.4621119423289221,
-            "top_minus_bottom_pp": 1.4640000000000002,
-            "market_mean_pp": 2.5673333333333335
+            "ic": 0.5226969421795681,
+            "top_minus_bottom_pp": 1.4128199514289497,
+            "ic_close": 0.4621119423289221,
+            "top_minus_bottom_close_pp": 1.4640000000000002
           },
           {
             "date": "2026-11-04",
             "next_date": "2026-11-05",
             "ranked": 30,
-            "ic": -0.15662255838336464,
-            "top_minus_bottom_pp": -0.20199999999999999,
-            "market_mean_pp": 0.142
+            "ic": -0.34712951460201197,
+            "top_minus_bottom_pp": -0.8365046534289089,
+            "ic_close": -0.15662255838336464,
+            "top_minus_bottom_close_pp": -0.20199999999999999
           },
           {
             "date": "2026-11-05",
             "next_date": "2026-11-06",
             "ranked": 30,
-            "ic": 0.11864219978363266,
-            "top_minus_bottom_pp": -0.15599999999999997,
-            "market_mean_pp": -0.7713333333333332
+            "ic": 0.2500000247793879,
+            "top_minus_bottom_pp": 0.3697241506984028,
+            "ic_close": 0.11864219978363266,
+            "top_minus_bottom_close_pp": -0.15599999999999997
           }
         ],
         "ic": {
+          "pairs": 14,
+          "mean": 0.03675439036118205,
+          "sd": 0.24481452573788612,
+          "t": 0.5617409170341872,
+          "positive_share": 0.5
+        },
+        "power": {
+          "detectable_ic": 0.13085886837381724,
+          "target_ic": 0.05,
+          "sessions_for_target": 97
+        },
+        "top_minus_bottom_pp": {
+          "pairs": 14,
+          "mean": 0.09702505952105607,
+          "sd": 1.068624624379058,
+          "t": 0.33972128507715044,
+          "positive_share": 0.6428571428571429
+        },
+        "ic_close": {
           "pairs": 14,
           "mean": -0.017179241206866962,
           "sd": 0.22226294011813114,
           "t": -0.2892017658305128,
           "positive_share": 0.5
         },
-        "top_minus_bottom_pp": {
+        "top_minus_bottom_close_pp": {
           "pairs": 14,
           "mean": -0.04357142857142853,
           "sd": 1.0910943493213037,
@@ -344,24 +419,24 @@
         "factor_ic": {
           "momentum": {
             "pairs": 14,
-            "mean": -0.016298505645716707,
-            "sd": 0.20132332408226483,
-            "t": -0.3029128607957696,
+            "mean": 0.004340385238182141,
+            "sd": 0.22947012600391709,
+            "t": 0.07077276145136016,
             "positive_share": 0.5
           },
           "liquidity": {
             "pairs": 14,
-            "mean": 0.038437716927934094,
-            "sd": 0.12886918954607365,
-            "t": 1.1160213545279665,
+            "mean": 0.07425862556649657,
+            "sd": 0.14943418850818319,
+            "t": 1.8593491734145344,
             "positive_share": 0.6428571428571429
           },
           "foreign": {
             "pairs": 14,
-            "mean": -0.06504291740240781,
-            "sd": 0.20722586818549776,
-            "t": -1.1744108710317764,
-            "positive_share": 0.35714285714285715
+            "mean": -0.01855800436324017,
+            "sd": 0.17536574411794095,
+            "t": -0.3959592818925959,
+            "positive_share": 0.5
           }
         }
       }

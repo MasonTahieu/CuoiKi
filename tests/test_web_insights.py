@@ -37,12 +37,21 @@ def daily(monkeypatch, tmp_path):
 
 def test_daily_pulse_uses_reference_breadth_index_and_foreign_net(daily):
     pulse = api.snapshot("daily")["pulse"]
-    assert pulse["basis"] == "tham chiếu" and pulse["members"] == pulse["priced"] == 12
+    assert pulse["basis"] == "phiên trước" and pulse["members"] == pulse["priced"] == 12
     # last session (d=3) flips: change = (5 - i) * 0.5 -> 5 up (i<5), 1 flat (i=5), 6 down
     assert (pulse["advancers"], pulse["unchanged"], pulse["decliners"]) == (5, 1, 6)
     assert pulse["total_value"] == pytest.approx(sum(1e9 * (i + 1) for i in range(12)))
     assert pulse["foreign_net"] == pytest.approx(sum(1e7 * i - 5e7 for i in range(12)))
     assert pulse["index"] == {"close": 1803, "change": 4.0, "change_pct": pytest.approx(0.4), "value": 7e12}
+
+
+def test_real_daily_data_states_its_open_question_and_is_not_labelled_demo(daily, monkeypatch):
+    note = api.snapshot("daily")["scope_note"]
+    assert note and "thỏa thuận" in note["detail"]
+    monkeypatch.setenv("SSI_SEMANTICS_VERIFIED", "true")
+    assert api.snapshot("daily")["scope_note"] is None
+    script = (api.Path(api.__file__).parent / "static" / "app.js").read_text(encoding="utf-8")
+    assert 'd.source_kind === "daily" ? "SSI thật"' in script
 
 
 def test_intraday_pulse_falls_back_to_change_since_open(daily):
@@ -69,6 +78,7 @@ def test_validation_reports_the_chosen_weights_honestly(daily):
     assert v["weights"] == "momentum" and v["sessions"] == 4 and v["pairs"] == 3 and len(v["series"]) == 3
     assert set(v["factor_ic"]) == {"momentum", "liquidity", "foreign"}
     assert v["verdict"] and v["summary"]["ic"]["pairs"] == 3
+    assert set(v["returns"]) == {"tradable", "close"} and "power" in v["summary"] and "ic_close" in v["summary"]
     with pytest.raises(api.ApiError, match="Cuối ngày"):
         api.validation("demo-journal")
 

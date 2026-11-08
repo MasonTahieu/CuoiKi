@@ -74,7 +74,7 @@ button, input, select { font: inherit; color: inherit; }
   display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px;
   font-size: 12px; font-weight: 600; border: 1px solid var(--seam-2); color: var(--text-2); white-space: nowrap;
 }
-.chip.synthetic { color: #F6D365; border-color: rgba(240, 185, 11, .45); background: rgba(240, 185, 11, .08); }
+.chip.synthetic, .chip.caution { color: #F6D365; border-color: rgba(240, 185, 11, .45); background: rgba(240, 185, 11, .08); }
 .chip.unverified { color: #FFB4B9; border-color: rgba(255, 92, 102, .4); background: rgba(255, 92, 102, .08); }
 .conn-group { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
 .conn { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); white-space: nowrap; }
@@ -299,12 +299,12 @@ svg.heat .sel-ring { fill: none; stroke: #CFE0FF; stroke-width: 1.5; }
 .vstats dd { margin: 0; display: grid; gap: 2px; }
 .vstats strong { font-size: 22px; font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
 .vstats span { font-size: 12px; color: var(--text-2); }
+.vcompare { margin: 0; font-size: 13px; color: var(--text-2); max-width: 75ch; }
 .validate .chart-title { margin: 4px 0 4px; font-size: 12px; font-weight: 600; color: var(--text-2); }
 svg.ic .pos { fill: #7FB0FF; }
 svg.ic .neg { fill: var(--text-3); }
 svg.ic .grid.zero { stroke: var(--seam-2); }
 svg.ic .mean { stroke: var(--text-2); stroke-width: 1; stroke-dasharray: 4 3; }
-svg.chart .mean-label { fill: var(--text-2); }
 .vgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 20px; align-items: start; }
 .vgrid .legend-note { line-height: 1.6; max-width: 75ch; }
 .ftable thead th { position: static; padding: 8px 10px; }
@@ -320,6 +320,7 @@ svg.chart .mean-label { fill: var(--text-2); }
 .method { padding: 18px 20px; display: grid; gap: 16px; max-width: 920px; }
 .method h3 { margin: 0 0 6px; font-size: 14px; }
 .method p, .method li { color: var(--text-2); margin: 0; line-height: 1.6; max-width: 75ch; }
+.method p + p { margin-top: 6px; }
 .method ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
 .method dl { display: grid; grid-template-columns: 160px 1fr; gap: 6px 16px; margin: 0; font-size: 13px; }
 .method dt { color: var(--text-2); }

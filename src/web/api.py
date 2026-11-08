@@ -340,15 +340,22 @@ def _daily_snapshot(point, weights, foreign, compare):
                          "cohort_id": first["cohort_id"] if first is not None else None,
                          "method": daily_rank.METHOD, "usable": None, "rows": rows}
     fetched = frame["fetched_at"].max() if "fetched_at" in frame and len(frame) else None
+    provider = load_provider_settings(load_settings().provider)
     result = {
         "source": "ssi", "source_kind": "daily", "run": DAILY_RUN, "as_of": as_of, "last_recorded": fetched,
-        "mode": load_settings().mode, "synthetic": False, "verified": True, "profile": "fastconnect_v3",
-        "method_kind": "daily",
+        "mode": load_settings().mode, "synthetic": False, "profile": "fastconnect_v3",
+        # Daily scores are not locked: value units were checked (average price x volume). What is still
+        # open about the foreign fields is stated by scope_note rather than hidden behind this flag.
+        "verified": True, "method_kind": "daily",
+        "scope_note": None if provider.semantics_verified else {
+            "label": "Khối ngoại chưa xác minh phạm vi",
+            "detail": "Đơn vị giá trị đã đối chiếu, nhưng chưa xác nhận số khối ngoại của SSI có gồm giao dịch thỏa thuận "
+                      "hay không. Một số dòng có khối ngoại mua hoặc bán lớn hơn giá trị khớp."},
         "connection": {"state": "daily", "label": "Dữ liệu ngày SSI", "severity": "muted", "epoch": None},
         "freshness_seconds": None, "gaps": [], "policy": {"max_age_seconds": 60},
         "weights": {"id": weights, "label": daily_rank.WEIGHT_LABELS[weights], "values": weight_map},
         "foreign": foreign, "groups": groups, "compare": None,
-        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), _index_row(day), "tham chiếu"),
+        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), _index_row(day), "phiên trước"),
     }
     if compare:
         target = _compare_point("daily", DAILY_RUN, None, as_of, compare, moments=moments)
@@ -435,7 +442,7 @@ def heatmap(source, weights="balanced", foreign="value"):
 
 
 def validation(source, weights="balanced"):
-    """Out-of-sample check of the end-of-day score against the next session's return."""
+    """Forward check of the end-of-day score against the next session's return."""
     from src.analytics.validation import forward_check, verdict
     _require_daily(source, "Kiểm chứng")
     if weights not in daily_rank.WEIGHTS:
@@ -443,8 +450,10 @@ def validation(source, weights="balanced"):
     result = forward_check(_daily_frame(), weights=(weights,))
     part = result["weights"][weights]
     return {"method": result["method"], "sessions": result["sessions"], "pairs": result["pairs"],
-            "top_n": result["top_n"], "forward_return": result["forward_return"], "weights": weights,
-            "weights_label": daily_rank.WEIGHT_LABELS[weights], "summary": {"ic": part["ic"], "spread": part["top_minus_bottom_pp"]},
+            "top_n": result["top_n"], "returns": result["returns"], "weights": weights,
+            "weights_label": daily_rank.WEIGHT_LABELS[weights],
+            "summary": {"ic": part["ic"], "spread": part["top_minus_bottom_pp"], "ic_close": part["ic_close"],
+                        "spread_close": part["top_minus_bottom_close_pp"], "power": part["power"]},
             "factor_ic": part["factor_ic"], "series": part["pairs"], "verdict": verdict(part)}
 
 

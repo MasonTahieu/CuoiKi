@@ -204,6 +204,10 @@
     const conn = d.connection;
     $("conn").innerHTML = `<span class="dot ${esc(conn.severity)}"></span><span>${esc(conn.label)}${conn.epoch ? ` · lần ${conn.epoch}` : ""}</span>`;
     $("clock").textContent = d.method_kind === "daily" ? day(d.as_of) : clock(d.as_of);
+    // The app's run mode says nothing about the data: real daily data must not sit beside a "Demo" label.
+    $("mode-chip").textContent = d.source_kind === "daily" ? "SSI thật" : (MODE[d.mode] || d.mode);
+    $("scope-chip").hidden = !d.scope_note;
+    if (d.scope_note) { $("scope-chip").textContent = d.scope_note.label; $("scope-chip").title = d.scope_note.detail; }
     $("synthetic-chip").hidden = !d.synthetic;
     $("unverified-chip").hidden = d.verified;
     for (const name of ["VN30"]) {
@@ -503,13 +507,18 @@
   function renderMethod() {
     const d = state.data, g = groupData();
     $("method").innerHTML = `
-      ${d.method_kind === "daily" ? `<div><h3>Đang xem chế độ cuối ngày</h3><p>Xếp hạng theo dữ liệu tổng hợp từng phiên của SSI (REST securitiesSummary, từng mã). Ba yếu tố: động lượng = % đóng cửa so với mở cửa; thanh khoản = điểm phân vị của giá trị khớp cả phiên; dòng tiền ngoại = (mua − bán của khối ngoại) / giá trị khớp. Trọng số 33/33/33 hoặc 50/25/25. Không có sổ lệnh nên không có cung–cầu, độ sâu và chênh lệch giá. Mã thiếu dữ liệu khối ngoại (SSI trả trống) không được xếp hạng. Đây là phương pháp khác (daily-v1), không so trực tiếp với bảng trong phiên.</p></div>` : ""}
+      ${d.method_kind === "daily" ? `<div><h3>Đang xem chế độ cuối ngày</h3><p>Xếp hạng theo dữ liệu tổng hợp từng phiên của SSI (REST securitiesSummary, từng mã). Ba yếu tố: động lượng = % đóng cửa so với mở cửa; thanh khoản = điểm phân vị của giá trị khớp cả phiên; dòng tiền ngoại = (mua − bán của khối ngoại) / giá trị khớp. Trọng số 33/33/33 hoặc 50/25/25. Không có sổ lệnh nên không có cung–cầu, độ sâu và chênh lệch giá. Mã thiếu dữ liệu khối ngoại (SSI trả trống) không được xếp hạng. Đây là phương pháp khác (daily-v1), không so trực tiếp với bảng trong phiên.</p>${d.scope_note ? `<p>${esc(d.scope_note.detail)}</p>` : ""}</div>` : ""}
       <div><h3>Sản phẩm làm gì</h3><p>Xếp hạng tương đối các cổ phiếu trong rổ VN30 tại một mốc của phiên khớp lệnh liên tục, để thu hẹp danh sách cần nghiên cứu tiếp. Không dự báo giá, không đặt lệnh. Phạm vi chỉ gồm VN30: trên dữ liệu SSI 15 phiên, HNX30 có 11/30 mã giao dịch dưới 1 tỷ đồng mỗi phiên và 43% dòng thiếu dữ liệu khối ngoại, nên động lượng và dòng tiền ngoại của nhóm này không đủ tin cậy để xếp hạng.</p></div>
       <div><h3>Bốn yếu tố</h3><ul>
         <li><b>Động lượng</b>: % thay đổi từ giá mở cửa đến giá khớp gần nhất.</li>
         <li><b>Thanh khoản</b>: trung bình điểm phân vị của giá trị khớp, độ sâu ba mức giá mỗi bên và chênh lệch mua–bán (hẹp hơn tốt hơn).</li>
         <li><b>Dòng tiền ngoại</b>: (mua − bán của nhà đầu tư nước ngoài) / tổng giá trị khớp, hoặc theo khối lượng.</li>
         <li><b>Cung–cầu</b>: (khối lượng chào mua − chào bán) / tổng khối lượng chào ở ba mức giá.</li></ul></div>
+      <div><h3>Cơ sở tài chính</h3><ul>
+        <li><b>Động lượng</b>: lợi suất cổ phiếu có tính tự tương quan, âm ở tháng liền trước và dương ở các độ trễ dài hơn (Jegadeesh, 1990). Các kết quả này ở khung thời gian dài hơn một phiên, nên ở đây động lượng chỉ mô tả diễn biến tại mốc, không dự báo.</li>
+        <li><b>Thanh khoản</b>: thanh khoản liên hệ với lợi suất kỳ vọng (Amihud, 2002). Sản phẩm dùng giá trị khớp, độ sâu và chênh lệch giá thay cho thước đo của Amihud, và có thể nghiêng về mã vốn hóa lớn.</li>
+        <li><b>Dòng tiền ngoại</b>: dòng vốn của nhà đầu tư nước ngoài có tính bền và theo lợi suất quá khứ (Froot, O'Connell &amp; Seasholes, 2001); ở Việt Nam họ cũng được ghi nhận giao dịch theo xu hướng (Vo, 2017).</li>
+        <li><b>Cung–cầu</b>: mất cân bằng lệnh liên hệ với biến động giá ngắn hạn (Chordia, Roll &amp; Subrahmanyam, 2002; Cont, Kukanov &amp; Stoikov, 2014). Các nghiên cứu này đo dòng lệnh; sản phẩm đo khối lượng chào tại một mốc ở ba mức giá, nên đây là thước đo gần đúng.</li></ul></div>
       <div><h3>Cách chấm</h3><p>Mỗi yếu tố đổi thành điểm phân vị 0–100 trong nhóm đủ dữ liệu; điểm tổng là tổng có trọng số. Cần tối thiểu 10 mã hợp lệ; điểm bằng nhau cùng hạng. Không xếp hạng khi thiếu hoặc cũ dữ liệu, ngoài phiên LO, mất kết nối, hoặc nguồn thật chưa xác minh. Không tự bỏ một yếu tố rồi chia lại trọng số.</p></div>
       <div><h3>Giới hạn</h3><p>Trọng số là cấu hình thử nghiệm; thanh khoản có thể nghiêng về mã vốn hóa lớn và các yếu tố có thể tương quan. Sổ lệnh chỉ phản ánh lượng chào tại mốc ghi nhận. Dữ liệu giả lập chỉ dùng kiểm tra phần mềm.</p></div>
       <div><h3>Thông tin lần tính</h3><dl>
@@ -627,26 +636,27 @@
   function drawValidate() {
     const v = state.valid, el = $("validate");
     if (!v || state.view !== "validate" || !isDaily()) return;
-    const ic = v.summary.ic, sp = v.summary.spread;
+    const ic = v.summary.ic, sp = v.summary.spread, close = v.summary.ic_close, pw = v.summary.power;
     const stat = (label, value, note) => `<div><dt>${label}</dt><dd><strong class="num">${value}</strong><span>${note}</span></dd></div>`;
     const positive = ic.positive_share == null ? "—" : `${Math.round(ic.positive_share * ic.pairs)}/${ic.pairs}`;
-    const tNote = ic.t == null ? "chưa đủ cặp" : Math.abs(ic.t) >= 2 ? "|t| ≥ 2: khác 0 có ý nghĩa" : "|t| < 2: chưa khác 0";
+    const tNote = ic.t == null ? "chưa đủ cặp" : `t = ${signed(ic.t, 2)} · ${Math.abs(ic.t) >= 2 ? "|t| ≥ 2, cần xác nhận thêm" : "|t| < 2, chưa khác 0"}`;
     el.innerHTML = `
       <p class="verdict">${esc(v.verdict)}</p>
       <dl class="vstats">
-        ${stat("IC trung bình", signed(ic.mean, 3), `độ lệch chuẩn ${fmt(ic.sd, 3)}`)}
-        ${stat("Thống kê t", signed(ic.t, 2), tNote)}
+        ${stat("IC trung bình", signed(ic.mean, 3), tNote)}
         ${stat("Cặp phiên có IC > 0", positive, "một nửa là mức ngẫu nhiên")}
         ${stat(`Top ${v.top_n} − bottom ${v.top_n}`, `${signed(sp.mean, 2)} điểm %`, "lợi suất phiên sau, trung bình")}
+        ${stat("Mẫu phân biệt được", pw.detectable_ic == null ? "—" : `|IC| ≥ ${fmt(pw.detectable_ic, 2)}`, pw.sessions_for_target ? `IC ${fmt(pw.target_ic, 2)} cần khoảng ${pw.sessions_for_target} phiên` : "chưa đủ cặp")}
       </dl>
-      <h3 class="chart-title">IC từng cặp phiên liên tiếp · trọng số ${esc(v.weights_label.replace(/^\D+/, ""))}</h3>
+      <p class="vcompare">Nếu tính cả chênh lệch qua đêm (từ đóng cửa phiên t, không mua kịp vì điểm có sau khi đóng cửa): IC ${signed(close.mean, 3)}, t = ${signed(close.t, 2)}.</p>
+      <h3 class="chart-title">IC từng cặp phiên · lợi suất mở cửa → đóng cửa phiên sau · trọng số ${esc(v.weights_label.replace(/^\D+/, ""))} · đường đứt: trung bình ${signed(ic.mean, 3)}</h3>
       <div id="ic-chart"></div>
       <div class="vgrid">
         <div><h3 class="chart-title">IC của từng yếu tố</h3>
           <table class="ftable"><thead><tr><th scope="col">Yếu tố</th><th scope="col" class="n">IC trung bình</th><th scope="col" class="n">t</th></tr></thead>
           <tbody>${["momentum", "liquidity", "foreign"].map((f) => `<tr><td><i class="sw c-${f}"></i>${FLABEL[f]}</td><td class="num n">${signed(v.factor_ic[f].mean, 3)}</td><td class="num n">${signed(v.factor_ic[f].t, 2)}</td></tr>`).join("")}</tbody></table></div>
         <div><h3 class="chart-title">Cách đo</h3>
-          <p class="legend-note">IC là tương quan hạng Spearman giữa điểm phiên t và lợi suất phiên t+1 của các mã được xếp hạng. Lợi suất lấy theo ${esc(v.forward_return)}, nên ngày không hưởng quyền không làm méo kết quả. Trọng số cố định từ trước, không dò trên dữ liệu này. Với ${v.pairs} cặp phiên, phép thử có độ nhạy thấp; kết quả không thay đổi cách chấm điểm.</p></div>
+          <p class="legend-note">IC là tương quan hạng Spearman giữa điểm phiên t và lợi suất phiên t+1 của các mã được xếp hạng. Không có tham số nào được ước lượng; trọng số chọn trước khi tính phép đo này. "Chưa có bằng chứng" không có nghĩa là đã chứng minh điểm không dự báo được. Có nhiều phép đo trên cùng mẫu, nên một |t| vừa trên 2 chưa đủ để coi là phát hiện. Kết quả không thay đổi cách chấm điểm.</p></div>
       </div>`;
     const box = $("ic-chart");
     box.innerHTML = icChart(v.series, ic.mean, Math.max(280, box.clientWidth));
@@ -667,7 +677,7 @@
       const top = y(Math.max(0, p.ic)), h = Math.max(1, Math.abs(y(p.ic) - y(0)));
       return `<g><title>Phiên ${p.date.slice(8, 10)}/${p.date.slice(5, 7)} → ${p.next_date.slice(8, 10)}/${p.next_date.slice(5, 7)}: IC ${signed(p.ic, 3)} · ${p.ranked} mã</title><rect class="${p.ic >= 0 ? "pos" : "neg"}" x="${(cx - bw / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2"/></g>${label}`;
     }).join("");
-    if (mean != null) out += `<line class="mean" x1="${P.l}" x2="${W - P.r}" y1="${y(mean).toFixed(1)}" y2="${y(mean).toFixed(1)}"/><text class="mean-label" x="${P.l + 4}" y="${(y(mean) + (mean >= 0 ? 13 : -5)).toFixed(1)}">trung bình ${signed(mean, 3)}</text>`;
+    if (mean != null) out += `<line class="mean" x1="${P.l}" x2="${W - P.r}" y1="${y(mean).toFixed(1)}" y2="${y(mean).toFixed(1)}"/>`;
     return `<svg class="chart ic" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="IC của ${pts.length} cặp phiên, trung bình ${signed(mean, 3)}">${out}</svg>`;
   }
 

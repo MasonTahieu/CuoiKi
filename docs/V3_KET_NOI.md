@@ -105,10 +105,19 @@
 
 ## 5. Ngưỡng dữ liệu cũ phải chọn từ dữ liệu thật
 
-Ngưỡng 60 giây hiện là ngưỡng thử nghiệm. Với nguồn phát theo sự kiện, một mã ít giao dịch có thể không cập nhật trong 60 giây dù giá vẫn đúng. Sau 5 phiên, đọc `update_intervals` trong `evaluation.json`: các phân vị p50, p90, p95, p99 và tỷ lệ cập nhật trong 30, 60, 120, 300, 600 giây theo từng cụm trade, quote, foreign. Chọn ngưỡng sao cho phần lớn mã thanh khoản bình thường được giữ lại, và ghi lý do vào báo cáo. Đây là căn cứ thống kê cho ngưỡng mà đề yêu cầu ở Mục 7.
+Ngưỡng hiện tại lấy từ bản thu thật buổi chiều 09/11/2026, chưa có phiên sáng và ATO. [Số liệu](../evidence/v3_smoke/20261109-dong-cua/KET_QUA.md)
+
+| Cụm trường | Tuổi tối đa | Trễ tối đa | Căn cứ đo được |
+|---|---|---|---|
+| Khối ngoại | 100 giây | 35 giây | Gói đến 60 giây một lần, trễ đến 30,5 giây. Lỡ một đợt thì tuổi vượt 120 giây nên vẫn bị phát hiện |
+| Giá, khớp lệnh, sổ lệnh | 120 giây | 10 giây | Trễ dưới 1,65 giây, nhưng có mã không khớp lệnh 100 giây dù kết nối tốt |
+
+Mã trong `QualityPolicy` là `V3_LIMITS`. Sau 5 phiên, đọc `update_intervals` trong `evaluation.json` để kiểm tra lại: các phân vị p50, p90, p95, p99 và tỷ lệ cập nhật trong 30, 60, 120, 300, 600 giây theo từng cụm trade, quote, foreign. Đây là căn cứ thống kê cho ngưỡng mà đề yêu cầu ở Mục 7.
 
 ## 6. Giới hạn đã biết
 
+- Token SSI sống 15 phút và SDK mở lại kết nối mỗi khoảng 14 phút. ROOM không gửi lại khi vừa đăng ký, nên khoảng 1 phút sau mỗi lần đó có mã chưa có số khối ngoại và tạm không xếp hạng. Bộ thu không giữ dữ liệu nền qua các lần nối lại, đây là chủ đích.
+- `securitiesByBoard?index=VN30` có lúc chỉ trả một dòng là chính chỉ số. Mã từ chối kết quả đó, dùng lại thành phần của phiên đầy đủ gần nhất và ghi `member_warning`. Nếu rổ VN30 vừa đổi, cảnh báo này cần được đọc.
 - Smoke test và lệnh `phien` cần người ngồi máy để nhập OTP nếu SSI yêu cầu. Task Scheduler không nhập OTP thay được.
 - Dữ liệu ngày không có sổ lệnh, nên phân tích nhiều phiên theo ngày chỉ có động lượng, thanh khoản và khối ngoại.
 - Lịch giao dịch dùng để suy phiên chưa tính ngày nghỉ lễ. Ngày nghỉ sẽ không có dữ liệu nên mã không được chấm.

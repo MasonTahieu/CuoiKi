@@ -7,10 +7,12 @@ turn an omitted number into 0. Only market-data routes are reachable from here.
 from datetime import date, datetime
 import re
 
+from src.data.daily_store import default_daily_path, known_members
 from src.neo_api.rest import AuthError, NeoError
 from src.ssi_api.connections import V3_DATA_ROUTES, v3_api_base, v3_stream_url
 
 EXPECTED_BOARD = {"VN30": "HOSE"}  # scope: VN30 only
+EXPECTED_MEMBERS = {"VN30": 30}
 OTP_PATTERN = re.compile(r"\d{4,8}")
 SYMBOL = re.compile(r"[A-Z0-9][A-Z0-9._-]{0,31}")
 MAX_PAGES = 20
@@ -23,6 +25,26 @@ SUMMARY_MAP = {"open": "openPrice", "high": "highPrice", "low": "lowPrice", "clo
     "totalBuy": "totalBuy", "totalSell": "totalSell", "totalTradeBuy": "totalTradeBuy",
     "totalTradeSell": "totalTradeSell", "totalDeal": "ptTotalTradedVolume", "totalDealValue": "ptTotalTradedValue",
     "refPrice": "refPrice", "ceiling": "ceilingPrice", "floor": "floorPrice"}
+
+
+class MemberListError(NeoError):
+    """SSI answered, but not with the composition of the index (seen live 09/11/2026 at 15:49:
+    ``securitiesByBoard?index=VN30`` returned one row, the index itself; at 14:58 it returned 30)."""
+
+
+def resolve_members(client, groups=("VN30",), database=None):
+    """Composition from SSI. If its answer is unusable, the last complete stored session, with a warning."""
+    try:
+        return client.universe(groups), None
+    except MemberListError as error:
+        members, warnings = [], []
+        for group in groups:
+            symbols, day = known_members(database or default_daily_path(), group, EXPECTED_MEMBERS[group])
+            if not symbols:
+                raise
+            members += [{"symbol": s, "index_group": group, "marketCode": EXPECTED_BOARD[group]} for s in symbols]
+            warnings.append(f"{error} Dùng tạm thành phần {group} của phiên {day}; cần kiểm tra lại.")
+        return members, " ".join(warnings)
 
 
 def _sdk():
@@ -189,6 +211,8 @@ class V3Client:
         expected = EXPECTED_BOARD[index]
         for row in body:
             symbol = str(row.get("symbol") or "").strip().upper()
+            if symbol == index:
+                raise MemberListError(f"SSI trả chính chỉ số {index} thay vì danh sách thành phần.")
             if not SYMBOL.fullmatch(symbol) or symbol in seen:
                 raise NeoError("Danh sách thành phần thiếu hoặc trùng mã.")
             board = str(row.get("board") or "").strip().upper()
@@ -199,8 +223,8 @@ class V3Client:
                 raise NeoError("SSI trả thành phần của nhóm khác yêu cầu.")
             seen.add(symbol)
             members.append({"symbol": symbol, "index_group": index, "marketCode": expected})
-        if not members:
-            raise NeoError(f"SSI chưa trả thành phần {index}.")
+        if len(members) != EXPECTED_MEMBERS[index]:
+            raise MemberListError(f"SSI trả {len(members)} mã cho {index}, cần {EXPECTED_MEMBERS[index]} mã.")
         return members
 
     def universe(self, groups=("VN30",)):

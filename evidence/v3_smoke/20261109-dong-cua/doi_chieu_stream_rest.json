@@ -1,0 +1,32 @@
+{
+  "totalTradingVolume": {
+    "symbols": 30,
+    "median_ratio": 1.0,
+    "min_ratio": 1.0,
+    "max_ratio": 1.0
+  },
+  "totalTradingValue": {
+    "symbols": 30,
+    "median_ratio": 1.0000000147834758,
+    "min_ratio": 0.9999998575280172,
+    "max_ratio": 1.0000002350109205
+  },
+  "foreignBuyValue": {
+    "symbols": 29,
+    "median_ratio": 1.0,
+    "min_ratio": 1.0,
+    "max_ratio": 1.0
+  },
+  "foreignSellValue": {
+    "symbols": 30,
+    "median_ratio": 1.0,
+    "min_ratio": 1.0,
+    "max_ratio": 1.0
+  },
+  "openPrice": {
+    "symbols": 30,
+    "median_ratio": 1.0,
+    "min_ratio": 1.0,
+    "max_ratio": 1.0
+  }
+}

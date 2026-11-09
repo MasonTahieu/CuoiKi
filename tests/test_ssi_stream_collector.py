@@ -134,6 +134,29 @@ def test_reconnect_limit_and_backoff_are_bounded():
     assert report["states"]=={}
 
 
+def test_wait_between_failures_is_capped():
+    report,factory,_,clock=run([[StreamDisconnected()]]*8,max_reconnects=7,seconds=1000)
+    assert report["stop_reason"]=="reconnect_limit" and clock.value==1+2+4+8+16+30+30
+
+
+def test_routine_token_cycles_do_not_add_up_to_a_failure():
+    # Each connection delivers data for over a minute, then the SDK reopens it for a new token.
+    def cycle(first,last):
+        return [frame("X-TRADE",at=first,received=first,LastPrice=20000),
+                frame("X-TRADE",at=last,received=last,LastPrice=20100),StreamDisconnected()]
+    report,factory,_,clock=run([cycle("10:00:01","10:01:10"),cycle("10:01:12","10:02:20"),cycle("10:02:22","10:03:30")],
+                               max_reconnects=1,seconds=300,idle_seconds=100)
+    assert report["counters"]["reconnects"]==3 and len(factory.sessions)==4
+    assert report["stop_reason"]=="reconnect_limit"  # a dead connection right after still counts
+    assert clock.value==211  # the last frame at 210 s, then a one-second wait each time, not 1, 2, 4
+
+
+def test_data_for_too_short_a_time_does_not_clear_failures():
+    quick=[frame("X-TRADE",at="10:00:01",received="10:00:01",LastPrice=20000),StreamDisconnected()]
+    report,factory,_,_=run([quick,[StreamDisconnected()],[StreamDisconnected()]],max_reconnects=2,seconds=300)
+    assert report["stop_reason"]=="reconnect_limit" and len(factory.sessions)==3
+
+
 def test_idle_timeout_reconnects_without_real_sleep():
     report,factory,_,clock=run([[],[]],idle_seconds=2,max_reconnects=1)
     assert report["stop_reason"]=="reconnect_limit" and len(factory.sessions)==2

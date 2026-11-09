@@ -16,7 +16,7 @@ from src.data.ssi_journal import BufferedSink, SSIJournal
 from src.data.store import EventStore, TZ, now, timestamp
 from src.ssi_api.replay import replay
 from src.ssi_api.stream_collector import collect_stream
-from src.ssi_api.v3_client import V3Client
+from src.ssi_api.v3_client import V3Client, resolve_members
 from src.ssi_api.v3_stream import V3Factory
 
 DEFAULT_WINDOWS = ((time(8, 58), time(11, 31)), (time(12, 59), time(14, 46)))
@@ -123,7 +123,7 @@ def reconcile(stream_totals, summaries):
 
 def fetch_summaries(client, day, groups=("VN30",), members=None):
     """Per-member daily rows for one day (``index=`` would return the index itself)."""
-    members = members or client.universe(groups)
+    members = members or resolve_members(client, groups)[0]
     return client.member_summaries(members, day, day)
 
 
@@ -131,7 +131,7 @@ def history(settings, client, *, sessions=10, database=DAILY_DB, today=None, gro
     """Fetch about ``sessions`` trading days of daily summaries (calendar window ×1.6 + 7)."""
     today = today or datetime.now(TZ).date()
     start = today - timedelta(days=int(sessions * 1.6) + 7)
-    members = client.universe(groups)
+    members, warning = resolve_members(client, groups, database)
     rows = client.member_summaries(members, start, today)
     index_rows = [row for group in groups for row in client.summaries(group, start, today)]
     days = sorted({row["tradingDate"] for row in rows})
@@ -143,7 +143,7 @@ def history(settings, client, *, sessions=10, database=DAILY_DB, today=None, gro
     per_day = {day: sum(r["tradingDate"] == day for r in rows) for day in sorted(keep)}
     return {"source": "ssi", "groups": list(groups), "members": len(members), "sessions": len(keep),
             "trading_dates": sorted(keep), "rows": len(rows), "index_rows": len(index_rows),
-            "rows_per_day": per_day, "database": str(database), "network_called": True}
+            "rows_per_day": per_day, "database": str(database), "member_warning": warning, "network_called": True}
 
 
 def smoke(settings, client, *, seconds=30, out_root=None, ws_factory=None, today=None, database=None):
@@ -154,8 +154,10 @@ def smoke(settings, client, *, seconds=30, out_root=None, ws_factory=None, today
     folder.mkdir(parents=True, exist_ok=True)
     database = database or PROJECT_ROOT / "runtime" / "ssi-smoke.sqlite"
     report = {"schema_version": "ssi-v3-smoke-1", "started_at": now(), "login_mode": client.login_mode, "steps": {}}
-    members = client.universe()
+    members, warning = resolve_members(client)
     report["steps"]["universe"] = {"VN30": sum(m["index_group"] == "VN30" for m in members)}
+    if warning:
+        report["steps"]["universe"]["warning"] = warning
     today = today or datetime.now(TZ).date()
     summaries = [row for group in ("VN30",) for row in client.summaries(group, today, today)]
     report["steps"]["summary_today"] = {"index_rows": len(summaries),

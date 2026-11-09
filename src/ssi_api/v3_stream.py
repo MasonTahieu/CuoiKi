@@ -9,6 +9,7 @@ import threading
 
 from src.data.store import now
 from src.ssi_api.stream_collector import Frame, StreamAuthFailed, StreamDisconnected, validate_members, v3_subscription_plan
+from src.ssi_api.v3_client import MemberListError, resolve_members
 
 QUEUE_LIMIT = 50_000
 _DROP, _AUTH, _DENIED = "disconnected", "auth_failed", "subscription_denied"
@@ -119,9 +120,18 @@ class V3Factory:
             raise ValueError("subscribe_mode phải là index hoặc symbols.")
         self.client, self.groups, self.subscribe_mode, self.ws_factory = client, tuple(groups), subscribe_mode, ws_factory
         self.last_stream = None
+        self.members = None
 
     def bootstrap(self):
-        return self.client.universe(self.groups)
+        """A reconnect keeps the composition it already has if SSI's list turns unusable mid-run."""
+        if self.members is None:
+            self.members = resolve_members(self.client, self.groups)[0]
+        else:
+            try:
+                self.members = self.client.universe(self.groups)
+            except MemberListError:
+                pass
+        return self.members
 
     def create(self):
         self.last_stream = V3Stream(self.client, self.ws_factory)

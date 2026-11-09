@@ -5,6 +5,7 @@ All offline. Frames follow the wire shape read from ssi-sdk 3.3.2; values are sy
 from collections import Counter
 from datetime import datetime, timedelta, date
 import json
+import sqlite3
 
 import pytest
 
@@ -12,7 +13,7 @@ from src.analytics.sessions import evaluate_daily, evaluate_run, report_frame, s
 from src.config import ConfigurationError
 from src.data.daily_store import DailyStore, read_daily
 from src.data.ssi_journal import BufferedSink, SSIJournal
-from src.data.ssi_quality import QualityPolicy, policy_for_profile, scheduled_session
+from src.data.ssi_quality import QualityPolicy, assess_member, policy_for_profile, scheduled_session
 from src.data.store import EventStore, TZ, now
 from src.neo_api.rest import AuthError, NeoError
 from src.ranking.engine import rank_groups
@@ -22,7 +23,7 @@ from src.ssi_api.fake_stream import FakeClock, FakeFactory
 from src.ssi_api.replay import replay
 from src.ssi_api.settings import SSISettings, load_ssi_settings
 from src.ssi_api.stream_collector import Frame, StreamAuthFailed, StreamDisconnected, collect_stream
-from src.ssi_api.v3_client import V3Client, canonical_summary
+from src.ssi_api.v3_client import MemberListError, V3Client, canonical_summary, resolve_members
 from src.ssi_api.v3_decoder import decode_v3, fan_out, retained_raw, source_time
 from src.ssi_api.v3_ops import history, reconcile, smoke
 from src.ssi_api.v3_sample import baseline_frames, v3_members, v3_scenario
@@ -134,11 +135,43 @@ def test_policy_validation_and_profile_relaxation():
     v3 = policy_for_profile(base, "fastconnect_v3")
     assert v3.require_symbol_status is False and v3.session_fallback == "schedule"
     assert "tradingStatus" not in v3.needed() and "tradingStatus" in base.needed()
+    assert (v3.max_age_seconds, v3.limits("closePrice"), v3.limits("foreignBuyValue")) == (120, (120, 10), (100, 35))
+    assert base.limits("foreignBuyValue") == (60, 10)  # FCData v2 keeps the general limits
+    chosen = policy_for_profile(QualityPolicy(max_age_seconds=45), "fastconnect_v3")
+    assert chosen.limits("foreignBuyValue") == (45, 10) and chosen.session_fallback == "schedule"
+    with pytest.raises(ValueError):QualityPolicy(foreign_max_age_seconds=-1)
+
+
+def fresh_state(foreign_age=0, foreign_lag=0, price_age=0):
+    """All needed fields one second old, except the ages and lags asked for. Clock: 10:00:00."""
+    at = datetime.fromisoformat("2026-11-04T10:00:00+07:00")
+    stamp = lambda seconds: (at - timedelta(seconds=seconds)).isoformat()
+    payload, updated, received = {}, {}, {}
+    for key in QualityPolicy().needed():
+        payload[key] = 100.0
+        age, lag = (foreign_age + foreign_lag, foreign_lag) if key in {"foreignBuyValue", "foreignSellValue"} else (
+            (price_age, 0) if key in {"closePrice", "totalTradingValue"} else (1, 0))
+        updated[key], received[key] = stamp(age), stamp(age - lag)
+    payload.update(tradingSession="LO", tradingStatus="NORMAL")
+    return {"payload": payload, "field_updated_at": updated, "field_received_at": received}, at.isoformat()
+
+
+@pytest.mark.parametrize("state_args,reason", [
+    ({"foreign_age": 60, "foreign_lag": 30}, None),      # a normal late batch, 90 s old: usable
+    ({"foreign_age": 125}, "STALE_FIELDS"),              # one batch missed
+    ({"foreign_age": 5, "foreign_lag": 40}, "EXCESS_RECORDED_LAG"),
+    ({"price_age": 110}, None),                          # a quiet stock with a live connection
+    ({"price_age": 130}, "STALE_FIELDS")])
+def test_measured_limits_are_applied_per_field(state_args, reason):
+    state, at = fresh_state(**state_args)
+    policy = policy_for_profile(QualityPolicy(), "fastconnect_v3")
+    row = assess_member({"symbol": "FPT", "marketCode": "HOSE", "index_group": "VN30"}, state, at, "connected", policy)
+    assert row["reasons"] == ([reason] if reason else []) and row["data_usable"] is (reason is None)
 
 
 @pytest.mark.parametrize("market,clock,session", [
     ("HOSE", "09:05", "ATO"), ("HOSE", "09:20", "LO"), ("HOSE", "11:45", "BREAK"), ("HOSE", "14:35", "ATC"),
-    ("HNX", "09:05", "LO"), ("HNX", "14:50", "PT"), ("HNX", "15:10", "C"), ("UPCOM", "10:00", None)])
+    ("HNX", "09:05", "LO"), ("HNX", "14:50", "C"), ("HOSE", "14:50", "C"), ("HNX", "15:10", "C"), ("UPCOM", "10:00", None)])
 def test_published_timetable(market, clock, session):
     at = datetime.fromisoformat(f"2026-11-04T{clock}:00+07:00")
     assert scheduled_session(market, at) == session
@@ -355,16 +388,34 @@ def test_login_modes_never_keep_the_otp():
 
 def test_index_members_validate_board_and_routes_are_allow_listed():
     rows = [{"symbol": "FPT", "board": "HOSE", "index": "VN30"}, {"symbol": "VNM", "board": "HOSE"}]
+    rows += [{"symbol": f"AA{i:02d}", "board": "HOSE"} for i in range(28)]
     client, auth = client_with({"/api/v3/data/securitiesByBoard": rows})
     client.login("none")
-    assert client.index_members("VN30") == [{"symbol": "FPT", "index_group": "VN30", "marketCode": "HOSE"},
-                                            {"symbol": "VNM", "index_group": "VN30", "marketCode": "HOSE"}]
+    assert client.index_members("VN30")[:2] == [{"symbol": "FPT", "index_group": "VN30", "marketCode": "HOSE"},
+                                                {"symbol": "VNM", "index_group": "VN30", "marketCode": "HOSE"}]
     assert auth.rest_client.calls[0] == ("/api/v3/data/securitiesByBoard", {"index": "VN30"})
     with pytest.raises(NeoError):client.index_members("HNX30")  # outside the VN30-only scope
     with pytest.raises(NeoError):client.get("trading/order")
     empty, _ = client_with({"/api/v3/data/securitiesByBoard": {"code": 204}})
     empty.login("none")
     with pytest.raises(NeoError):empty.index_members("VN30")
+
+
+INDEX_ROW = {"symbol": "VN30", "board": "HOSE", "symbolNameVi": None, "listedShare": None}  # live reply, 09/11/2026 15:49
+
+
+@pytest.mark.parametrize("rows", [[INDEX_ROW], [{"symbol": "FPT", "board": "HOSE"}], {"code": 204}])
+def test_reply_that_is_not_the_composition_is_refused(rows):
+    client, _ = client_with({"/api/v3/data/securitiesByBoard": rows})
+    client.login("none")
+    with pytest.raises(MemberListError):client.index_members("VN30")
+
+
+def stored_days(path, *sizes):
+    rows = [{"symbol": f"S{i:02d}", "index_group": "VN30", "tradingDate": f"2026-11-0{d + 1}"}
+            for d, size in enumerate(sizes) for i in range(size)]
+    with DailyStore(path) as store:
+        store.upsert("ssi", rows, "2026-11-09T15:00:00+07:00")
 
 
 def test_summaries_paginate_and_keep_absent_fields_none():
@@ -447,6 +498,52 @@ class HistoryClient:
     def summaries(self, index, start, end):
         return [{"symbol": index, "index_group": index, "tradingDate": day, "openPrice": 1000.0, "closePrice": 1001.0,
                  "totalTradingValue": 1e12, "foreignBuyValue": None, "foreignSellValue": None} for day in self.days]
+
+
+class BrokenList(HistoryClient):
+    def universe(self, groups=("VN30",)):
+        raise MemberListError("SSI trả chính chỉ số VN30 thay vì danh sách thành phần.")
+
+
+def test_bad_list_reuses_the_last_complete_session_with_a_warning(tmp_path):
+    db = tmp_path / "daily.sqlite"
+    stored_days(db, 30, 29)
+    with DailyStore(db) as store:  # a stray index row must never count as a member
+        store.upsert("ssi", [{"symbol": "VN30", "index_group": "VN30", "tradingDate": "2026-11-01"}], "x")
+    members, warning = resolve_members(BrokenList([]), database=db)
+    assert len(members) == 30 and members[0] == {"symbol": "S00", "index_group": "VN30", "marketCode": "HOSE"}
+    assert "2026-11-01" in warning and "VN30" not in {m["symbol"] for m in members}
+
+
+def test_bad_list_without_a_stored_session_stops_before_writing(tmp_path):
+    db = tmp_path / "daily.sqlite"
+    with pytest.raises(MemberListError):history(V3_SETTINGS, BrokenList(["2026-11-02"]), sessions=5, database=db, today=date(2026, 11, 3))
+    stored_days(db, 12)
+    with pytest.raises(MemberListError):history(V3_SETTINGS, BrokenList(["2026-11-02"]), sessions=5, database=db, today=date(2026, 11, 3))
+    with sqlite3.connect(db) as check:
+        assert check.execute("SELECT COUNT(*) FROM daily_summary").fetchone()[0] == 12
+
+
+def test_history_reports_the_fallback_and_stream_keeps_its_members(tmp_path, monkeypatch):
+    db = tmp_path / "daily.sqlite"
+    stored_days(db, 30)
+    client = BrokenList(["2026-11-02"])
+    client.member_summaries = lambda members, start, end: [
+        {"symbol": m["symbol"], "index_group": "VN30", "tradingDate": "2026-11-02"} for m in members]
+    result = history(V3_SETTINGS, client, sessions=5, database=db, today=date(2026, 11, 3))
+    assert result["members"] == 30 and "dùng tạm" in result["member_warning"].lower()
+
+    class Flaky(HistoryClient):
+        calls = 0
+        def universe(self, groups=("VN30",)):
+            Flaky.calls += 1
+            if Flaky.calls > 1:
+                raise MemberListError("một dòng")
+            return [{"symbol": "AAA", "index_group": "VN30", "marketCode": "HOSE"}]
+
+    factory = V3Factory(Flaky([]))
+    first = factory.bootstrap()
+    assert factory.bootstrap() == first  # mid-run: no store lookup, no stop
 
 
 def test_history_store_and_daily_evaluation(tmp_path):
@@ -542,3 +639,31 @@ def test_streamlit_replays_a_v3_journal_with_v3_warnings(monkeypatch, tmp_path):
     table = app.dataframe[0].value
     assert table["Hạng"].notna().sum() == 11
     assert table["Cảnh báo"].str.contains("V3 không gửi trạng thái từng mã").all()
+
+
+# Frames as received from the live stream on 09/11/2026 (public market data).
+REAL_FRAMES = {
+    "TRADE": {"data": {"a": "73354.24", "h": "74400", "l": "72700", "o": "73700", "p": "72900", "q": "100", "s": "MWG",
+                       "t": "2026/11/09 13:15:40.198", "v": "1426700"}, "message_type": "TRADE", "topic": "trade.MWG"},
+    "QUOTE": {"data": {"asks": [["57300", "36900"], ["57400", "14700"], ["57500", "7700"]] + [["0", "0"]] * 7,
+                       "bids": [["57200", "34000"], ["57100", "63100"], ["57000", "73500"]] + [["0", "0"]] * 7,
+                       "s": "VNM", "t": "2026/11/09 13:15:39"}, "message_type": "QUOTE", "topic": "quote.VNM"},
+    "ROOM": {"data": {"bq": "450900", "bv": "9182840000", "cr": "463529303", "s": "ACB", "sq": "776400",
+                      "sv": "15801840000", "t": "2026/11/09 13:16:00", "tr": "1741326587.0"},
+             "message_type": "ROOM", "topic": "room.ACB"},
+}
+
+
+@pytest.mark.parametrize("kind", list(REAL_FRAMES))
+def test_real_stream_frames_decode_with_their_source_time(kind):
+    decoded = decode_v3(REAL_FRAMES[kind], received_at="2026-11-09T13:16:20+07:00")
+    assert decoded["source_at"].startswith("2026-11-09T13:1"), decoded
+    assert not {"SOURCE_TIME_UNAVAILABLE", "INVALID_OR_INCOMPLETE_SOURCE_TIME"} & {i["code"] for i in decoded["issues"]}
+    assert decoded["message_type"] == kind
+
+
+def test_real_trade_frame_keeps_milliseconds_and_derives_value():
+    payload = decode_v3(REAL_FRAMES["TRADE"], received_at="2026-11-09T13:15:39.928+07:00")
+    assert payload["source_at"].startswith("2026-11-09T13:15:40.198")
+    assert float(payload["payload"]["closePrice"]) == 72900 and float(payload["payload"]["openPrice"]) == 73700
+    assert float(payload["payload"]["totalTradingValue"]) == pytest.approx(73354.24 * 1426700)

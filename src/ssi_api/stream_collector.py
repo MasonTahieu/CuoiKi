@@ -205,6 +205,12 @@ class PatchState:
         return deepcopy(state),"merged"
 
 
+# The SDK reopens the socket about every 14 minutes, ahead of the 15-minute token (measured 09/11/2026).
+# That is routine: only drops in a row count towards max_reconnects and lengthen the wait.
+STABLE_SECONDS=60
+MAX_RECONNECT_WAIT=30
+
+
 def collect_stream(factory: Factory, sink, *, seconds=60, max_messages=10000, max_reconnects=3,
                    idle_seconds=15, clock=time.monotonic, sleep=time.sleep, wall_now=None):
     """Bounded collection; sink receives existing EventStore append-style keyword args."""
@@ -221,6 +227,8 @@ def collect_stream(factory: Factory, sink, *, seconds=60, max_messages=10000, ma
     merger=None
     epoch=0
     reason="duration_limit"
+    failures=0
+    healthy_since=None
     def emit(channel,payload,at=None):
         sink(source=factory.source,run=run,received_at=at or wall_now(),channel=channel,payload=payload)
     def status(value):
@@ -229,6 +237,7 @@ def collect_stream(factory: Factory, sink, *, seconds=60, max_messages=10000, ma
         stream=None
         epoch+=1
         merger=None  # never retain a baseline across connection gaps
+        healthy_since=None
         try:
             status("connecting")
             members=_call_adapter(factory.bootstrap)
@@ -248,6 +257,7 @@ def collect_stream(factory: Factory, sink, *, seconds=60, max_messages=10000, ma
                     sleep(min(.05,max(0,deadline-clock())))
                     continue
                 idle_start=clock()
+                healthy_since=clock() if healthy_since is None else healthy_since
                 counters["received"]+=1
                 if not isinstance(frame,Frame):
                     raise ValueError("Transport trả dữ liệu khác Frame.")
@@ -287,10 +297,13 @@ def collect_stream(factory: Factory, sink, *, seconds=60, max_messages=10000, ma
         except StreamDisconnected:
             merger=None
             status("disconnected")
-            if counters["reconnects"]>=max_reconnects or clock()>=deadline:
-                reason="reconnect_limit" if counters["reconnects"]>=max_reconnects else "duration_limit"
+            if healthy_since is not None and clock()-healthy_since>=STABLE_SECONDS:
+                failures=0
+            if failures>=max_reconnects or clock()>=deadline:
+                reason="reconnect_limit" if failures>=max_reconnects else "duration_limit"
                 break
-            delay=min(2**counters["reconnects"],max(0,deadline-clock()))
+            delay=min(2**failures,MAX_RECONNECT_WAIT,max(0,deadline-clock()))
+            failures+=1
             counters["reconnects"]+=1
             sleep(delay)
         finally:

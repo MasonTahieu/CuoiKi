@@ -1,0 +1,260 @@
+{
+  "schema_version": "ssi-v3-smoke-1",
+  "started_at": "2026-11-09T13:18:20.380084+07:00",
+  "login_mode": "none",
+  "steps": {
+    "universe": {
+      "VN30": 30
+    },
+    "summary_today": {
+      "index_rows": 0,
+      "present_fields": []
+    },
+    "stream": {
+      "stop_reason": "duration_limit",
+      "counters": {
+        "received": 8414,
+        "decoded": 8414,
+        "merged": 8045,
+        "duplicate": 369,
+        "rejected": 0,
+        "decode_errors": 0,
+        "reconnects": 0
+      },
+      "acks": {
+        "ok": 1,
+        "error": 0
+      }
+    },
+    "stream_profile": {
+      "message_types": {
+        "QUOTE": 5497,
+        "ROOM": 146,
+        "TRADE": 2771
+      },
+      "fields_by_type": {
+        "QUOTE": {
+          "asks": 5497,
+          "bids": 5497,
+          "s": 5497,
+          "t": 5497
+        },
+        "ROOM": {
+          "bq": 146,
+          "bv": 146,
+          "cr": 146,
+          "s": 146,
+          "sq": 146,
+          "sv": 146,
+          "t": 146,
+          "tr": 146
+        },
+        "TRADE": {
+          "a": 2771,
+          "h": 2771,
+          "l": 2771,
+          "o": 2771,
+          "p": 2771,
+          "q": 2771,
+          "s": 2771,
+          "t": 2771,
+          "v": 2771
+        }
+      },
+      "source_time_formats": {
+        "QUOTE": {
+          "9999/99/99 99:99:99": 5497
+        },
+        "ROOM": {
+          "9999/99/99 99:99:99": 146
+        },
+        "TRADE": {
+          "9999/99/99 99:99:99.999": 2771
+        }
+      },
+      "quote_levels": {
+        "bids=10/asks=10": 5497
+      },
+      "trade_price_median": null,
+      "samples": {
+        "QUOTE": {
+          "data": {
+            "asks": [
+              [
+                "53600",
+                "101600"
+              ],
+              [
+                "53700",
+                "120900"
+              ],
+              [
+                "53800",
+                "56100"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ]
+            ],
+            "bids": [
+              [
+                "53500",
+                "326900"
+              ],
+              [
+                "53400",
+                "95300"
+              ],
+              [
+                "53300",
+                "98900"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ],
+              [
+                "0",
+                "0"
+              ]
+            ],
+            "s": "VCB",
+            "t": "2026/11/09 13:18:22"
+          },
+          "message_type": "QUOTE",
+          "topic": "quote.VCB"
+        },
+        "ROOM": {
+          "data": {
+            "bq": "30200",
+            "bv": "861295000",
+            "cr": "3057673676",
+            "s": "TCX",
+            "sq": "578000",
+            "sv": "16538180000",
+            "t": "2026/11/09 13:18:00",
+            "tr": "3329339823.0"
+          },
+          "message_type": "ROOM",
+          "topic": "room.TCX"
+        },
+        "TRADE": {
+          "data": {
+            "a": "19113.35",
+            "h": "19350",
+            "l": "19000",
+            "o": "19250",
+            "p": "19050",
+            "q": "200",
+            "s": "MBB",
+            "t": "2026/11/09 13:18:23.079",
+            "v": "4599800"
+          },
+          "message_type": "TRADE",
+          "topic": "trade.MBB"
+        }
+      }
+    },
+    "quality": {
+      "group_coverage": {
+        "VN30": {
+          "members": 30,
+          "fields_complete": 30,
+          "data_usable": 0,
+          "data_usable_percent": 0.0
+        }
+      },
+      "reasons": {
+        "CONNECTION_NOT_ACTIVE": 30,
+        "EXCESS_RECORDED_LAG": 22,
+        "STALE_FIELDS": 14
+      },
+      "warnings": {
+        "SESSION_FROM_SCHEDULE": 30,
+        "SYMBOL_STATUS_NOT_PROVIDED": 30,
+        "TOTAL_VALUE_DERIVED": 30,
+        "SOURCE_CLOCK_AHEAD_OF_RECEIVE": 30
+      }
+    },
+    "reconciliation": {
+      "totalTradingVolume": {
+        "symbols": 0,
+        "median_ratio": null,
+        "min_ratio": null,
+        "max_ratio": null
+      },
+      "totalTradingValue": {
+        "symbols": 0,
+        "median_ratio": null,
+        "min_ratio": null,
+        "max_ratio": null
+      },
+      "foreignBuyValue": {
+        "symbols": 0,
+        "median_ratio": null,
+        "min_ratio": null,
+        "max_ratio": null
+      },
+      "foreignSellValue": {
+        "symbols": 0,
+        "median_ratio": null,
+        "min_ratio": null,
+        "max_ratio": null
+      },
+      "openPrice": {
+        "symbols": 0,
+        "median_ratio": null,
+        "min_ratio": null,
+        "max_ratio": null
+      }
+    }
+  },
+  "finished_at": "2026-11-09T13:24:04.875382+07:00",
+  "run": "ssi-stream-4f551d3b0fd14649858f1654f8f36117",
+  "database": "E:\\Gói phần mềm 1\\Cuối kì\\neo-vn30-screener\\runtime\\ssi-smoke.sqlite"
+}

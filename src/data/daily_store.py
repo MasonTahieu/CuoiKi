@@ -53,6 +53,24 @@ class DailyStore:
         self.close()
 
 
+def known_members(path, group, size, source="ssi"):
+    """Symbols of the latest stored session holding exactly ``size`` members, and that session."""
+    path = Path(path).resolve()
+    if not path.is_file():
+        return [], None
+    with sqlite3.connect(path.as_uri() + "?mode=ro", uri=True) as db:
+        rows = db.execute("""SELECT trading_date, symbol FROM daily_summary
+            WHERE source=? AND index_group=? AND symbol<>? ORDER BY trading_date DESC, symbol""",
+            (source, group, group)).fetchall()
+    days = {}
+    for day, symbol in rows:
+        days.setdefault(day, []).append(symbol)
+    for day in sorted(days, reverse=True):
+        if len(days[day]) == size:
+            return days[day], day
+    return [], None
+
+
 def read_daily(path, source="ssi"):
     path = Path(path).resolve()
     if not path.is_file():

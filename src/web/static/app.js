@@ -236,7 +236,7 @@
     $("m-asof-note").textContent = d.method_kind === "daily" ? "cuối phiên" : day(d.as_of);
     if (d.freshness_seconds != null) {
       $("m-fresh").textContent = `${fmt(d.freshness_seconds, 0)} giây`;
-      $("m-fresh-note").textContent = `từ bản ghi gần nhất · ngưỡng ${fmt(d.policy.max_age_seconds, 0)} giây`;
+      $("m-fresh-note").textContent = `từ bản ghi gần nhất · ngưỡng giá ${fmt(d.policy.max_age_seconds, 0)} giây`;
     } else {
       $("m-fresh").textContent = "—";
       $("m-fresh-note").textContent = d.source_kind === "daily" ? "dữ liệu tổng hợp cuối ngày từ SSI REST"
@@ -494,13 +494,14 @@
     const d = state.data, g = groupData();
     if (!g) return;
     const limit = d.policy.max_age_seconds;
-    const age = (v) => v == null ? `<span class="muted">—</span>` : `<span class="age${v > limit ? " stale" : ""}">${fmt(v, 0)}</span>`;
+    const foreignLimit = d.policy.foreign_max_age_seconds ?? limit;
+    const age = (v, max = limit) => v == null ? `<span class="muted">—</span>` : `<span class="age${v > max ? " stale" : ""}">${fmt(v, 0)}</span>`;
     $("quality-table").innerHTML = `<thead><tr>${["Mã", "Phiên", "Giá và khớp (giây)", "Sổ lệnh (giây)", "Khối ngoại (giây)", "Trạng thái", "Lý do / cảnh báo"].map((h) => `<th scope="col"><button type="button" tabindex="-1">${h}</button></th>`).join("")}</tr></thead>
-      <tbody>${g.rows.map((r) => `<tr><td class="sym">${esc(r.symbol)}</td><td>${esc(r.session || "—")}</td><td>${age(r.ages.trade)}</td><td>${age(r.ages.book)}</td><td>${age(r.ages.foreign)}</td>
+      <tbody>${g.rows.map((r) => `<tr><td class="sym">${esc(r.symbol)}</td><td>${esc(r.session || "—")}</td><td>${age(r.ages.trade)}</td><td>${age(r.ages.book)}</td><td>${age(r.ages.foreign, foreignLimit)}</td>
         <td>${statusTag(r)}</td><td class="muted why" title="${esc([...r.status.details, ...r.warnings].join(" · "))}">${esc([...ownDetails(r), ...ownWarnings(r)].join(" · ") || "—")}</td></tr>`).join("")}</tbody>`;
     const gaps = d.gaps.map((x) => `${clock(x.start)}–${clock(x.end)} (${x.kind === "disconnected" ? "mất kết nối" : x.kind})`).join(", ");
     const common = commonWarnings();
-    $("quality-note").textContent = `Tuổi (giây) tính từ thời gian nguồn của trường lâu nhất trong mỗi cụm; ngưỡng ${fmt(limit, 0)} giây là ngưỡng thử nghiệm, sẽ hiệu chỉnh từ dữ liệu thật.`
+    $("quality-note").textContent = `Tuổi (giây) tính từ thời gian nguồn của trường lâu nhất trong mỗi cụm; ngưỡng ${fmt(limit, 0)} giây cho giá và sổ lệnh, ${fmt(foreignLimit, 0)} giây cho khối ngoại.`
       + (common.length ? ` Áp dụng cho cả nhóm: ${common.join("; ").toLowerCase()}.` : "") + (gaps ? ` Khoảng gián đoạn: ${gaps}.` : "");
   }
 

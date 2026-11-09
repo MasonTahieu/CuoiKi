@@ -7,12 +7,18 @@ from src.data.store import timestamp
 
 NEEDED=tuple(REQUIRED)+("tradingSession","tradingStatus")
 SAME_DAY={"openPrice","tradingSession","tradingStatus"}
+FOREIGN={"foreignBuyValue","foreignSellValue"}
 THRESHOLDS=("max_age_seconds","max_recorded_lag_seconds","max_clock_skew_seconds")
+FOREIGN_THRESHOLDS=("foreign_max_age_seconds","foreign_max_recorded_lag_seconds")
+# Measured on the live V3 feed, 09/11/2026 13:34-15:05 (evidence/v3_smoke/20261109-dong-cua). Foreign values
+# come once a minute and up to 30.5 s late: 60 + 30.5 plus a margin, so one missed batch (age >= 120) still
+# shows. Prices stay within 1.65 s of source time, but a quiet stock went 100 s without a trade.
+V3_LIMITS={"max_age_seconds":120,"foreign_max_age_seconds":100,"foreign_max_recorded_lag_seconds":35}
 # Order-matching timetable of the cash market (HOSE/HNX trading rules). Used only when the feed
 # sent no session flag for the connection, and always reported as a SESSION_FROM_SCHEDULE warning.
 SCHEDULE={
-    "HOSE":((time(9,0),"ATO"),(time(9,15),"LO"),(time(11,30),"BREAK"),(time(13,0),"LO"),(time(14,30),"ATC"),(time(14,45),"PT"),(time(15,0),"C")),
-    "HNX":((time(9,0),"LO"),(time(11,30),"BREAK"),(time(13,0),"LO"),(time(14,30),"ATC"),(time(14,45),"PT"),(time(15,0),"C")),
+    "HOSE":((time(9,0),"ATO"),(time(9,15),"LO"),(time(11,30),"BREAK"),(time(13,0),"LO"),(time(14,30),"ATC"),(time(14,45),"C")),
+    "HNX":((time(9,0),"LO"),(time(11,30),"BREAK"),(time(13,0),"LO"),(time(14,30),"ATC"),(time(14,45),"C")),
 }
 
 
@@ -32,14 +38,17 @@ class QualityPolicy:
     max_age_seconds: float=60
     max_recorded_lag_seconds: float=10
     max_clock_skew_seconds: float=5
+    # None: foreign fields follow the general limits above.
+    foreign_max_age_seconds: float|None=None
+    foreign_max_recorded_lag_seconds: float|None=None
     # FCData v2 sends a per-symbol status; FastConnect V3 does not, so V3 replays relax this.
     require_symbol_status: bool=True
     # "none": a missing session flag blocks ranking. "schedule": fall back to the timetable.
     session_fallback: str="none"
 
     def __post_init__(self):
-        if any(isinstance(getattr(self,k),bool) or not isinstance(getattr(self,k),(int,float))
-               or not math.isfinite(getattr(self,k)) or getattr(self,k)<0 for k in THRESHOLDS):
+        values=[getattr(self,k) for k in THRESHOLDS]+[v for v in (getattr(self,k) for k in FOREIGN_THRESHOLDS) if v is not None]
+        if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or v<0 for v in values):
             raise ValueError("Các ngưỡng chất lượng phải hữu hạn và không âm.")
         if not isinstance(self.require_symbol_status,bool) or self.session_fallback not in {"none","schedule"}:
             raise ValueError("Chính sách trạng thái/phiên không hợp lệ.")
@@ -47,12 +56,21 @@ class QualityPolicy:
     def needed(self):
         return tuple(k for k in NEEDED if self.require_symbol_status or k!="tradingStatus")
 
+    def limits(self,key):
+        """Age and lag limits of one field."""
+        if key in FOREIGN:
+            age,lag=self.foreign_max_age_seconds,self.foreign_max_recorded_lag_seconds
+            return (self.max_age_seconds if age is None else age,self.max_recorded_lag_seconds if lag is None else lag)
+        return self.max_age_seconds,self.max_recorded_lag_seconds
+
 
 def policy_for_profile(policy,profile):
-    """V3 has no per-symbol status and broadcasts session flags only on change."""
+    """V3 has no per-symbol status and broadcasts session flags only on change. Its measured limits
+    replace the defaults only: limits a caller chose stay as they are."""
     from dataclasses import replace
     if profile=="fastconnect_v3":
-        return replace(policy,require_symbol_status=False,session_fallback="schedule")
+        limits=V3_LIMITS if policy==QualityPolicy() else {}
+        return replace(policy,require_symbol_status=False,session_fallback="schedule",**limits)
     return policy
 
 
@@ -88,12 +106,13 @@ def assess_member(member,state,as_of,connection_state,policy,counter_issues=()):
         ages[key]=(cutoff-source_time).total_seconds()
         receive_ages[key]=(cutoff-receive_time).total_seconds()
         lags[key]=(receive_time-source_time).total_seconds()
+        max_age,max_lag=policy.limits(key)
         if lags[key]<0:
             clock_skew.append(key)
         if (source_time.date()!=cutoff.date() or receive_time.date()!=cutoff.date() or ages[key]<0 or receive_ages[key]<0
-                or (key not in SAME_DAY and max(ages[key],receive_ages[key])>policy.max_age_seconds)):
+                or (key not in SAME_DAY and max(ages[key],receive_ages[key])>max_age)):
             stale.append(key)
-        if lags[key]>policy.max_recorded_lag_seconds or -lags[key]>policy.max_clock_skew_seconds:
+        if lags[key]>max_lag or -lags[key]>policy.max_clock_skew_seconds:
             lagging.append(key)
     reasons=[]
     if connection_state!="connected":reasons.append("CONNECTION_NOT_ACTIVE")

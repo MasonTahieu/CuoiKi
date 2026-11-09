@@ -63,7 +63,7 @@ def source_time(value, received):
         return None, "INVALID_OR_INCOMPLETE_SOURCE_TIME"
     text = value.strip()
     if "T" in text or "-" in text or "/" in text or (" " in text and ":" in text):
-        for fmt in (None, "%d/%m/%Y %H:%M:%S", "%Y/%m/%d %H:%M:%S", "%d/%m/%Y %H:%M:%S.%f"):
+        for fmt in (None, "%d/%m/%Y %H:%M:%S", "%Y/%m/%d %H:%M:%S", "%d/%m/%Y %H:%M:%S.%f", "%Y/%m/%d %H:%M:%S.%f"):
             try:
                 dt = datetime.fromisoformat(text) if fmt is None else datetime.strptime(text, fmt)
             except ValueError:

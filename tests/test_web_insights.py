@@ -47,9 +47,10 @@ def test_daily_pulse_uses_reference_breadth_index_and_foreign_net(daily):
 
 def test_real_daily_data_states_its_open_question_and_is_not_labelled_demo(daily, monkeypatch):
     note = api.snapshot("daily")["scope_note"]
-    assert note and "thỏa thuận" in note["detail"]
+    assert note and "gồm cả giao dịch thỏa thuận" in note["detail"] and "chưa" not in note["label"]
     monkeypatch.setenv("SSI_SEMANTICS_VERIFIED", "true")
-    assert api.snapshot("daily")["scope_note"] is None
+    assert api.snapshot("daily")["scope_note"] == note  # a measured fact, not part of the lock
+    assert api.snapshot("demo-board")["scope_note"] is None
     script = (api.Path(api.__file__).parent / "static" / "app.js").read_text(encoding="utf-8")
     assert 'd.source_kind === "daily" ? "SSI thật"' in script
 

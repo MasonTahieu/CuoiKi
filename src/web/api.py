@@ -265,6 +265,11 @@ def _journal_frame(report):
     return pd.DataFrame(rows)
 
 
+# Measured 09/11/2026: evidence/v3_history/KHOI_NGOAI_THOA_THUAN.md
+FOREIGN_SCOPE_NOTE = {
+    "label": "Khối ngoại gồm thỏa thuận",
+    "detail": "Số khối ngoại của SSI gồm cả giao dịch thỏa thuận, còn giá trị khớp thì không. Một lô thỏa thuận một phía "
+              "có thể đẩy điểm khối ngoại của mã đó, và dữ liệu ngày không tách riêng được phần này."}
 COMPARE = {"prev": "mốc dữ liệu liền trước", "30": "30 giây trước", "60": "1 phút trước",
            "300": "5 phút trước", "900": "15 phút trước"}
 
@@ -340,17 +345,13 @@ def _daily_snapshot(point, weights, foreign, compare):
                          "cohort_id": first["cohort_id"] if first is not None else None,
                          "method": daily_rank.METHOD, "usable": None, "rows": rows}
     fetched = frame["fetched_at"].max() if "fetched_at" in frame and len(frame) else None
-    provider = load_provider_settings(load_settings().provider)
     result = {
         "source": "ssi", "source_kind": "daily", "run": DAILY_RUN, "as_of": as_of, "last_recorded": fetched,
         "mode": load_settings().mode, "synthetic": False, "profile": "fastconnect_v3",
-        # Daily scores are not locked: value units were checked (average price x volume). What is still
-        # open about the foreign fields is stated by scope_note rather than hidden behind this flag.
+        # Daily scores are not locked: value units were checked (average price x volume). What the
+        # foreign fields measure is stated by scope_note, whatever SSI_SEMANTICS_VERIFIED says.
         "verified": True, "method_kind": "daily",
-        "scope_note": None if provider.semantics_verified else {
-            "label": "Khối ngoại chưa xác minh phạm vi",
-            "detail": "Đơn vị giá trị đã đối chiếu, nhưng chưa xác nhận số khối ngoại của SSI có gồm giao dịch thỏa thuận "
-                      "hay không. Một số dòng có khối ngoại mua hoặc bán lớn hơn giá trị khớp."},
+        "scope_note": FOREIGN_SCOPE_NOTE,
         "connection": {"state": "daily", "label": "Dữ liệu ngày SSI", "severity": "muted", "epoch": None},
         "freshness_seconds": None, "gaps": [], "policy": {"max_age_seconds": 60},
         "weights": {"id": weights, "label": daily_rank.WEIGHT_LABELS[weights], "values": weight_map},
@@ -561,6 +562,7 @@ def snapshot(source, run=None, point=None, weights="balanced", foreign="value", 
         "source": data_source, "source_kind": source, "run": run, "as_of": as_of, "last_recorded": last_recorded,
         "mode": settings.mode, "synthetic": data_source == "synthetic",
         "verified": data_source == "synthetic" or bool(provider.semantics_verified),
+        "scope_note": None if data_source == "synthetic" else FOREIGN_SCOPE_NOTE,
         "profile": report.get("profile") if report else None,
         "connection": {"state": connection_state, "label": label, "severity": severity,
                        "epoch": report.get("connection_epoch") if report else None},

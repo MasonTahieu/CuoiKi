@@ -19,6 +19,7 @@
 **Việc gần nhất:** sau 11:35 ngày 10/11, đọc `evidence/v3_sessions/stream/` xem lịch buổi sáng có chạy, giờ bắt đầu thế nào và đã có cờ `LO` chưa. Không chạy lúc khoảng 15:20 vì workflow dùng cùng API Key. Xem [Công việc còn lại](#công-việc-còn-lại).
 
 **Kết quả chính trên dữ liệu thật:**
+- **Khối ngoại gồm cả giao dịch thỏa thuận:** FPT và VNM ngày 09/11 có bước nhảy mua và bán khớp đến từng đồng với thỏa thuận REST. Giá trị khớp thì không gồm thỏa thuận. Trường hợp xấu nhất, tổng điểm vẫn có Spearman trung bình 0,95 và giữ 3,8/5 mã top 5. Ghi chú trên web cần đổi từ "chưa xác minh" sang nội dung này. [Kết quả](evidence/v3_history/KHOI_NGOAI_THOA_THUAN.md)
 - **Stream so với REST (09/11):** khối lượng, giá trị, mua bán của khối ngoại và giá mở cửa đều khớp, tỷ lệ 0,9999999–1,0000002 trên 29–30 mã. [Kết quả](evidence/v3_smoke/20261109-dong-cua/KET_QUA.md)
 - **Stream 5 phút (09/11, 13:18–13:23):** nhận 8.414 gói, lỗi giải mã 0, từ chối 0, mất kết nối 0, trùng 369 (4,4%). Với ngưỡng thử 90/30 giây, 30/30 mã dùng được và thứ hạng 13:20 so với 13:23 có Spearman 0,93. Đây chỉ là một mẫu ngắn giữa phiên chiều. [Kết quả](evidence/v3_smoke/20261109-131820/SMOKE.md)
 - **Kiểm tra phiên kế tiếp:** chưa có bằng chứng điểm cuối ngày liên hệ với lợi suất phiên sau (IC +0,031, t = +0,50, 14 cặp phiên). Mẫu chỉ phân biệt được IC từ khoảng 0,13; muốn thấy IC 0,05 cần khoảng 90 phiên. [Kết quả](evidence/v3_sessions/KIEM_TRA_PHIEN_KE_TIEP.md)
@@ -179,7 +180,6 @@ Bản ZIP cũ đã được nghiệm thu ngày 05/11/2026. Gói không kèm tệ
 
 **Điểm chưa chắc chắn, chỉ kiểm được bằng dữ liệu thật:**
 - cờ phiên buổi sáng (ATO, LO) chưa quan sát được;
-- số khối ngoại có gồm giao dịch thỏa thuận không (stream và REST khớp nhau, nhưng điều đó chưa trả lời câu này);
 - `securitiesByBoard` trả 1 dòng theo quy luật nào, và lịch 15:20 của GitHub Actions trễ bao lâu (09/11 chưa chạy lúc 15:52);
 - `priceChangePercent` xử lý ngày giao dịch không hưởng quyền thế nào (`refPrice` đang trống, mẫu chưa có ngày như vậy).
 

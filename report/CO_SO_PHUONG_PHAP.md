@@ -32,7 +32,7 @@ Sản phẩm **mô tả** vị trí tương đối của các mã VN30 tại m�
 - Điểm thanh khoản gần như không đổi giữa các phiên (Spearman 0,87), trong khi động lượng gần như không lặp lại (0,00). Khoảng một phần ba điểm vì thế phản ánh quy mô giao dịch hơn là diễn biến của phiên.
 - Trung bình 10,4/30 mã có điểm trùng với mã khác mỗi phiên, do phân vị rời rạc và trọng số bằng nhau.
 - Chênh lệch giá theo bps chịu ảnh hưởng của bước giá theo vùng giá của HOSE, nên không hoàn toàn so sánh được giữa các vùng giá.
-- Chưa xác nhận số khối ngoại của SSI có gồm giao dịch thỏa thuận hay không.
+- Số khối ngoại của SSI gồm cả giao dịch thỏa thuận, còn giá trị khớp thì không, nên yếu tố khối ngoại không đo riêng áp lực khớp lệnh. Dữ liệu ngày không tách được phần này. Trong trường hợp xấu nhất trên 6 phiên, tổng điểm có Spearman trung bình 0,95 so với bản gốc và giữ 3,8/5 mã top 5. [Kết quả](../evidence/v3_history/KHOI_NGOAI_THOA_THUAN.md)
 - Danh sách VN30 lấy theo thời điểm thu thập, không theo từng ngày trong quá khứ.
 
 ## Tài liệu tham khảo

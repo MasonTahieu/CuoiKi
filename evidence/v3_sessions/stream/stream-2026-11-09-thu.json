@@ -1,0 +1,67 @@
+{
+  "schema_version": "ssi-v3-stream-window-1",
+  "window": "thu",
+  "trading_date": "2026-11-09",
+  "run": "ssi-stream-ec6334136f4e4486beb50820c4189f62",
+  "stop_reason": "duration_limit",
+  "counters": {
+    "received": 0,
+    "decoded": 0,
+    "merged": 0,
+    "duplicate": 0,
+    "rejected": 0,
+    "decode_errors": 0,
+    "reconnects": 0
+  },
+  "acks": {
+    "ok": 1,
+    "error": 0
+  },
+  "reconciliation": null,
+  "finished_at": "2026-11-09T16:19:58.724735+07:00",
+  "lag_seconds": {},
+  "gap_seconds": {},
+  "session_flags": [],
+  "connections": [
+    {
+      "at": "2026-11-09T16:18:28.463048+07:00",
+      "state": "connecting"
+    },
+    {
+      "at": "2026-11-09T16:18:30.016518+07:00",
+      "state": "connected"
+    },
+    {
+      "at": "2026-11-09T16:19:58.463273+07:00",
+      "state": "stopped"
+    }
+  ],
+  "evaluation": {
+    "first_received_at": "2026-11-09T16:18:28.463048+07:00",
+    "last_received_at": "2026-11-09T16:19:58.463273+07:00",
+    "checkpoints": [
+      {
+        "as_of": "2026-11-09T16:19:58.463273+07:00",
+        "groups": {
+          "VN30": {
+            "members": 30,
+            "data_usable": 0,
+            "ranked": 0,
+            "reasons": {
+              "CONNECTION_NOT_ACTIVE": 30,
+              "NO_BASELINE": 30,
+              "MISSING_FIELDS": 30,
+              "SESSION_NOT_LO": 30
+            },
+            "spearman_vs_previous": null,
+            "top5_overlap_vs_previous": null,
+            "spearman_momentum_weights": null,
+            "spearman_foreign_volume": null
+          }
+        }
+      }
+    ],
+    "update_intervals": {},
+    "exploratory_ranking": true
+  }
+}

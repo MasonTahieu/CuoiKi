@@ -87,6 +87,12 @@ def test_deployment_files_keep_secrets_and_heavy_stacks_out():
     assert "!webdata/ssi_daily.sqlite" in (PROJECT_ROOT / ".gitignore").read_text(encoding="utf-8")
 
 
+def test_stream_workflow_commits_summaries_only():
+    workflow = (PROJECT_ROOT / ".github" / "workflows" / "ssi-stream.yml").read_text(encoding="utf-8")
+    assert "git add evidence/v3_sessions/stream/" in workflow and "upload-artifact" not in workflow
+    assert "stream-window" in workflow and "secrets.SSI_API_KEY" in workflow and "cancel-in-progress: false" in workflow
+
+
 def test_vercel_installs_the_same_runtime_and_ships_the_demo_data():
     """Vercel reads pyproject.toml before requirements.txt; both must list the same pins."""
     import tomllib

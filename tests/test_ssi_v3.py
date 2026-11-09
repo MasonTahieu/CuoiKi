@@ -25,7 +25,7 @@ from src.ssi_api.settings import SSISettings, load_ssi_settings
 from src.ssi_api.stream_collector import Frame, StreamAuthFailed, StreamDisconnected, collect_stream
 from src.ssi_api.v3_client import MemberListError, V3Client, canonical_summary, resolve_members
 from src.ssi_api.v3_decoder import decode_v3, fan_out, retained_raw, source_time
-from src.ssi_api.v3_ops import history, reconcile, smoke
+from src.ssi_api.v3_ops import history, reconcile, smoke, stream_stats, stream_window, stream_window_for
 from src.ssi_api.v3_sample import baseline_frames, v3_members, v3_scenario
 from src.ssi_api.v3_stream import V3Factory, V3Stream
 
@@ -416,6 +416,71 @@ def stored_days(path, *sizes):
             for d, size in enumerate(sizes) for i in range(size)]
     with DailyStore(path) as store:
         store.upsert("ssi", rows, "2026-11-09T15:00:00+07:00")
+
+
+@pytest.mark.parametrize("clock,label", [("08:10", "sang"), ("11:34", "sang"), ("11:36", "chieu"), ("15:04", "chieu"), ("15:05", None)])
+def test_stream_window_is_chosen_by_the_clock(clock, label):
+    window = stream_window_for(datetime.fromisoformat(f"2026-11-10T{clock}:00+07:00"))
+    assert (window[0] if window else None) == label
+
+
+def run_window(tmp_path, at, **options):
+    moments = {"now": datetime.fromisoformat(at)}
+    logins = []
+
+    def login():
+        logins.append(1)
+        client = SmokeClient(v3_members(11))
+        client.close = lambda: None
+        return client
+
+    def sleep(seconds):
+        moments["now"] += timedelta(seconds=seconds)
+
+    return stream_window(V3_SETTINGS, login, clock=lambda: moments["now"], sleep=sleep, database=tmp_path / "s.sqlite",
+                         out_root=tmp_path / "out", ws_factory=lambda c: FakeWS(script=[]), **options), moments, logins
+
+
+def test_stream_window_does_nothing_once_over_or_at_the_weekend_or_already_done(tmp_path):
+    for at in ("2026-11-10T15:10:00+07:00", "2026-11-14T09:00:00+07:00"):
+        result, _, logins = run_window(tmp_path, at)
+        assert "skipped" in result and not logins
+    (tmp_path / "out").mkdir()
+    (tmp_path / "out" / "stream-2026-11-10-sang.json").write_text("{}", encoding="utf-8")
+    result, _, logins = run_window(tmp_path, "2026-11-10T09:00:00+07:00")
+    assert "đã có" in result["skipped"] and not logins
+
+
+def test_stream_window_waits_for_the_start_and_keeps_no_prices(tmp_path, monkeypatch):
+    def fake_collect(settings, client, *, seconds, database, ws_factory):
+        fake_collect.seconds = seconds
+        return {"run": "r1", "stop_reason": "duration_limit", "counters": {"received": 0}, "acks": {"ok": 1, "error": 0}}
+
+    monkeypatch.setattr("src.ssi_api.v3_ops.collect", fake_collect)
+    monkeypatch.setattr("src.ssi_api.v3_ops.stream_stats", lambda path, run: {"lag_seconds": {}, "session_flags": []})
+    monkeypatch.setattr("src.ssi_api.v3_ops.evaluate_run", lambda *a, **k: 1 / 0)
+    result, moments, logins = run_window(tmp_path, "2026-11-10T08:30:00+07:00")
+    assert logins and moments["now"] >= datetime.fromisoformat("2026-11-10T08:55:00+07:00")
+    assert fake_collect.seconds == 160 * 60 and result["window"] == "sang" and "ZeroDivisionError" in result["analysis_error"]
+    saved = json.loads((tmp_path / "out" / "stream-2026-11-10-sang.json").read_text(encoding="utf-8"))
+    assert saved["counters"] == {"received": 0} and saved["acks"]["ok"] == 1 and "analysis_error" in saved
+
+
+def test_stream_stats_reads_flags_of_the_board_and_connection_changes(tmp_path):
+    db = tmp_path / "s.sqlite"
+    store = EventStore(db)
+    write = lambda channel, payload, at: store.append(source="ssi", run="r1", received_at=f"2026-11-10T{at}+07:00", channel=channel, payload=payload)
+    write("connection", {"state": "connected", "connection_epoch": 1}, "13:00:00")
+    write("connection", {"state": "duplicate", "connection_epoch": 1}, "13:00:01")
+    room = lambda at: {"connection_epoch": 1, "message": {"message_type": "ROOM", "data": {"s": "FPT", "t": f"2026/11/10 {at}"}}}
+    write("ssiRaw", room("13:00:00"), "13:00:20")
+    write("ssiRaw", room("13:01:00"), "13:01:20")
+    for board, flag in (("HNX", "ATC"), ("HOSE", "ATC")):
+        write("ssiRaw", {"connection_epoch": 1, "message": {"message_type": "MARKET_FLAG", "data": {"b": board, "f": flag, "t": "2026/11/10 14:30:00"}}}, "14:30:00")
+    store.close()
+    stats = stream_stats(db, "r1")
+    assert stats["lag_seconds"]["ROOM"]["p50"] == 20 and stats["gap_seconds"]["ROOM"]["p50"] == 60
+    assert [f["flag"] for f in stats["session_flags"]] == ["ATC"] and [c["state"] for c in stats["connections"]] == ["connected"]
 
 
 def test_summaries_paginate_and_keep_absent_fields_none():

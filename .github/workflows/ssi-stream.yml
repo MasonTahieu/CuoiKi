@@ -1,0 +1,78 @@
+# Capture the VN30 stream in the morning and afternoon, then commit a summary (never the raw ticks).
+# GitHub may start scheduled runs late or drop them, so each window has spare triggers ahead of its
+# start: the job waits for the window, and a run that finds its window done or over exits at once.
+# Editing this file runs a short trial, which also proves the stream connects from GitHub's servers.
+name: SSI stream capture
+
+on:
+  schedule:
+    - cron: "10 1 * * 1-5"    # 08:10 Asia/Ho_Chi_Minh, window 08:55-11:35
+    - cron: "30 1 * * 1-5"    # 08:30
+    - cron: "45 1 * * 1-5"    # 08:45
+    - cron: "15 5 * * 1-5"    # 12:15, window 12:55-15:05
+    - cron: "35 5 * * 1-5"    # 12:35
+    - cron: "50 5 * * 1-5"    # 12:50
+  push:
+    branches: [main]
+    paths: [".github/workflows/ssi-stream.yml"]
+  workflow_dispatch:
+    inputs:
+      trial_seconds:
+        description: "Thu thử ngay trong số giây này; để trống để chạy theo khung giờ"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ssi-stream
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      DATA_PROVIDER: ssi
+      APP_MODE: demo
+      SSI_API_PROFILE: fastconnect_v3
+      SSI_API_KEY: ${{ secrets.SSI_API_KEY }}
+      SSI_API_SECRET: ${{ secrets.SSI_API_SECRET }}
+      SSI_OTP_MODE: none
+      SSI_DAILY_DATABASE: webdata/ssi_daily.sqlite
+      TZ: Asia/Ho_Chi_Minh
+      TRIAL_SECONDS: ${{ github.event_name == 'push' && '90' || inputs.trial_seconds }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install
+        run: python -m pip install -r requirements-ci.txt
+
+      - name: Capture and summarize
+        run: |
+          if [ -n "$TRIAL_SECONDS" ]; then
+            python -X utf8 -m src.cli stream-window --trial --seconds "$TRIAL_SECONDS" --otp-mode none
+          else
+            python -X utf8 -m src.cli stream-window --otp-mode none
+          fi
+
+      # A bot author on purpose: Vercel Hobby skips it, so a summary does not redeploy the site.
+      - name: Commit the summary
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add evidence/v3_sessions/stream/
+          if git diff --cached --quiet; then
+            echo "No new summary."
+          else
+            git commit -m "data: stream summary $(date +%F)"
+            git pull --rebase
+            git push
+          fi

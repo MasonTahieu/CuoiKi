@@ -18,9 +18,10 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="VN30 Screener — SSI FastConnect")
     parser.add_argument("command", choices=["check", "demo", "readiness", "connection-plan", "demo-pipeline", "collect", "replay",
-                                            "smoke-v3", "history-v3", "session-v3", "evaluate-v3"])
+                                            "smoke-v3", "history-v3", "session-v3", "stream-window", "evaluate-v3"])
     parser.add_argument("--transport", choices=["rest", "ws"], default=None)
     parser.add_argument("--seconds", type=int, default=300)
+    parser.add_argument("--trial", action="store_true", help="stream-window: thu ngay trong --seconds giây, không chờ khung giờ")
     parser.add_argument("--otp-mode", choices=["none", "prompt", "smart"], help="Ghi đè SSI_OTP_MODE cho lần chạy này")
     parser.add_argument("--sessions", type=int, default=10, help="Số phiên lịch sử cho history-v3")
     parser.add_argument("--every", type=int, default=15, help="Khoảng phút giữa các mốc đánh giá (evaluate-v3)")
@@ -70,6 +71,15 @@ def main():
             output.parent.mkdir(parents=True, exist_ok=True)
             output.write_text(json.dumps(result,ensure_ascii=False,indent=2,default=str),encoding="utf-8")
             result["output"] = str(output)
+            print(json.dumps(result,ensure_ascii=False,indent=2,default=str))
+            return 0
+        if args.command == "stream-window":
+            if settings.provider != "ssi":
+                raise ConfigurationError("Lệnh V3 cần DATA_PROVIDER=ssi.")
+            neo.validate_v3()
+            from src.ssi_api import v3_ops
+            result = v3_ops.stream_window(neo, lambda: v3_ops.login(neo, args.otp_mode or "none"),
+                                          trial_seconds=args.seconds if args.trial else None)
             print(json.dumps(result,ensure_ascii=False,indent=2,default=str))
             return 0
         if args.command in {"smoke-v3", "history-v3", "session-v3"} or (

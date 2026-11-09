@@ -100,7 +100,7 @@
 | Đơn vị giá và khối lượng | Smoke test và đối chiếu REST | Trung vị tỷ lệ `totalTradingVolume` stream/REST trong khoảng 0,99–1,01 |
 | Giá trị khớp suy ra | Đối chiếu ở 15:05 | Trung vị tỷ lệ `totalTradingValue` trong khoảng 0,98–1,02. Nếu lệch, bỏ `a × v` và dùng nguồn khác |
 | Khối ngoại | Đối chiếu `bv/sv` với REST | Cùng thứ tự độ lớn. Ghi rõ là số ước tính hay số chính xác |
-| Phiên | Cờ `market.flag` trong các ngày thu | Nhận được LO, ATC trên cả hai sàn |
+| Phiên | Cờ `market.flag` trong các ngày thu | Nhận được LO, ATC trên HOSE |
 | Thời gian nguồn | Dạng `t` và độ trễ ghi nhận | Không có chênh âm lớn hơn 5 giây |
 
 ## 5. Ngưỡng dữ liệu cũ phải chọn từ dữ liệu thật
@@ -116,6 +116,7 @@ Mã trong `QualityPolicy` là `V3_LIMITS`. Sau 5 phiên, đọc `update_interval
 
 ## 6. Giới hạn đã biết
 
+- Thu tự động bằng `.github/workflows/ssi-stream.yml` chỉ giữ bản tóm tắt trong `evidence/v3_sessions/stream/`. Lịch của GitHub có thể trễ hoặc bị bỏ qua, nên một khung có thể thiếu dữ liệu đầu giờ hoặc thiếu cả khung.
 - Token SSI sống 15 phút và SDK mở lại kết nối mỗi khoảng 14 phút. ROOM không gửi lại khi vừa đăng ký, nên khoảng 1 phút sau mỗi lần đó có mã chưa có số khối ngoại và tạm không xếp hạng. Bộ thu không giữ dữ liệu nền qua các lần nối lại, đây là chủ đích.
 - `securitiesByBoard?index=VN30` có lúc chỉ trả một dòng là chính chỉ số. Mã từ chối kết quả đó, dùng lại thành phần của phiên đầy đủ gần nhất và ghi `member_warning`. Nếu rổ VN30 vừa đổi, cảnh báo này cần được đọc.
 - Smoke test và lệnh `phien` cần người ngồi máy để nhập OTP nếu SSI yêu cầu. Task Scheduler không nhập OTP thay được.

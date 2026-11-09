@@ -7,15 +7,16 @@
 | Hạng mục | Hiện trạng |
 |---|---|
 | Trang web | https://cuoiki.vercel.app, mở sẵn nguồn **Cuối ngày · SSI thật** |
-| Mã nguồn | [MasonTahieu/CuoiKi](https://github.com/MasonTahieu/CuoiKi), nhánh `main`, repo công khai. **303/303 kiểm thử** offline |
+| Mã nguồn | [MasonTahieu/CuoiKi](https://github.com/MasonTahieu/CuoiKi), nhánh `main`, repo công khai. **312/312 kiểm thử** offline |
 | Phạm vi | Chỉ rổ VN30. Giảng viên đã xác nhận dùng SSI làm nguồn chính và phạm vi này |
 | Dữ liệu ngày (REST) | 15 phiên VN30 thật (19/10–06/11/2026) trong `webdata/ssi_daily.sqlite`. Không cần OTP |
-| Tự động hằng ngày | GitHub Actions lấy dữ liệu lúc 15:20 thứ Hai–thứ Sáu, Vercel hiển thị. Đã chạy tay thành công một lần. Lần theo lịch 09/11 chưa chạy lúc 16:00, cần theo dõi |
+| Tự động hằng ngày | GitHub Actions lấy dữ liệu lúc 15:20 thứ Hai–thứ Sáu, Vercel hiển thị. Đã chạy tay thành công một lần. Lần theo lịch 09/11 chưa chạy lúc 16:15, nên đã thêm hai lần dự phòng 15:50 và 16:20 |
 | Stream trong phiên | **Đã thu thật buổi chiều 09/11, không cần OTP**, đủ 30 mã. Tổng cuối ngày khớp REST (tỷ lệ 1,0). Ngưỡng đã đặt riêng theo số đo: 30/30 mã dùng được khi khớp lệnh liên tục |
+| Thu stream tự động | Workflow `ssi-stream.yml`: khung 08:55–11:35 và 12:55–15:05, thứ Hai–thứ Sáu, mỗi khung ba lần kích hoạt dự phòng. Chỉ commit bản tóm tắt vào `evidence/v3_sessions/stream/`, không lưu nhật ký thô. **Chưa thu được phiên nào bằng lịch này** |
 | Mô hình 4 yếu tố | Mới chạy trên dữ liệu giả lập. `SSI_SEMANTICS_VERIFIED` vẫn `false` nên điểm trong phiên trên dữ liệu thật đang khóa |
 | Báo cáo, video, ZIP | Gói ngày 05/11 lỗi thời và đã gỡ. Có sẵn bản nháp phần V3 và phần cơ sở tài chính |
 
-**Việc gần nhất:** xem lịch tự động có chạy và trang có hiện phiên 09/11 không, rồi thu thêm phiên có buổi sáng. Không chạy lúc khoảng 15:20 vì workflow dùng cùng API Key. Xem [Công việc còn lại](#công-việc-còn-lại).
+**Việc gần nhất:** sau 11:35 ngày 10/11, đọc `evidence/v3_sessions/stream/` xem lịch buổi sáng có chạy, giờ bắt đầu thế nào và đã có cờ `LO` chưa. Không chạy lúc khoảng 15:20 vì workflow dùng cùng API Key. Xem [Công việc còn lại](#công-việc-còn-lại).
 
 **Kết quả chính trên dữ liệu thật:**
 - **Stream so với REST (09/11):** khối lượng, giá trị, mua bán của khối ngoại và giá mở cửa đều khớp, tỷ lệ 0,9999999–1,0000002 trên 29–30 mã. [Kết quả](evidence/v3_smoke/20261109-dong-cua/KET_QUA.md)
@@ -158,8 +159,9 @@ Bản ZIP cũ đã được nghiệm thu ngày 05/11/2026. Gói không kèm tệ
 - Lịch phiên dự phòng: 14:45 chuyển sang `C` theo cờ thật, bỏ `PT`.
 
 **2b. Việc tiếp theo về stream**
-- Chọn cách thu stream: stream không đòi OTP nên có thể dùng GitHub Actions, nhưng chưa thử từ IP của Actions. Máy cá nhân là phương án dự phòng.
-- Thu ít nhất 5 phiên, ưu tiên 10 phiên, bằng `.\SSI_V3.ps1 -Lenh phien`.
+- Theo dõi lịch GitHub: nếu trễ nhiều hoặc bị bỏ qua, phiên đó thiếu dữ liệu đầu khung. Task Scheduler trên máy là phương án dự phòng.
+- Nhật ký thô không được lưu vì repo công khai và khoảng 4 GB mỗi phiên. Bản tóm tắt có độ trễ, nhịp, cờ phiên, kết nối, đánh giá theo mốc và đối chiếu REST. Muốn phát lại với ngưỡng khác thì phải thu trên máy.
+- Thu ít nhất 5 phiên, ưu tiên 10 phiên. Workflow `ssi-stream.yml` tự chạy; chạy tay được bằng `python -m src.cli stream-window`. Không chạy stream trên máy trùng giờ với workflow, vì cùng API Key.
 - `.\SSI_V3.ps1 -Lenh danhgia`: kiểm tra lại ngưỡng bằng phân vị khoảng cập nhật, ghi căn cứ cho ngưỡng tối thiểu 10 mã.
 - Đối chiếu khối ngoại trong phiên với dữ liệu ngày, làm rõ số khối ngoại có gồm giao dịch thỏa thuận không.
 - Bật `SSI_SEMANTICS_VERIFIED=true` khi đạt các điều kiện ở mục 4 của [hướng dẫn V3](docs/V3_KET_NOI.md).

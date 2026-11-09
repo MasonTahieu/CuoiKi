@@ -5,7 +5,11 @@ name: SSI daily summaries
 
 on:
   schedule:
-    - cron: "20 8 * * 1-5"   # 15:20 Asia/Ho_Chi_Minh (UTC+7), Monday–Friday
+    # 15:20, 15:50, 16:20 Asia/Ho_Chi_Minh, Monday–Friday. GitHub may delay or drop a scheduled run;
+    # the spares only cost a few minutes, the fetch is idempotent and an unchanged store is not committed.
+    - cron: "20 8 * * 1-5"
+    - cron: "50 8 * * 1-5"
+    - cron: "20 9 * * 1-5"
   workflow_dispatch: {}
 
 permissions:

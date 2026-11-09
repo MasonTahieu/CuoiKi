@@ -10,18 +10,25 @@ import json
 import re
 import statistics
 
+from pathlib import Path
+
+from src.analytics.sessions import evaluate_run
 from src.config import PROJECT_ROOT
 from src.data.daily_store import DailyStore, default_daily_path
 from src.data.ssi_journal import BufferedSink, SSIJournal
 from src.data.store import EventStore, TZ, now, timestamp
 from src.ssi_api.replay import replay
 from src.ssi_api.stream_collector import collect_stream
-from src.ssi_api.v3_client import V3Client, resolve_members
+from src.ssi_api.v3_client import EXPECTED_BOARD, V3Client, resolve_members
+from src.ssi_api.v3_decoder import source_time
 from src.ssi_api.v3_stream import V3Factory
 
 DEFAULT_WINDOWS = ((time(8, 58), time(11, 31)), (time(12, 59), time(14, 46)))
 DAILY_DB = default_daily_path()
 SUMMARY_AT = time(15, 5)
+STREAM_WINDOWS = (("sang", time(8, 55), time(11, 35)), ("chieu", time(12, 55), time(15, 5)))
+STREAM_DB = PROJECT_ROOT / "runtime" / "ssi-stream.sqlite"
+STREAM_EVIDENCE = PROJECT_ROOT / "evidence" / "v3_sessions" / "stream"
 
 
 def time_format(value):
@@ -202,6 +209,100 @@ def smoke_markdown(report):
              json.dumps(s["reconciliation"], ensure_ascii=False, indent=2), "```", "",
              "Không bật `SSI_SEMANTICS_VERIFIED=true` chỉ dựa trên một lần smoke test.", ""]
     return "\n".join(lines)
+
+
+def _spread(values):
+    if not values:
+        return None
+    ordered = sorted(values)
+    return {"count": len(ordered), "p50": round(statistics.median(ordered), 2),
+            "p99": round(ordered[min(len(ordered) - 1, int(.99 * len(ordered)))], 2),
+            "min": round(ordered[0], 2), "max": round(ordered[-1], 2)}
+
+
+def stream_stats(path, run):
+    """Lag, cadence, session flags and connection changes of a run. Counts and times, no prices."""
+    lags, gaps, previous, flags, connections = defaultdict(list), defaultdict(list), {}, [], []
+    with SSIJournal(path) as journal:
+        for event in journal.events(run):
+            if event["channel"] == "connection":
+                state = event["payload"].get("state")
+                if state not in {"duplicate", "rejected"}:
+                    connections.append({"at": event["received_at"], "state": state})
+                continue
+            if event["channel"] != "ssiRaw":
+                continue
+            message = event["payload"].get("message", {})
+            kind, data = message.get("message_type"), message.get("data") or {}
+            received = timestamp(event["received_at"])
+            source, _ = source_time(data.get("t"), received)
+            if kind == "MARKET_FLAG":
+                if data.get("b") == EXPECTED_BOARD["VN30"]:
+                    flags.append({"at": event["received_at"], "flag": data.get("f")})
+                continue
+            if source is not None:
+                lags[kind].append((received - source).total_seconds())
+            key = (kind, data.get("s"))
+            if key in previous:
+                gaps[kind].append((received - previous[key]).total_seconds())
+            previous[key] = received
+    return {"lag_seconds": {k: _spread(v) for k, v in lags.items()}, "gap_seconds": {k: _spread(v) for k, v in gaps.items()},
+            "session_flags": flags, "connections": connections}
+
+
+def stream_window_for(at):
+    """The window still open or still ahead at ``at``; None once the afternoon one is over."""
+    for label, start, end in STREAM_WINDOWS:
+        if at.time() < end:
+            return label, datetime.combine(at.date(), start, tzinfo=TZ), datetime.combine(at.date(), end, tzinfo=TZ)
+    return None
+
+
+def stream_window(settings, login, *, trial_seconds=None, clock=None, sleep=None, ws_factory=None, database=None, out_root=None):
+    """Wait for today's window, collect until it ends, write a summary. Exits quietly if nothing is left to do."""
+    import time as _time
+    clock = clock or (lambda: datetime.now(TZ))
+    sleep = sleep or _time.sleep
+    database, out_root = Path(database or STREAM_DB), Path(out_root or STREAM_EVIDENCE)
+    current = clock()
+    if trial_seconds:
+        label, seconds = "thu", int(trial_seconds)
+    else:
+        window = stream_window_for(current) if current.weekday() < 5 else None
+        if window is None:
+            return {"skipped": "hết khung giờ hôm nay"}
+        label, start, end = window
+        if (out_root / f"stream-{current.date().isoformat()}-{label}.json").exists():
+            return {"skipped": f"đã có bản tóm tắt khung {label}"}
+        while clock() < start:
+            sleep(min(30, (start - clock()).total_seconds()))
+        seconds = int((end - clock()).total_seconds())
+    output = out_root / f"stream-{current.date().isoformat()}-{label}.json"
+    client = login()
+    reconciliation = None
+    try:
+        collected = collect(settings, client, seconds=seconds, database=database, ws_factory=ws_factory)
+        if label == "chieu":
+            try:
+                reconciliation = reconcile(last_stream_totals(database, collected["run"]),
+                                           fetch_summaries(client, current.date()))["summary"]
+            except Exception as error:  # the capture matters more than this comparison
+                reconciliation = {"error": type(error).__name__}
+    finally:
+        client.close()
+    report = {"schema_version": "ssi-v3-stream-window-1", "window": label, "trading_date": current.date().isoformat(),
+              "run": collected["run"], "stop_reason": collected["stop_reason"], "counters": collected["counters"],
+              "acks": collected["acks"], "reconciliation": reconciliation, "finished_at": now()}
+    try:
+        report.update(stream_stats(database, collected["run"]))
+        evaluation = evaluate_run(database, collected["run"], semantics_verified=settings.semantics_verified)
+        report["evaluation"] = {k: evaluation[k] for k in ("first_received_at", "last_received_at", "checkpoints", "update_intervals", "exploratory_ranking")}
+    except Exception as error:  # keep the counters above even if the analysis of a run fails
+        report["analysis_error"] = f"{type(error).__name__}: {error}"
+    out_root.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    return {"output": str(output), "window": label, "run": collected["run"], "stop_reason": collected["stop_reason"],
+            "counters": collected["counters"], "acks": collected["acks"], "analysis_error": report.get("analysis_error")}
 
 
 def windows_today(windows=DEFAULT_WINDOWS, at=None):

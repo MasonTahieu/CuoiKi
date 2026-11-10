@@ -1,7 +1,7 @@
 {
   "intraday": null,
   "daily": {
-    "sessions": 16,
+    "sessions": 17,
     "trading_dates": [
       "2026-10-19",
       "2026-10-20",
@@ -18,35 +18,36 @@
       "2026-11-04",
       "2026-11-05",
       "2026-11-06",
-      "2026-11-09"
+      "2026-11-09",
+      "2026-11-10"
     ],
     "groups": {
       "VN30": {
         "symbols": 30,
-        "days": 16,
+        "days": 17,
         "day_to_day_persistence": {
           "momentum": {
-            "pairs": 15,
-            "mean_spearman": 0.006007388169635077
+            "pairs": 16,
+            "mean_spearman": 0.009803691926003437
           },
           "turnover": {
-            "pairs": 15,
-            "mean_spearman": 0.8765146459028551
+            "pairs": 16,
+            "mean_spearman": 0.8791713014460512
           },
           "foreign_ratio": {
-            "pairs": 15,
-            "mean_spearman": 0.41153874675565427
+            "pairs": 16,
+            "mean_spearman": 0.4140195455267757
           }
         },
         "factor_rank_correlation": {
-          "momentum~turnover": 0.06888379504742576,
-          "momentum~foreign_ratio": 0.39489679275353845,
-          "turnover~foreign_ratio": 0.16623240292735636
+          "momentum~turnover": 0.07021643226455117,
+          "momentum~foreign_ratio": 0.40347060979180255,
+          "turnover~foreign_ratio": 0.16033595320325017
         },
         "missing_share": {
           "momentum": 0.0,
           "turnover": 0.0,
-          "foreign_ratio": 0.014583333333333334
+          "foreign_ratio": 0.01568627450980392
         }
       }
     }
@@ -55,8 +56,8 @@
   "forward_check": {
     "method": "next-session-rank-ic-v2",
     "group": "VN30",
-    "sessions": 16,
-    "pairs": 15,
+    "sessions": 17,
+    "pairs": 16,
     "top_n": 5,
     "returns": {
       "tradable": "mở cửa → đóng cửa của phiên t+1 (mua được sau khi có điểm)",
@@ -64,8 +65,13 @@
     },
     "adjustment": {
       "tolerance_pp": 0.3,
-      "compared": 450,
-      "flagged": [],
+      "compared": 480,
+      "flagged": [
+        {
+          "symbol": "GVR",
+          "tradingDate": "2026-10-21"
+        }
+      ],
       "ref_price_present": 0
     },
     "weights": {
@@ -94,7 +100,7 @@
             "next_date": "2026-10-22",
             "ranked": 30,
             "ic": -0.031197781076754527,
-            "top_minus_bottom_pp": 0.05482476414204296,
+            "top_minus_bottom_pp": 0.05482476414204074,
             "ic_close": -0.12533427437885433,
             "top_minus_bottom_close_pp": -0.1060000000000001
           },
@@ -205,62 +211,71 @@
             "top_minus_bottom_pp": -0.022469013114168268,
             "ic_close": -0.25298129297243166,
             "top_minus_bottom_close_pp": -0.12200000000000011
+          },
+          {
+            "date": "2026-11-09",
+            "next_date": "2026-11-10",
+            "ranked": 30,
+            "ic": 0.19964375288102723,
+            "top_minus_bottom_pp": 0.22977046400433754,
+            "ic_close": 0.04254845599393286,
+            "top_minus_bottom_close_pp": -0.43399999999999994
           }
         ],
         "ic": {
-          "pairs": 15,
-          "mean": 0.021588549486236376,
-          "sd": 0.22923128186850894,
-          "t": 0.3647499239520439,
-          "positive_share": 0.4666666666666667
+          "pairs": 16,
+          "mean": 0.032716999698410805,
+          "sd": 0.22588786380400933,
+          "t": 0.5793494019102784,
+          "positive_share": 0.5
         },
         "power": {
-          "detectable_ic": 0.1183745249475351,
+          "detectable_ic": 0.11294393190200466,
           "target_ic": 0.05,
-          "sessions_for_target": 86
+          "sessions_for_target": 83
         },
         "top_minus_bottom_pp": {
-          "pairs": 15,
-          "mean": -0.10481991473050842,
-          "sd": 0.9002989673558691,
-          "t": -0.45092330306058315,
-          "positive_share": 0.4666666666666667
+          "pairs": 16,
+          "mean": -0.08390801605958068,
+          "sd": 0.8737844520686695,
+          "t": -0.38411311101235507,
+          "positive_share": 0.5
         },
         "ic_close": {
-          "pairs": 15,
-          "mean": -0.03902887874169337,
-          "sd": 0.22364942281743835,
-          "t": -0.6758711714231217,
-          "positive_share": 0.4666666666666667
+          "pairs": 16,
+          "mean": -0.03393029532071674,
+          "sd": 0.21702624008295776,
+          "t": -0.6253676109902095,
+          "positive_share": 0.5
         },
         "top_minus_bottom_close_pp": {
-          "pairs": 15,
-          "mean": -0.16760000000000003,
-          "sd": 0.9963600037852066,
-          "t": -0.6514834059560438,
-          "positive_share": 0.4
+          "pairs": 16,
+          "mean": -0.18424999999999997,
+          "sd": 0.9648764687772212,
+          "t": -0.7638283488600287,
+          "positive_share": 0.375
         },
         "factor_ic": {
           "momentum": {
-            "pairs": 15,
-            "mean": 0.0036653696767344965,
-            "sd": 0.22113840028507967,
-            "t": 0.06419471108313057,
-            "positive_share": 0.4666666666666667
+            "pairs": 16,
+            "mean": 0.007608049588909151,
+            "sd": 0.2142212910524357,
+            "t": 0.14205963471757627,
+            "positive_share": 0.5
           },
           "liquidity": {
-            "pairs": 15,
-            "mean": 0.05425428708786992,
-            "sd": 0.16351800779150927,
-            "t": 1.2850324755643652,
-            "positive_share": 0.6
+            "pairs": 16,
+            "mean": 0.057065418880107625,
+            "sd": 0.1583730901128211,
+            "t": 1.4412907859398492,
+            "positive_share": 0.625
           },
           "foreign": {
-            "pairs": 15,
-            "mean": -0.017365297954448702,
-            "sd": 0.169049783439207,
-            "t": -0.3978444006921529,
-            "positive_share": 0.4666666666666667
+            "pairs": 16,
+            "mean": -0.012372413131399904,
+            "sd": 0.16453420022542314,
+            "t": -0.3007864167923471,
+            "positive_share": 0.5
           }
         }
       },
@@ -289,7 +304,7 @@
             "next_date": "2026-10-22",
             "ranked": 30,
             "ic": -0.06928047023095871,
-            "top_minus_bottom_pp": 0.34925604376289543,
+            "top_minus_bottom_pp": 0.3492560437628932,
             "ic_close": -0.1656086680643732,
             "top_minus_bottom_close_pp": 0.2519999999999999
           },
@@ -400,62 +415,71 @@
             "top_minus_bottom_pp": -0.4599093536803882,
             "ic_close": -0.19501336191156307,
             "top_minus_bottom_close_pp": -0.45799999999999996
+          },
+          {
+            "date": "2026-11-09",
+            "next_date": "2026-11-10",
+            "ranked": 30,
+            "ic": 0.10929327264750896,
+            "top_minus_bottom_pp": -0.11898571458734963,
+            "ic_close": -0.10621242484969945,
+            "top_minus_bottom_close_pp": -0.7619999999999999
           }
         ],
         "ic": {
-          "pairs": 15,
-          "mean": 0.028488936571120824,
-          "sd": 0.2380712226405822,
-          "t": 0.46346289008515407,
-          "positive_share": 0.4666666666666667
+          "pairs": 16,
+          "mean": 0.03353920757589508,
+          "sd": 0.23088409150153566,
+          "t": 0.5810570552137327,
+          "positive_share": 0.5
         },
         "power": {
-          "detectable_ic": 0.12293945073309506,
+          "detectable_ic": 0.11544204575076783,
           "target_ic": 0.05,
-          "sessions_for_target": 92
+          "sessions_for_target": 87
         },
         "top_minus_bottom_pp": {
-          "pairs": 15,
-          "mean": 0.05989609864095978,
-          "sd": 1.0397444461552003,
-          "t": 0.22310923938766325,
-          "positive_share": 0.6
+          "pairs": 16,
+          "mean": 0.04871598531419033,
+          "sd": 1.0054835642783373,
+          "t": 0.1938012198107091,
+          "positive_share": 0.5625
         },
         "ic_close": {
-          "pairs": 15,
-          "mean": -0.029034849253846702,
-          "sd": 0.2190445538508067,
-          "t": -0.5133726707324706,
-          "positive_share": 0.4666666666666667
+          "pairs": 16,
+          "mean": -0.0338584477285875,
+          "sd": 0.2124949154752823,
+          "t": -0.6373507366584678,
+          "positive_share": 0.4375
         },
         "top_minus_bottom_close_pp": {
-          "pairs": 15,
-          "mean": -0.07119999999999996,
-          "sd": 1.0568359245543142,
-          "t": -0.26092641993245935,
-          "positive_share": 0.5333333333333333
+          "pairs": 16,
+          "mean": -0.114375,
+          "sd": 1.0355034121946036,
+          "t": -0.4418140921722249,
+          "positive_share": 0.5
         },
         "factor_ic": {
           "momentum": {
-            "pairs": 15,
-            "mean": 0.0036653696767344965,
-            "sd": 0.22113840028507967,
-            "t": 0.06419471108313057,
-            "positive_share": 0.4666666666666667
+            "pairs": 16,
+            "mean": 0.007608049588909151,
+            "sd": 0.2142212910524357,
+            "t": 0.14205963471757627,
+            "positive_share": 0.5
           },
           "liquidity": {
-            "pairs": 15,
-            "mean": 0.05425428708786992,
-            "sd": 0.16351800779150927,
-            "t": 1.2850324755643652,
-            "positive_share": 0.6
+            "pairs": 16,
+            "mean": 0.057065418880107625,
+            "sd": 0.1583730901128211,
+            "t": 1.4412907859398492,
+            "positive_share": 0.625
           },
           "foreign": {
-            "pairs": 15,
-            "mean": -0.017365297954448702,
-            "sd": 0.169049783439207,
-            "t": -0.3978444006921529,
-            "positive_share": 0.4666666666666667
+            "pairs": 16,
+            "mean": -0.012372413131399904,
+            "sd": 0.16453420022542314,
+            "t": -0.3007864167923471,
+            "positive_share": 0.5
           }
         }
       }

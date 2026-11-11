@@ -131,6 +131,11 @@ def test_daily_source_ranks_three_factors_and_names_missing_foreign_data(demo, m
     missing = [r for r in vn["rows"] if r["rank"] is None]
     assert len(missing) == 3
     assert missing[0]["status"]["details"] == ["Thiếu dữ liệu khối ngoại (SSI trả trống)"]
+    assert missing[0]["status"]["label"] == "Thiếu khối ngoại"
+    assert missing[0]["total"] is None and missing[0]["raw"]["foreign_ratio"] is None
+    assert missing[0]["raw"]["momentum"] == pytest.approx(-0.5)
+    assert missing[0]["raw"]["turnover"] == 2e9
+    assert data["pulse"]["total_value"] == sum(range(2, 16)) * 1e9
     assert [p["label"] for p in api.history("daily", "ssi-daily", None, "AAA03")["points"]] == ["05/11", "06/11"]
     with pytest.raises(api.ApiError):
         api.snapshot("daily", weights="bogus")

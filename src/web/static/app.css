@@ -89,6 +89,7 @@ button, input, select { font: inherit; color: inherit; }
 .page > * { min-width: 0; }
 .metrics {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
   background: var(--surface); border: 1px solid var(--seam); border-radius: var(--radius);
 }
 .metric { padding: 12px 18px; min-width: 0; }
@@ -145,6 +146,11 @@ input[type="number"] { width: 80px; }
   border-bottom: 1px solid var(--seam); background: var(--surface-2);
 }
 .notice .dot { margin-left: 2px; }
+.rank-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 10px 16px 0; }
+.rank-presets .segmented { flex-wrap: wrap; }
+.rank-presets .segmented button { white-space: nowrap; padding-inline: 9px; }
+#rank-filter-count { font-size: 12px; }
+#min:disabled { opacity: .45; }
 .filterbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 10px 16px 4px; }
 .legend-row { padding: 4px 16px 10px; border-bottom: 1px solid var(--seam); display: grid; gap: 4px; }
 .legend-keys { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-2); }
@@ -243,6 +249,16 @@ svg.chart .grid { stroke: var(--seam); stroke-width: 1; }
 .pulse-value > span:not(.breadth) { font-size: 13px; color: var(--text-2); }
 .pulse-value .move { display: inline-flex; align-items: center; gap: 2px; font-weight: 600; }
 .pulse-value .move.up { color: var(--up); } .pulse-value .move.down { color: var(--down); } .pulse-value .move.ref { color: var(--ref); }
+.snapshot-summary {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px;
+  padding: 7px 0 0; margin-top: calc(7px - var(--gap));
+  border-top: 1px solid var(--seam); color: var(--text-2); font-size: 13px;
+}
+.snapshot-summary p { margin: 0; }
+.summary-action {
+  color: #CFE0FF; background: transparent; border: 0; padding: 2px 0;
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
 .move .icon { width: 12px; height: 12px; stroke-width: 2.2; }
 .breadth { display: flex; width: 120px; height: 6px; align-self: center; border-radius: 3px; overflow: hidden; background: var(--raised); }
 .breadth i { display: block; height: 100%; transition: width .24s cubic-bezier(.16, 1, .3, 1); }

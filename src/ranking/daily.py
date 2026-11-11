@@ -19,6 +19,7 @@ WEIGHTS = {"balanced": {"momentum": 1 / 3, "liquidity": 1 / 3, "foreign": 1 / 3}
 WEIGHT_LABELS = {"balanced": "Cân bằng 33/33/33", "momentum": "Ưu tiên động lượng 50/25/25"}
 FOREIGN = {"value": ("foreignBuyValue", "foreignSellValue", "totalTradingValue"),
            "volume": ("foreignBuyVolume", "foreignSellVolume", "totalTradingVolume")}
+MISSING_FOREIGN = "Thiếu dữ liệu khối ngoại (SSI trả trống)"
 
 
 def _num(value):
@@ -29,23 +30,30 @@ def _num(value):
     return number if math.isfinite(number) else None
 
 
+def daily_momentum(row):
+    opening, closing = _num(row.get("openPrice")), _num(row.get("closePrice"))
+    if opening is None or closing is None or opening <= 0 or closing <= 0:
+        return None
+    return 100 * (closing / opening - 1)
+
+
 def daily_factors(row, foreign="value"):
     """Raw factors for one stock-day, or (None, reason)."""
-    open_, close, value = _num(row.get("openPrice")), _num(row.get("closePrice")), _num(row.get("totalTradingValue"))
-    if not open_ or not close or open_ <= 0 or close <= 0:
+    momentum, value = daily_momentum(row), _num(row.get("totalTradingValue"))
+    if momentum is None:
         return None, "Thiếu giá mở cửa hoặc đóng cửa"
     if not value or value <= 0:
         return None, "Không có giá trị khớp trong phiên"
     buy_key, sell_key, total_key = FOREIGN[foreign]
     buy, sell, total = _num(row.get(buy_key)), _num(row.get(sell_key)), _num(row.get(total_key))
     if buy is None or sell is None:
-        return None, "Thiếu dữ liệu khối ngoại (SSI trả trống)"
+        return None, MISSING_FOREIGN
     if not total or total <= 0:
         return None, "Không có mẫu số khối ngoại"
     ratio = (buy - sell) / total
     if abs(ratio) > 1:
         return None, "Tỷ lệ khối ngoại vượt phạm vi; cần kiểm tra đơn vị"
-    return {"momentum": 100 * (close / open_ - 1), "turnover": value, "foreign_ratio": ratio,
+    return {"momentum": momentum, "turnover": value, "foreign_ratio": ratio,
             "foreign_net": buy - sell}, None
 
 

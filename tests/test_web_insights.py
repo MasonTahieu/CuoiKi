@@ -25,7 +25,7 @@ def daily(monkeypatch, tmp_path):
             rows.append({"symbol": f"S{i:02d}", "index_group": "VN30", "tradingDate": day,
                          "openPrice": 10_000, "closePrice": 10_000 + 20 * i, "totalTradingValue": 1e9 * (i + 1),
                          "foreignBuyValue": None if (i == 0 and d == 1) else 1e7 * i, "foreignSellValue": 5e7,
-                         "priceChangePercent": change})
+                         "priceChangePercent": None if (i == 11 and d == 0) else change})
         rows.append({"symbol": "VN30", "index_group": "INDEX", "tradingDate": day, "closePrice": 1800 + d,
                      "priceChange": 1.0 + d, "priceChangePercent": 0.1 * (d + 1), "totalTradingValue": 7e12})
     path = tmp_path / "daily.sqlite"
@@ -43,6 +43,45 @@ def test_daily_pulse_uses_reference_breadth_index_and_foreign_net(daily):
     assert pulse["total_value"] == pytest.approx(sum(1e9 * (i + 1) for i in range(12)))
     assert pulse["foreign_net"] == pytest.approx(sum(1e7 * i - 5e7 for i in range(12)))
     assert pulse["index"] == {"close": 1803, "change": 4.0, "change_pct": pytest.approx(0.4), "value": 7e12}
+
+
+def test_daily_breadth_excludes_missing_reference_change_even_when_momentum_is_available(daily):
+    point = api.timeline("daily", api.DAILY_RUN)[0]["id"]
+    data = api.snapshot("daily", point=point)
+    row = next(row for row in data["groups"]["VN30"]["rows"] if row["symbol"] == "S11")
+    assert row["raw"]["momentum"] > 0 and row["raw"]["change_pct"] is None
+    pulse = data["pulse"]
+    assert (pulse["priced"], pulse["members"]) == (11, 12)
+    assert (pulse["advancers"], pulse["unchanged"], pulse["decliners"]) == (5, 1, 5)
+
+
+def test_daily_foreign_supplement_fills_blanks_and_defers_to_ssi(daily, monkeypatch, tmp_path):
+    missing = {field: None for field in api.DAILY_FOREIGN_FIELDS}
+    supplement = {
+        "symbol": "S00", "index_group": "VN30", "trading_date": DAYS[1],
+        "source": "Stockbiz", "url": "https://example.test",
+        "fields": dict.fromkeys(api.DAILY_FOREIGN_FIELDS, 0),
+    }
+    path = tmp_path / "foreign_supplements.json"
+    path.write_text(json.dumps([supplement]), encoding="utf-8")
+    monkeypatch.setattr(api, "DAILY_FOREIGN_SUPPLEMENTS", path)
+    record = {"symbol": "S00", "index_group": "VN30", "tradingDate": DAYS[1],
+              "openPrice": 10_000, "closePrice": 10_000, "totalTradingValue": 1e9,
+              "priceChangePercent": 2.5, **missing}
+    with DailyStore(daily) as store:
+        store.upsert("ssi", [record], now())
+    point = api.timeline("daily", api.DAILY_RUN)[1]["id"]
+    group = api.snapshot("daily", point=point)["groups"]["VN30"]
+    row = next(row for row in group["rows"] if row["symbol"] == "S00")
+    assert group["ranked"] == 12 and row["rank"] is not None
+    assert row["raw"]["foreign_ratio"] == 0
+    assert row["warnings"] == ["Khối ngoại bổ sung từ Stockbiz (đối chiếu)."]
+    assert row["warnings"][0] in api.export_csv("daily", point=point)
+    with DailyStore(daily) as store:
+        store.upsert("ssi", [{**record, "foreignBuyValue": 1e7, "foreignSellValue": 0}], now())
+    official = next(row for row in api.snapshot("daily", point=point)["groups"]["VN30"]["rows"] if row["symbol"] == "S00")
+    assert official["raw"]["foreign_ratio"] == pytest.approx(0.01)
+    assert official["warnings"] == []
 
 
 def test_real_daily_data_states_its_open_question_and_is_not_labelled_demo(daily, monkeypatch):

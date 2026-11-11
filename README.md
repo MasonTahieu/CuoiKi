@@ -89,6 +89,7 @@ Từ 06/11/2026, `RUN_APP.ps1` mở **giao diện web mới** tại http://127.0
 Giao diện mới là dashboard nền tối theo chuẩn các ứng dụng chứng khoán Việt:
 - thanh trên cùng có nhãn rổ VN30 kèm số mã đã xếp hạng, trạng thái kết nối và mốc phân tích;
 - bốn chỉ số tổng quan;
+- dòng tóm tắt cập nhật theo mốc đang xem và các bộ lọc nhanh Tất cả, Top 5, Tăng hạng, Chưa xếp hạng;
 - bảng xếp hạng: thanh điểm tổng chia theo phần đóng góp, mỗi yếu tố có thanh phân vị riêng, mỗi mã có một nhãn trạng thái;
 - khung bên phải giải thích vì sao mã đứng hạng đó, kèm đường giá đã ghi nhận và biểu đồ điểm tổng của cả nhóm;
 - hai tab Chất lượng dữ liệu và Phương pháp.

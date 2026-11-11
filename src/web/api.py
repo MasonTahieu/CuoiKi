@@ -10,6 +10,7 @@ from datetime import timedelta
 from functools import lru_cache
 import csv
 import io
+import json
 import math
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -27,6 +28,8 @@ from src.data.daily_store import default_daily_path
 
 DAILY_DB = default_daily_path()
 DAILY_RUN = "ssi-daily"
+DAILY_FOREIGN_SUPPLEMENTS = Path(__file__).resolve().parents[2] / "webdata" / "ssi_daily_foreign_supplements.json"
+DAILY_FOREIGN_FIELDS = ("foreignBuyValue", "foreignSellValue", "foreignBuyVolume", "foreignSellVolume")
 
 GROUPS = ("VN30",)
 WEIGHTS = {"balanced": dict.fromkeys(FACTOR_NAMES, 0.25),
@@ -189,6 +192,19 @@ def _daily_frame():
     if not Path(DAILY_DB).is_file():
         raise ApiError("Chưa có dữ liệu ngày. Chạy .\\SSI_V3.ps1 -Lenh lichsu trước.")
     frame = read_daily(DAILY_DB)
+    if not frame.empty and DAILY_FOREIGN_SUPPLEMENTS.is_file():
+        supplements = json.loads(DAILY_FOREIGN_SUPPLEMENTS.read_text(encoding="utf-8"))
+        for supplement in supplements:
+            same_session = (frame["symbol"].eq(supplement["symbol"])
+                            & frame["index_group"].eq(supplement["index_group"])
+                            & frame["tradingDate"].eq(supplement["trading_date"]))
+            missing = frame.loc[same_session].reindex(columns=DAILY_FOREIGN_FIELDS).isna().all(axis=1)
+            for index in missing.index[missing]:
+                if "foreign_supplement" not in frame:
+                    frame["foreign_supplement"] = None
+                for field in DAILY_FOREIGN_FIELDS:
+                    frame.at[index, field] = supplement["fields"][field]
+                frame.at[index, "foreign_supplement"] = supplement
     return frame[frame["index_group"].isin(GROUPS)] if not frame.empty else frame
 
 
@@ -323,19 +339,27 @@ def _daily_snapshot(point, weights, foreign, compare):
             scores = {f: (_num(rec.get(f"score_{f}")) if f != "imbalance" else None) for f in FACTOR_NAMES}
             reason = rec.get("quality_reason") or ""
             kind = "cohort" if "hợp lệ" in reason else "missing"
+            label = "Nhóm chưa đủ mã" if kind == "cohort" else "Thiếu dữ liệu"
+            if reason == daily_rank.MISSING_FOREIGN:
+                label = "Thiếu khối ngoại"
+            turnover = _num(rec.get("totalTradingValue"))
+            supplement = rec.get("foreign_supplement")
+            supplement_source = supplement.get("source") if isinstance(supplement, dict) else None
             rows.append({
                 "symbol": rec["symbol"], "rank": int(rec["rank"]) if ok else None, "total": _num(rec.get("total_score")),
                 "scores": scores,
                 "contributions": {f: (scores[f] * weight_map[f] if scores[f] is not None else None) for f in FACTOR_NAMES},
-                "raw": {"momentum": _num(rec.get("momentum")), "turnover": _num(rec.get("turnover")), "spread_bps": None,
+                "raw": {"momentum": daily_rank.daily_momentum(rec),
+                        "turnover": turnover if turnover is not None and turnover >= 0 else None, "spread_bps": None,
                         "depth_vnd": None, "foreign_ratio": _num(rec.get("foreign_ratio")), "imbalance": None,
                         "closePrice": _num(rec.get("closePrice")), "openPrice": _num(rec.get("openPrice")),
                         "totalTradingVolume": _num(rec.get("totalTradingVolume")),
                         "change_pct": _num(rec.get("priceChangePercent")),
                         "foreign_net_value": _net(rec.get("foreignBuyValue"), rec.get("foreignSellValue"))},
-                "status": {"kind": "ranked" if ok else kind, "label": "Đã xếp hạng" if ok else
-                           ("Nhóm chưa đủ mã" if kind == "cohort" else "Thiếu dữ liệu"), "details": [] if ok else [reason]},
-                "warnings": [], "session": "Cuối ngày", "ages": {}, "explanation": None,
+                "status": {"kind": "ranked" if ok else kind, "label": "Đã xếp hạng" if ok else label,
+                           "details": [] if ok else [reason]},
+                "warnings": [f"Khối ngoại bổ sung từ {supplement_source} (đối chiếu)."] if supplement_source else [],
+                "session": "Cuối ngày", "ages": {}, "explanation": None,
             })
         rows.sort(key=lambda r: (r["rank"] is None, r["rank"] or 0, r["symbol"]))
         first = ranked.iloc[0] if len(ranked) else None
@@ -356,7 +380,7 @@ def _daily_snapshot(point, weights, foreign, compare):
         "freshness_seconds": None, "gaps": [], "policy": {"max_age_seconds": 60},
         "weights": {"id": weights, "label": daily_rank.WEIGHT_LABELS[weights], "values": weight_map},
         "foreign": foreign, "groups": groups, "compare": None,
-        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), _index_row(day), "phiên trước"),
+        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), _index_row(day), change_field="change_pct", basis="phiên trước"),
     }
     if compare:
         target = _compare_point("daily", DAILY_RUN, None, as_of, compare, moments=moments)
@@ -388,18 +412,12 @@ def _index_row(day):
             "change_pct": _num(rec.get("priceChangePercent")), "value": _num(rec.get("totalTradingValue"))}
 
 
-def _pulse(rows, index, basis):
+def _pulse(rows, index, *, change_field, basis):
     """Basket context at the moment: breadth, matched value and foreign net, from the members' raw data.
 
-    Breadth uses the change against the reference price when the source has it (daily), otherwise
-    the change since the open (intraday), and says which.
+    All members use the same comparison basis. Missing values reduce the reported coverage.
     """
-    changes = []
-    for r in rows:
-        raw = r.get("raw", {})
-        value = raw.get("change_pct") if raw.get("change_pct") is not None else raw.get("momentum")
-        if value is not None:
-            changes.append(value)
+    changes = [r["raw"][change_field] for r in rows if r.get("raw", {}).get(change_field) is not None]
     turnover = [r["raw"]["turnover"] for r in rows if r.get("raw", {}).get("turnover") is not None]
     nets = [r["raw"]["foreign_net_value"] for r in rows if r.get("raw", {}).get("foreign_net_value") is not None]
     eps = 1e-9
@@ -570,7 +588,7 @@ def snapshot(source, run=None, point=None, weights="balanced", foreign="value", 
         "policy": report.get("policy") if report else {"max_age_seconds": 60},
         "weights": {"id": weights, "label": WEIGHT_LABELS[weights], "values": weight_map},
         "foreign": foreign, "groups": groups, "compare": compare_info,
-        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), None, "giá mở cửa"),
+        "pulse": _pulse(groups.get("VN30", {}).get("rows", []), None, change_field="momentum", basis="giá mở cửa"),
     }
     if compare_info and compare_info["point"]:
         previous = snapshot(source, run, compare_info["point"], weights, foreign)

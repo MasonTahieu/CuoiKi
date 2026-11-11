@@ -55,6 +55,11 @@
       <span class="pulse-value"><strong class="num" id="p-foreign">–</strong><span id="p-foreign-note"></span></span></div>
   </section>
 
+  <div class="snapshot-summary" id="snapshot-summary" hidden>
+    <p id="snapshot-summary-text" aria-live="polite"></p>
+    <button class="summary-action" id="summary-unranked" type="button" hidden></button>
+  </div>
+
   <dl class="metrics" aria-label="Tổng quan nhóm">
     <div class="metric"><dt>Mã đã xếp hạng</dt><dd><strong class="num" id="m-ranked">–</strong><span id="m-ranked-note"></span></dd></div>
     <div class="metric"><dt>Dẫn đầu nhóm</dt><dd><strong id="m-leader">–</strong><span class="num" id="m-leader-note"></span></dd></div>
@@ -98,6 +103,15 @@
       </div>
       <div class="notice" id="notice" hidden></div>
       <div id="view-rank">
+        <div class="rank-presets">
+          <div class="segmented" id="rank-filter" role="group" aria-label="Lọc nhanh bảng xếp hạng">
+            <button type="button" data-filter="all" aria-pressed="true">Tất cả</button>
+            <button type="button" data-filter="top" aria-pressed="false" title="Hạng 1–5, kể cả đồng hạng">Top 5</button>
+            <button type="button" data-filter="rising" aria-pressed="false">Tăng hạng</button>
+            <button type="button" data-filter="unranked" aria-pressed="false">Chưa xếp hạng</button>
+          </div>
+          <span class="muted" id="rank-filter-count" aria-live="polite"></span>
+        </div>
         <div class="filterbar">
           <label class="inline grow"><span class="search"><svg class="icon"><use href="#i-search"/></svg><input type="search" id="search" placeholder="Tìm mã" aria-label="Tìm mã" autocomplete="off"></span></label>
           <label class="inline"><span>Điểm tổng ≥</span><input type="number" id="min" min="0" max="100" step="5" value="0"></label>

@@ -5,6 +5,7 @@
   const FCOLOR = { momentum: "#4C8DFF", liquidity: "#31C2D6", foreign: "#A48BFF", imbalance: "#E58BC8" };
   const FRGB = { momentum: "76, 141, 255", liquidity: "49, 194, 214", foreign: "164, 139, 255", imbalance: "229, 139, 200" };
   const VIEWS = ["rank", "history", "validate", "quality", "method"];
+  const RANK_FILTERS = ["all", "top", "rising", "unranked"];
   const MODE = { demo: "Demo", replay: "Phát lại", live: "Trực tiếp" };
   const BAD = new Set(["disconnected", "halt", "invalid"]);
   const $ = (id) => document.getElementById(id);
@@ -19,7 +20,7 @@
 
   const state = {
     ctx: null, source: null, run: null, point: null, weights: "balanced", foreign: "value", group: "VN30",
-    sort: { key: "rank", dir: 1 }, search: "", min: 0, selected: null, view: "rank", compare: "prev",
+    sort: { key: "rank", dir: 1 }, search: "", min: 0, rankFilter: "all", selected: null, view: "rank", compare: "prev",
     runs: [], timeline: [], data: null, timer: null, refresh: 0, requestId: 0,
     chart: "score", heat: null, heatKey: "", valid: null, validKey: "",
   };
@@ -27,7 +28,7 @@
   // ---------- URL state ----------
   function readHash() {
     const p = new URLSearchParams(location.hash.slice(1));
-    for (const [k, key] of [["src", "source"], ["run", "run"], ["pt", "point"], ["g", "group"], ["w", "weights"], ["f", "foreign"], ["sel", "selected"], ["view", "view"], ["cmp", "compare"], ["ch", "chart"]]) {
+    for (const [k, key] of [["src", "source"], ["run", "run"], ["pt", "point"], ["g", "group"], ["w", "weights"], ["f", "foreign"], ["sel", "selected"], ["view", "view"], ["cmp", "compare"], ["ch", "chart"], ["rf", "rankFilter"]]) {
       if (p.has(k)) state[key] = p.get(k);
     }
   }
@@ -36,6 +37,7 @@
     const put = (k, v) => v && p.set(k, v);
     put("src", state.source); put("run", state.run); put("pt", state.point); put("g", state.group);
     put("w", state.weights); put("f", state.foreign); put("sel", state.selected); put("view", state.view); p.set("cmp", state.compare || ""); put("ch", state.chart);
+    if (state.rankFilter !== "all") put("rf", state.rankFilter);
     history.replaceState(null, "", "#" + p.toString());
   }
 
@@ -61,6 +63,7 @@
     state.group = "VN30";  // scope is VN30 only; old links may still carry g=HNX30
     if (!VIEWS.includes(state.view)) state.view = "rank";
     if (!["score", "scatter"].includes(state.chart)) state.chart = "score";
+    if (!RANK_FILTERS.includes(state.rankFilter)) state.rankFilter = "all";
     try {
       state.ctx = await get("/api/context");
     } catch (err) { return fatal(err); }
@@ -111,6 +114,20 @@
     $("refresh").onchange = (e) => setRefresh(Number(e.target.value));
     $("search").oninput = (e) => { state.search = e.target.value.trim().toUpperCase(); renderRank(); };
     $("min").oninput = (e) => { state.min = Math.max(0, Math.min(100, Number(e.target.value) || 0)); renderRank(); };
+    $("rank-filter").onclick = (e) => {
+      const button = e.target.closest("button[data-filter]");
+      if (!button) return;
+      state.rankFilter = button.dataset.filter;
+      renderRank();
+    };
+    $("summary-unranked").onclick = () => {
+      state.view = "rank";
+      state.rankFilter = "unranked";
+      state.search = "";
+      $("search").value = "";
+      render();
+      $("rank-filter").querySelector('[data-filter="unranked"]').focus();
+    };
     $("export").onclick = () => {
       const q = new URLSearchParams({ source: state.source, run: state.run || "", point: state.point || "", weights: state.weights, foreign: state.foreign, group: state.group, compare: state.compare || "" });
       location.href = "/api/export.csv?" + q;
@@ -186,7 +203,10 @@
     const g = groupData();
     if (!g) return [];
     let rows = g.rows.filter((r) => !state.search || r.symbol.includes(state.search));
-    if (state.min > 0) rows = rows.filter((r) => r.total != null && r.total >= state.min);
+    if (state.rankFilter === "unranked") rows = rows.filter((r) => r.rank == null);
+    else if (state.min > 0) rows = rows.filter((r) => r.total != null && r.total >= state.min);
+    if (state.rankFilter === "top") rows = rows.filter((r) => r.rank != null && r.rank <= 5);
+    if (state.rankFilter === "rising") rows = rows.filter((r) => r.rank_change > 0);
     const { key, dir } = state.sort;
     const val = (r) => key === "rank" ? r.rank : key === "symbol" ? r.symbol : key === "total" ? r.total : r.scores[key];
     return rows.slice().sort((a, b) => {
@@ -227,6 +247,7 @@
   function renderMetrics() {
     const d = state.data, g = groupData();
     const leader = g && g.rows.find((r) => r.rank === 1);
+    renderSummary(g, leader);
     $("m-ranked").textContent = g ? `${g.ranked}/${g.members}` : "–";
     $("m-ranked-note").textContent = g && g.ranked ? `${state.group} · nhóm so sánh ${g.cohort_size} mã` : `${state.group} · chưa đủ điều kiện`;
     $("m-leader").textContent = leader ? leader.symbol : "—";
@@ -244,6 +265,29 @@
         : "chưa có bản ghi của lần kết nối này";
     }
     $("cohort-note").textContent = g && g.config_id ? `Cấu hình ${String(g.config_id).slice(0, 6)} · tập mã ${String(g.cohort_id).slice(0, 6)}` : "";
+  }
+
+  function renderSummary(group, leader) {
+    const summary = $("snapshot-summary");
+    summary.hidden = !group?.members;
+    if (summary.hidden) return;
+    const { as_of: at, pulse } = state.data;
+    const when = isDaily() ? `Phiên ${day(at)}` : `${clock(at)} · ${day(at)}`;
+    const parts = [];
+    if (pulse?.priced) {
+      const coverage = pulse.priced < pulse.members ? ` (${pulse.priced}/${pulse.members} mã có giá so sánh)` : "";
+      parts.push(`${pulse.advancers} tăng, ${pulse.unchanged} đứng, ${pulse.decliners} giảm so với ${pulse.basis}${coverage}`);
+    }
+    parts.push(`${group.ranked}/${group.members} mã đã xếp hạng`);
+    if (leader) {
+      const leaders = group.rows.filter((row) => row.rank === 1);
+      parts.push(leaders.length > 1 ? `${leaders.length} mã đồng hạng nhất` : `${leader.symbol} dẫn đầu (${fmt(leader.total)} điểm)`);
+    }
+    $("snapshot-summary-text").textContent = `${when} · ${parts.join(" · ")}`;
+    const unranked = group.members - group.ranked;
+    const action = $("summary-unranked");
+    action.hidden = unranked <= 0;
+    action.textContent = `Xem ${unranked} mã chưa xếp hạng`;
   }
 
   function renderNotice(text) {
@@ -320,10 +364,17 @@
     if (!state.data) return;
     const rows = visibleRows();
     const g = groupData();
-    if (!state.selected || !g.rows.some((r) => r.symbol === state.selected)) {
-      state.selected = (g.rows.find((r) => r.rank === 1) || g.rows[0] || {}).symbol || null;
-      writeHash();  // keep the shared link on the symbol actually shown
+    const choices = state.rankFilter === "all" ? g.rows : rows;
+    if (!choices.some((r) => r.symbol === state.selected)) {
+      state.selected = (choices.find((r) => r.rank === 1) || choices[0])?.symbol ?? null;
     }
+    writeHash();
+    $("rank-filter").querySelectorAll("button").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.filter === state.rankFilter));
+    });
+    $("min").disabled = state.rankFilter === "unranked";
+    $("min").title = $("min").disabled ? "Mã chưa xếp hạng chưa có điểm tổng" : "";
+    $("rank-filter-count").textContent = `${rows.length}/${g.members} mã hiển thị`;
     const anyOpen = g.rows.some((r) => r.rank == null || ownWarnings(r).length);
     const head = [["rank", "#", ""], ["symbol", "Mã", ""], ["total", "Điểm tổng", ""], ...shownFactors().map((f) => [f, FLABEL[f], "n"]), [null, anyOpen ? "Trạng thái" : "", ""]];
     const th = head.map(([key, label, cls]) => {
@@ -336,7 +387,14 @@
     }).join("");
     let body;
     if (!g.rows.length) body = `<tr><td colspan="8"><div class="empty"><strong>Chưa có danh sách mã</strong>Nhóm này chưa có dữ liệu tại mốc đã chọn.</div></td></tr>`;
-    else if (!rows.length) body = `<tr><td colspan="8"><div class="empty"><strong>Không có mã khớp bộ lọc</strong>Xóa ô tìm mã hoặc hạ ngưỡng điểm tổng.</div></td></tr>`;
+    else if (!rows.length) {
+      const message = state.rankFilter === "rising" && !compareAt()
+        ? "Chọn một mốc có dữ liệu đối chiếu để xem mã tăng hạng."
+        : state.rankFilter === "unranked" && g.ranked === g.members
+          ? "Tất cả mã tại mốc này đã được xếp hạng."
+          : "Thử đổi bộ lọc nhanh, ô tìm mã hoặc ngưỡng điểm.";
+      body = `<tr><td colspan="${head.length}"><div class="empty"><strong>Không có mã khớp bộ lọc</strong>${message}</div></td></tr>`;
+    }
     else body = rows.map((r) => `
       <tr data-symbol="${esc(r.symbol)}" tabindex="0" aria-selected="${r.symbol === state.selected}" class="${r.rank == null ? "unranked" : ""}">
         <td class="rank num"><span class="rank-cell"><b>${r.rank ?? "—"}</b>${deltaTag(r)}</span></td>
@@ -393,7 +451,12 @@
   function renderDetail() {
     const g = groupData(), el = $("detail");
     const r = g && g.rows.find((x) => x.symbol === state.selected);
-    if (!r) { el.innerHTML = `<div class="empty"><strong>Chưa chọn mã</strong>Bấm vào một dòng trong bảng.</div>`; $("price").innerHTML = ""; return; }
+    if (!r) {
+      el.innerHTML = `<div class="empty"><strong>Chưa chọn mã</strong>Bấm vào một dòng trong bảng.</div>`;
+      $("price").replaceChildren();
+      state.price = null;
+      return;
+    }
     const ranked = r.rank != null;
     let explain = "";
     if (ranked) {
@@ -427,12 +490,18 @@
   async function loadPrice(row) {
     const el = $("price");
     const symbol = row.symbol;
+    const snapshot = state.data;
+    if (state.price?.snapshot === snapshot && state.price.symbol === symbol) return;
+    const isCurrent = () => state.data === snapshot && state.selected === symbol;
+    state.price = null;
+    el.replaceChildren();
     try {
       const h = await get("/api/history", { source: state.source, run: state.run, point: state.point, symbol });
-      if (state.selected !== symbol) return;
-      state.price = { symbol, points: h.points, open: row.raw.openPrice };
+      if (!isCurrent()) return;
+      state.price = { snapshot, symbol, points: h.points, open: row.raw.openPrice };
       drawPrice();
     } catch (err) {
+      if (!isCurrent()) return;
       el.innerHTML = `<h4>Giá khớp đã ghi nhận</h4><p class="muted">${esc(err.message)}</p>`;
     }
   }

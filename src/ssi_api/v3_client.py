@@ -5,7 +5,9 @@ must share this login. Raw JSON is read (``rest_client.get``) instead of the SDK
 turn an omitted number into 0. Only market-data routes are reachable from here.
 """
 from datetime import date, datetime
+import logging
 import re
+import threading
 
 from src.data.daily_store import default_daily_path, known_members
 from src.neo_api.rest import AuthError, NeoError
@@ -16,6 +18,7 @@ EXPECTED_MEMBERS = {"VN30": 30}
 OTP_PATTERN = re.compile(r"\d{4,8}")
 SYMBOL = re.compile(r"[A-Z0-9][A-Z0-9._-]{0,31}")
 MAX_PAGES = 20
+logger = logging.getLogger(__name__)
 SUMMARY_MAP = {"open": "openPrice", "high": "highPrice", "low": "lowPrice", "close": "closePrice",
     "average": "averagePrice", "priceChange": "priceChange", "priceChangePercentage": "priceChangePercent",
     "totalMatch": "totalTradingVolume", "totalMatchValue": "totalTradingValue",
@@ -123,6 +126,7 @@ class V3Client:
             self.config = getattr(auth_factory, "config", None)
         self.auth = auth_factory(self.config) if self.config is not None else auth_factory()
         self.login_mode = None
+        self._auth_lock = threading.Lock()
 
     # -- login -----------------------------------------------------------------
     def login(self, otp_mode=None, read_otp=None, notify=print):
@@ -158,9 +162,33 @@ class V3Client:
 
     def token_provider(self, force_refresh):
         tm = self.auth.token_manager
-        if force_refresh and tm.has_refresh_token:
-            tm.refresh()
-        return tm.ensure_authenticated()
+
+        def current_token():
+            if force_refresh and tm.has_refresh_token:
+                tm.refresh()
+            return tm.ensure_authenticated()
+
+        # After a fresh login, use its token directly instead of refreshing it again.
+        # Preserve SDK exception types so its background WebSocket worker stops on failure.
+        return self._authenticated_call(current_token, retry_action=tm.ensure_authenticated)
+
+    def _authenticated_call(self, action, retry_action=None):
+        """Retry one failed operation after one non-OTP login, sharing the REST/WS session."""
+        _, exceptions = _sdk()
+        with self._auth_lock:
+            try:
+                return action()
+            except exceptions.AuthenticationError:
+                if self.login_mode != "none":
+                    raise
+            logger.warning("SSI từ chối xác thực; đang đăng nhập lại một lần với OTP none.")
+            try:
+                self.auth.authenticate()
+                return (retry_action or action)()
+            except exceptions.AuthenticationError:
+                self.login_mode = None
+                logger.error("SSI vẫn từ chối xác thực sau một lần đăng nhập lại; dừng thao tác.")
+                raise
 
     def token_expiry(self):
         token = self.auth.token_manager.token
@@ -193,7 +221,8 @@ class V3Client:
         if self.login_mode is None:
             raise AuthError("Chưa đăng nhập SSI V3.")
         try:
-            return self.auth.rest_client.get("/api/v3/" + V3_DATA_ROUTES[route], params=params or {})
+            return self._authenticated_call(
+                lambda: self.auth.rest_client.get("/api/v3/" + V3_DATA_ROUTES[route], params=params or {}))
         except Exception as error:
             raise self._translate(error, route) from None
 

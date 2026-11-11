@@ -8,6 +8,7 @@ import queue
 import threading
 
 from src.data.store import now
+from src.neo_api.rest import AuthError
 from src.ssi_api.stream_collector import Frame, StreamAuthFailed, StreamDisconnected, validate_members, v3_subscription_plan
 from src.ssi_api.v3_client import MemberListError, resolve_members
 
@@ -124,13 +125,16 @@ class V3Factory:
 
     def bootstrap(self):
         """A reconnect keeps the composition it already has if SSI's list turns unusable mid-run."""
-        if self.members is None:
-            self.members = resolve_members(self.client, self.groups)[0]
-        else:
-            try:
-                self.members = self.client.universe(self.groups)
-            except MemberListError:
-                pass
+        try:
+            if self.members is None:
+                self.members = resolve_members(self.client, self.groups)[0]
+            else:
+                try:
+                    self.members = self.client.universe(self.groups)
+                except MemberListError:
+                    pass
+        except AuthError:
+            raise StreamAuthFailed("SSI từ chối xác thực khi lấy thành phần VN30.") from None
         return self.members
 
     def create(self):

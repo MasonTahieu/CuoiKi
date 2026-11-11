@@ -118,6 +118,7 @@ Mã trong `QualityPolicy` là `V3_LIMITS`. Sau 5 phiên, đọc `update_interval
 
 - Thu tự động bằng `.github/workflows/ssi-stream.yml` chỉ giữ bản tóm tắt trong `evidence/v3_sessions/stream/`. Lịch của GitHub có thể trễ hoặc bị bỏ qua, nên một khung có thể thiếu dữ liệu đầu giờ hoặc thiếu cả khung.
 - Token SSI sống 15 phút và SDK mở lại kết nối mỗi khoảng 14 phút. ROOM không gửi lại khi vừa đăng ký, nên khoảng 1 phút sau mỗi lần đó có mã chưa có số khối ngoại và tạm không xếp hạng. Bộ thu không giữ dữ liệu nền qua các lần nối lại, đây là chủ đích.
+- Từ bản sửa 11/11/2026, với `--otp-mode none`, nếu REST hoặc bước lấy/đổi token WebSocket bị từ chối xác thực, client đăng nhập lại một lần rồi thử lại thao tác. Nếu xác thực vẫn thất bại, client vô hiệu hóa phiên, bộ thu ghi `auth_failed` và dừng. Nhật ký chỉ ghi thông báo cố định. Chế độ `prompt` và `smart` tiếp tục yêu cầu người dùng xác thực bằng OTP. Đã kiểm thử offline, cần theo dõi thêm khi thu thật.
 - `securitiesByBoard?index=VN30` có lúc chỉ trả một dòng là chính chỉ số. Mã từ chối kết quả đó, dùng lại thành phần của phiên đầy đủ gần nhất và ghi `member_warning`. Nếu rổ VN30 vừa đổi, cảnh báo này cần được đọc.
 - Smoke test và lệnh `phien` cần người ngồi máy để nhập OTP nếu SSI yêu cầu. Task Scheduler không nhập OTP thay được.
 - Dữ liệu ngày không có sổ lệnh, nên phân tích nhiều phiên theo ngày chỉ có động lượng, thanh khoản và khối ngoại.

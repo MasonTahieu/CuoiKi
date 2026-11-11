@@ -19,7 +19,7 @@ from src.neo_api.rest import AuthError, NeoError
 from src.ranking.engine import rank_groups
 from src.ssi_api.connections import connection_plan, v3_api_base, v3_stream_url
 from src.ssi_api.decoder import DecodeError
-from src.ssi_api.fake_stream import FakeClock, FakeFactory
+from src.ssi_api.fake_stream import FakeClock, FakeFactory, FakeSession
 from src.ssi_api.replay import replay
 from src.ssi_api.settings import SSISettings, load_ssi_settings
 from src.ssi_api.stream_collector import Frame, StreamAuthFailed, StreamDisconnected, collect_stream
@@ -384,6 +384,201 @@ def test_login_modes_never_keep_the_otp():
     client.login("smart", notify=lambda _: None)
     assert auth.events == ["smart", ("ensure", "T1")]
     with pytest.raises(ConfigurationError):V3Client(SSISettings(profile="fcdata_v2", consumer_id="a", consumer_secret="b"))
+
+
+@pytest.mark.parametrize("route", ["securitiesByBoard", "securitiesSummary"])
+@pytest.mark.parametrize("error_name", ["AuthenticationError", "ReauthenticationRequired"])
+def test_rest_reauthenticates_once_and_retries_the_same_request(route, error_name, caplog):
+    from ssi_sdk import exceptions
+    response = {"data": [{"symbol": "FPT"}]}
+    error = getattr(exceptions, error_name)("PRIVATE_SENTINEL")
+    client, auth = client_with({f"/api/v3/data/{route}": Pages([error, response])})
+    client.login("none")
+
+    assert client.get(route, {"index": "VN30"}) == response
+    assert auth.events == [("auth", None), ("auth", None)]
+    assert auth.rest_client.calls == [(f"/api/v3/data/{route}", {"index": "VN30"})] * 2
+    assert "PRIVATE_SENTINEL" not in caplog.text
+
+
+@pytest.mark.parametrize("failure_at", ["login", "retry"])
+def test_rest_stops_if_relogin_or_retried_request_is_rejected(failure_at, monkeypatch, caplog):
+    from ssi_sdk.exceptions import AuthenticationError
+    client, auth = client_with({"/api/v3/data/securitiesByBoard": Pages([
+        AuthenticationError("PRIVATE_FIRST"), AuthenticationError("PRIVATE_SECOND"), {"data": []}])})
+    client.login("none")
+
+    if failure_at == "login":
+        def rejected_login():
+            auth.events.append(("auth", None))
+            raise AuthenticationError("PRIVATE_LOGIN")
+        monkeypatch.setattr(auth, "authenticate", rejected_login)
+
+    with pytest.raises(AuthError) as caught:
+        client.get("securitiesByBoard")
+    # The end-of-session reconciliation must not start another login attempt.
+    with pytest.raises(AuthError):
+        client.get("securitiesSummary")
+    assert client.login_mode is None
+    assert auth.events == [("auth", None), ("auth", None)]
+    assert len(auth.rest_client.calls) == (1 if failure_at == "login" else 2)
+    assert "sau một lần đăng nhập lại" in caplog.text
+    assert "PRIVATE" not in str(caught.value) + caplog.text
+
+
+@pytest.mark.parametrize("mode", ["prompt", "smart"])
+def test_otp_sessions_do_not_automatically_relogin_without_otp(mode):
+    from ssi_sdk.exceptions import AuthenticationError
+    client, auth = client_with({"/api/v3/data/securitiesSummary": AuthenticationError("PRIVATE")})
+    client.login(mode, read_otp=lambda: "123456", notify=lambda _: None)
+    events = list(auth.events)
+    with pytest.raises(AuthError):
+        client.get("securitiesSummary")
+    assert auth.events == events and len(auth.rest_client.calls) == 1
+
+
+@pytest.mark.parametrize("error_name", ["RateLimitError", "ValidationError", "APIError"])
+def test_non_auth_rest_errors_do_not_trigger_relogin(error_name):
+    from ssi_sdk import exceptions
+    error = getattr(exceptions, error_name)("PRIVATE")
+    client, auth = client_with({"/api/v3/data/securitiesSummary": error})
+    client.login("none")
+    with pytest.raises(NeoError):
+        client.get("securitiesSummary")
+    assert auth.events == [("auth", None)] and len(auth.rest_client.calls) == 1
+
+
+@pytest.mark.parametrize("force_refresh", [False, True])
+@pytest.mark.parametrize("error_name", ["AuthenticationError", "ReauthenticationRequired"])
+@pytest.mark.parametrize("recovered", [True, False])
+def test_websocket_token_relogin_is_bounded_and_preserves_sdk_errors(
+        force_refresh, error_name, recovered, monkeypatch, caplog):
+    from ssi_sdk import exceptions
+    error_type = getattr(exceptions, error_name)
+    client, auth = client_with()
+    client.login("none")
+    calls = []
+    results = iter(["NEW_TOKEN" if recovered else error_type("PRIVATE_RETRY")])
+
+    def ensure_token():
+        calls.append("ensure")
+        if not force_refresh and calls == ["ensure"]:
+            raise error_type("PRIVATE_EXPIRED")
+        result = next(results)
+        if isinstance(result, Exception):
+            raise result
+        return result
+
+    def rejected_refresh():
+        calls.append("refresh")
+        raise error_type("PRIVATE_REFRESH")
+
+    monkeypatch.setattr(auth.token_manager, "has_refresh_token", True)
+    monkeypatch.setattr(auth.token_manager, "refresh", rejected_refresh, raising=False)
+    monkeypatch.setattr(auth.token_manager, "ensure_authenticated", ensure_token)
+    if recovered:
+        assert client.token_provider(force_refresh) == "NEW_TOKEN"
+    else:
+        with pytest.raises(error_type):
+            client.token_provider(force_refresh)
+        assert "sau một lần đăng nhập lại" in caplog.text
+        with pytest.raises(AuthError):
+            client.get("securitiesSummary")
+    assert auth.events == [("auth", None), ("auth", None)]
+    assert calls == (["refresh", "ensure"] if force_refresh else ["ensure", "ensure"])
+    assert "PRIVATE" not in caplog.text
+
+
+def test_websocket_token_stops_when_relogin_itself_is_rejected(monkeypatch):
+    from ssi_sdk.exceptions import AuthenticationError
+    client, auth = client_with()
+    client.login("none")
+    calls = []
+
+    def expired_token():
+        calls.append("ensure")
+        raise AuthenticationError("PRIVATE_TOKEN")
+
+    def rejected_login():
+        auth.events.append(("auth", None))
+        raise AuthenticationError("PRIVATE_LOGIN")
+
+    monkeypatch.setattr(auth.token_manager, "ensure_authenticated", expired_token)
+    monkeypatch.setattr(auth, "authenticate", rejected_login)
+    with pytest.raises(AuthenticationError):
+        client.token_provider(False)
+    assert calls == ["ensure"] and auth.events == [("auth", None), ("auth", None)]
+
+
+@pytest.mark.parametrize("force_refresh", [False, True])
+def test_valid_websocket_token_does_not_trigger_relogin(force_refresh, monkeypatch):
+    client, auth = client_with()
+    client.login("none")
+    refreshes = []
+    monkeypatch.setattr(auth.token_manager, "has_refresh_token", True)
+    monkeypatch.setattr(auth.token_manager, "refresh", lambda: refreshes.append(1), raising=False)
+    assert client.token_provider(force_refresh) == "TOKEN"
+    assert refreshes == ([1] if force_refresh else [])
+    assert auth.events == [("auth", None)]
+
+
+@pytest.mark.parametrize("mode", ["prompt", "smart"])
+def test_otp_websocket_token_failures_keep_sdk_type_and_do_not_relogin(mode, monkeypatch):
+    from ssi_sdk.exceptions import ReauthenticationRequired
+    client, auth = client_with()
+    client.login(mode, read_otp=lambda: "123456", notify=lambda _: None)
+    events = list(auth.events)
+
+    def expired_token():
+        raise ReauthenticationRequired("PRIVATE")
+
+    monkeypatch.setattr(auth.token_manager, "ensure_authenticated", expired_token)
+    with pytest.raises(ReauthenticationRequired):
+        client.token_provider(False)
+    assert auth.events == events
+
+
+@pytest.mark.parametrize("recovered", [True, False])
+def test_collector_handles_rest_auth_failure_after_disconnect(tmp_path, monkeypatch, recovered):
+    from ssi_sdk.exceptions import AuthenticationError
+    members = v3_members(30)
+    rows = [{"symbol": m["symbol"], "board": "HOSE"} for m in members]
+    responses = Pages([rows, AuthenticationError("PRIVATE_EXPIRED"),
+                       rows if recovered else AuthenticationError("PRIVATE_RETRY")])
+    client, auth = client_with({"/api/v3/data/securitiesByBoard": responses})
+    client.login("none")
+    clock = FakeClock()
+    scripts = iter([[StreamDisconnected()], baseline_frames(members, clock.origin + timedelta(seconds=2))])
+    streams = []
+
+    def create_stream():
+        stream = FakeSession(next(scripts), clock)
+        streams.append(stream)
+        return stream
+
+    factory = V3Factory(client)
+    factory.source = "synthetic"
+    monkeypatch.setattr(factory, "create", create_stream)
+    path = tmp_path / "relogin.sqlite"
+    store = EventStore(path)
+    try:
+        result = collect_stream(factory, store.append, seconds=10, max_messages=91,
+                                clock=clock.monotonic, sleep=clock.sleep, wall_now=clock.wall_now)
+    finally:
+        store.close()
+    assert auth.events == [("auth", None), ("auth", None)]
+    assert len(auth.rest_client.calls) == 3 and result["counters"]["reconnects"] == 1
+    assert all(stream.closed for stream in streams)
+    with SSIJournal(path) as journal:
+        events = list(journal.events(result["run"]))
+    assert "PRIVATE" not in json.dumps(events)
+    if recovered:
+        assert result["stop_reason"] == "message_limit"
+        assert len(result["states"]) == 30 and result["counters"]["merged"] > 0
+        assert len(streams) == 2
+    else:
+        assert result["stop_reason"] == "auth_failed" and result["states"] == {}
+        assert events[-1]["payload"]["state"] == "auth_failed" and len(streams) == 1
 
 
 def test_index_members_validate_board_and_routes_are_allow_listed():

@@ -10,7 +10,6 @@ from datetime import timedelta
 from functools import lru_cache
 import csv
 import io
-import json
 import math
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -28,8 +27,6 @@ from src.data.daily_store import default_daily_path
 
 DAILY_DB = default_daily_path()
 DAILY_RUN = "ssi-daily"
-DAILY_FOREIGN_SUPPLEMENTS = Path(__file__).resolve().parents[2] / "webdata" / "ssi_daily_foreign_supplements.json"
-DAILY_FOREIGN_FIELDS = ("foreignBuyValue", "foreignSellValue", "foreignBuyVolume", "foreignSellVolume")
 
 GROUPS = ("VN30",)
 WEIGHTS = {"balanced": dict.fromkeys(FACTOR_NAMES, 0.25),
@@ -192,19 +189,6 @@ def _daily_frame():
     if not Path(DAILY_DB).is_file():
         raise ApiError("Chưa có dữ liệu ngày. Chạy .\\SSI_V3.ps1 -Lenh lichsu trước.")
     frame = read_daily(DAILY_DB)
-    if not frame.empty and DAILY_FOREIGN_SUPPLEMENTS.is_file():
-        supplements = json.loads(DAILY_FOREIGN_SUPPLEMENTS.read_text(encoding="utf-8"))
-        for supplement in supplements:
-            same_session = (frame["symbol"].eq(supplement["symbol"])
-                            & frame["index_group"].eq(supplement["index_group"])
-                            & frame["tradingDate"].eq(supplement["trading_date"]))
-            missing = frame.loc[same_session].reindex(columns=DAILY_FOREIGN_FIELDS).isna().all(axis=1)
-            for index in missing.index[missing]:
-                if "foreign_supplement" not in frame:
-                    frame["foreign_supplement"] = None
-                for field in DAILY_FOREIGN_FIELDS:
-                    frame.at[index, field] = supplement["fields"][field]
-                frame.at[index, "foreign_supplement"] = supplement
     return frame[frame["index_group"].isin(GROUPS)] if not frame.empty else frame
 
 
@@ -343,8 +327,6 @@ def _daily_snapshot(point, weights, foreign, compare):
             if reason == daily_rank.MISSING_FOREIGN:
                 label = "Thiếu khối ngoại"
             turnover = _num(rec.get("totalTradingValue"))
-            supplement = rec.get("foreign_supplement")
-            supplement_source = supplement.get("source") if isinstance(supplement, dict) else None
             rows.append({
                 "symbol": rec["symbol"], "rank": int(rec["rank"]) if ok else None, "total": _num(rec.get("total_score")),
                 "scores": scores,
@@ -358,7 +340,7 @@ def _daily_snapshot(point, weights, foreign, compare):
                         "foreign_net_value": _net(rec.get("foreignBuyValue"), rec.get("foreignSellValue"))},
                 "status": {"kind": "ranked" if ok else kind, "label": "Đã xếp hạng" if ok else label,
                            "details": [] if ok else [reason]},
-                "warnings": [f"Khối ngoại bổ sung từ {supplement_source} (đối chiếu)."] if supplement_source else [],
+                "warnings": [],
                 "session": "Cuối ngày", "ages": {}, "explanation": None,
             })
         rows.sort(key=lambda r: (r["rank"] is None, r["rank"] or 0, r["symbol"]))

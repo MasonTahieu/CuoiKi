@@ -1,9 +1,15 @@
-# Use Run workflow after the market closes to fetch and commit SSI FastConnect V3 daily summaries.
+# Fetch SSI FastConnect V3 daily summaries for VN30 after each session and commit them.
 # REST market data needs no OTP. Vercel redeploys on the push, so the "Cuối ngày" view updates
 # without any local machine running. Secrets: SSI_API_KEY, SSI_API_SECRET (repository secrets).
 name: SSI daily summaries
 
 on:
+  schedule:
+    # 15:20, 15:50, 16:20 Asia/Ho_Chi_Minh, Monday–Friday. GitHub may delay or drop a scheduled run;
+    # the spares only cost a few minutes, the fetch is idempotent and an unchanged store is not committed.
+    - cron: "20 8 * * 1-5"
+    - cron: "50 8 * * 1-5"
+    - cron: "20 9 * * 1-5"
   workflow_dispatch: {}
 
 permissions:

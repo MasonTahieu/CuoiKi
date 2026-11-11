@@ -1,17 +1,9 @@
 # Capture the VN30 stream in the morning and afternoon, then commit a summary (never the raw ticks).
-# GitHub may start scheduled runs late or drop them, so each window has spare triggers ahead of its
-# start: the job waits for the window, and a run that finds its window done or over exits at once.
+# Use Run workflow to queue a morning or afternoon capture. The job waits for its window.
 # Editing this file runs a short trial, which also proves the stream connects from GitHub's servers.
 name: SSI stream capture
 
 on:
-  schedule:
-    - cron: "10 1 * * 1-5"    # 08:10 Asia/Ho_Chi_Minh, window 08:55-11:35
-    - cron: "30 1 * * 1-5"    # 08:30
-    - cron: "45 1 * * 1-5"    # 08:45
-    - cron: "15 5 * * 1-5"    # 12:15, window 12:55-15:05
-    - cron: "35 5 * * 1-5"    # 12:35
-    - cron: "50 5 * * 1-5"    # 12:50
   push:
     branches: [main]
     paths: [".github/workflows/ssi-stream.yml"]

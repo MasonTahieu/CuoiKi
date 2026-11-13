@@ -1,6 +1,6 @@
 # Kiểm tra phiên kế tiếp: điểm cuối ngày và lợi suất phiên sau
 
-Dữ liệu SSI thật, rổ VN30, **19 phiên**, 18 cặp phiên liên tiếp. Không có tham số nào được ước lượng. Trọng số chọn trước khi tính phép đo này. Điểm phiên t chỉ dùng dữ liệu phiên t.
+Dữ liệu SSI thật, rổ VN30, **20 phiên**, 19 cặp phiên liên tiếp. Không có tham số nào được ước lượng. Trọng số chọn trước khi tính phép đo này. Điểm phiên t chỉ dùng dữ liệu phiên t.
 
 ## Lợi suất mua được
 
@@ -34,7 +34,7 @@ Chưa có bằng chứng điểm liên hệ với lợi suất phiên sau (IC tr
 
 - **Độ nhạy:** mẫu này chỉ phân biệt được IC trung bình từ khoảng 0,11 trở lên. Muốn phát hiện IC 0,05 cần khoảng 95 phiên. Vì vậy kết quả là "chưa có bằng chứng", không phải "đã chứng minh không dự báo được".
 - **Kiểm định nhiều lần:** có nhiều phép đo trên cùng mẫu, nên một giá trị |t| vừa trên 2 chưa đủ để coi là phát hiện.
-- **Điều chỉnh quyền:** `refPrice` trống ở mọi dòng. Có 2/540 dòng `priceChangePercent` lệch quá 0,3 điểm % so với đóng cửa/đóng cửa (GVR 2026-10-21, VNM 2026-10-22). Cần đối chiếu với lịch giao dịch không hưởng quyền.
+- **Điều chỉnh quyền:** `refPrice` trống ở mọi dòng. Có 2/570 dòng `priceChangePercent` lệch quá 0,3 điểm % so với đóng cửa/đóng cửa (GVR 2026-10-21, VNM 2026-10-22). Cần đối chiếu với lịch giao dịch không hưởng quyền.
 - Kết quả không thay đổi cách chấm điểm. Sản phẩm không trình bày điểm như xác suất tăng giá.
 
 Chi tiết từng cặp phiên: [kiem_tra_phien_ke_tiep.csv](kiem_tra_phien_ke_tiep.csv). Tạo lại: `python -X utf8 -m src.cli evaluate-v3`.

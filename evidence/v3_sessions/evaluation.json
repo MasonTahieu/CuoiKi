@@ -1,7 +1,7 @@
 {
   "intraday": null,
   "daily": {
-    "sessions": 19,
+    "sessions": 20,
     "trading_dates": [
       "2026-10-19",
       "2026-10-20",
@@ -21,20 +21,21 @@
       "2026-11-09",
       "2026-11-10",
       "2026-11-11",
-      "2026-11-12"
+      "2026-11-12",
+      "2026-11-13"
     ],
     "groups": {
       "VN30": {
         "symbols": 30,
-        "days": 19,
+        "days": 20,
         "day_to_day_persistence": {
           "momentum": {
-            "pairs": 18,
-            "mean_spearman": 0.006382117084165959
+            "pairs": 19,
+            "mean_spearman": 0.019717013246315182
           },
           "turnover": {
-            "pairs": 18,
-            "mean_spearman": 0.8796440489432702
+            "pairs": 19,
+            "mean_spearman": 0.8804285463380365
           },
           "foreign_ratio": {
             "pairs": 17,
@@ -42,14 +43,14 @@
           }
         },
         "factor_rank_correlation": {
-          "momentum~turnover": 0.07145653397538605,
-          "momentum~foreign_ratio": 0.4100781790268373,
-          "turnover~foreign_ratio": 0.15735578943789744
+          "momentum~turnover": 0.07807966893444666,
+          "momentum~foreign_ratio": 0.40372683716903474,
+          "turnover~foreign_ratio": 0.1421590459222118
         },
         "missing_share": {
           "momentum": 0.0,
           "turnover": 0.0,
-          "foreign_ratio": 0.06666666666666667
+          "foreign_ratio": 0.06333333333333334
         }
       }
     }
@@ -58,8 +59,8 @@
   "forward_check": {
     "method": "next-session-rank-ic-v2",
     "group": "VN30",
-    "sessions": 19,
-    "pairs": 18,
+    "sessions": 20,
+    "pairs": 19,
     "top_n": 5,
     "returns": {
       "tradable": "mở cửa → đóng cửa của phiên t+1 (mua được sau khi có điểm)",
@@ -67,7 +68,7 @@
     },
     "adjustment": {
       "tolerance_pp": 0.3,
-      "compared": 540,
+      "compared": 570,
       "flagged": [
         {
           "symbol": "GVR",
@@ -244,6 +245,15 @@
             "top_minus_bottom_pp": -1.1822947533635264,
             "ic_close": -0.4722533634932314,
             "top_minus_bottom_close_pp": -1.374
+          },
+          {
+            "date": "2026-11-12",
+            "next_date": "2026-11-13",
+            "ranked": 0,
+            "ic": null,
+            "top_minus_bottom_pp": null,
+            "ic_close": null,
+            "top_minus_bottom_close_pp": null
           }
         ],
         "ic": {
@@ -466,6 +476,15 @@
             "top_minus_bottom_pp": -0.880672023074569,
             "ic_close": -0.3386074125880917,
             "top_minus_bottom_close_pp": -1.0979999999999999
+          },
+          {
+            "date": "2026-11-12",
+            "next_date": "2026-11-13",
+            "ranked": 0,
+            "ic": null,
+            "top_minus_bottom_pp": null,
+            "ic_close": null,
+            "top_minus_bottom_close_pp": null
           }
         ],
         "ic": {
